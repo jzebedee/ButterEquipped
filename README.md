@@ -10,6 +10,7 @@ Butter Equipped is an equipment manager for Mount & Blade II: Bannerlord.
 
 Simply go to the Inventory screen and click the green "Equip" button.
 
+![Butter Equipped - Equip Button](https://user-images.githubusercontent.com/1896945/201581063-ea203e00-e614-4aa0-890b-3e54b372d69a.png)
 
 
 Butter Equipped automatically compares and upgrades equipment in your inventory, selecting the best option for each slot of equipment.
@@ -19,6 +20,8 @@ Butter Equipped can also upgrade your entire party, saving time on equipping eac
 ### Lock inventory slots
 
 Toggle the lock next to individual slots in the inventory screen to prevent Butter Equipped from changing them.
+
+https://user-images.githubusercontent.com/1896945/201581089-0143c4b5-83ae-46f3-9f2b-2950ebc8b167.mp4
 
 ### Auto-Equip
 
