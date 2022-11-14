@@ -30,4 +30,10 @@
   <ItemGroup>
     <Content Include="../../assets/GUI/**/*" LinkBase="GUI" />
   </ItemGroup>
+
+  <Target Name="CopyAssets" AfterTargets="PostBuildEvent" Condition="$(ModuleId) != '' AND Exists($(GameFolder))">
+	<CreateDirectory Directory="$(GameFolder)/Modules/$(ModuleId)/" />
+
+	<CopyFolder FromDirectory="../../assets/" ToDirectory="$(GameFolder)/Modules/$(ModuleId)/" Regex="^.*\.xml$" Clean="true" />
+  </Target>
 </Project>
