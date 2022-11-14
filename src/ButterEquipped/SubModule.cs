@@ -45,9 +45,17 @@ public class SubModule : MBSubModuleBase
 
         Options ??= new();
         campaignGameStarter.AddBehavior(eqUpBehavior = new AutoEquipBehavior(Options));
+    }
+
+    public override void OnAfterGameInitializationFinished(Game game, object starterObject)
+    {
+        if (game.GameType is not Campaign campaign)
+        {
+            return;
+        }
 
         Debug.Assert(settings is null);
-        var builder = Settings.EquipSettings.AddEquipSettings(Options, campaign.UniqueGameId);
+        var builder = Settings.EquipSettings.AddEquipSettings(Options!, campaign.UniqueGameId);
         settings = builder.BuildAsPerSave();
         settings?.Register();
     }
