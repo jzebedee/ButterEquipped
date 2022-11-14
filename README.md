@@ -41,6 +41,6 @@ Manually install by extracting into the "Modules" folder under your M&B II game 
 
 ## Links
 
-The mod page for this project is located on [Nexus](TBW).
+The mod page for this project is located on [Nexus](https://www.nexusmods.com/mountandblade2bannerlord/mods/4713).
 
 The repository for this project is located on [GitHub](https://github.com/jzebedee/ButterEquipped).
