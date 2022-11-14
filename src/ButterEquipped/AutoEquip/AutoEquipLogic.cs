@@ -48,7 +48,7 @@ public class AutoEquipLogic
 
         if (options.EquipFromInventory)
         {
-            result |= EquipAllHeroes(InventorySide.PlayerInventory).Any(t => t.result);
+            result |= EquipAllHeroes(InventorySide.PlayerInventory).Select(t => t.result).Last(t => t);
         }
 
         var shouldEquipOtherSide = Mode switch
@@ -62,7 +62,7 @@ public class AutoEquipLogic
 
         if(shouldEquipOtherSide)
         {
-            result |= EquipAllHeroes(InventorySide.OtherInventory).Any(t => t.result);
+            result |= EquipAllHeroes(InventorySide.OtherInventory).Select(t => t.result).Last(t => t);
         }
 
         if(!result)
