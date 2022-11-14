@@ -1,0 +1,32 @@
+name: Build mod
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  build_submodule:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+    - name: Get GameFolder path
+      run: |
+        mkdir ./bannerlord
+        $gamefolder = Resolve-Path ./bannerlord
+        echo "gamefolder=$gamefolder" | Out-File -FilePath $env:GITHUB_ENV -Append
+    - name: Build
+      run: |
+        MsBuild.exe -noLogo -r -p:Configuration=Release -p:GameFolder="${env:gamefolder}" -p:DebugType=None
+    - name: Upload assets
+      uses: actions/upload-artifact@v3
+      with:
+        name: ButterEquipped
+        if-no-files-found: error
+        path: |
+          bannerlord/Modules/
+          !bannerlord/Modules/Native
+          !bannerlord/Modules/SandBox
+          !bannerlord/Modules/StoryMode
