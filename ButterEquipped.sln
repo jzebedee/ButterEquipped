@@ -5,6 +5,11 @@ VisualStudioVersion = 17.4.33027.239
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ButterEquipped", "src\ButterEquipped\ButterEquipped.csproj", "{259CEEE0-3727-4A1B-97F1-7BD1C69F1290}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{918502DA-FBC2-477C-9509-12C91CCE3B31}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Beta_Debug|x64 = Beta_Debug|x64
