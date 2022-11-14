@@ -1,4 +1,4 @@
-# ButterEquipped
+# Butter Equipped
 
 ![butter_equipped_logo](https://user-images.githubusercontent.com/1896945/201556738-225ed771-7318-45de-870f-b61349519e3d.png)
 
@@ -26,8 +26,18 @@ Turn on Auto-Equip in the MCM Settings menu to make Butter Equipped run every ti
 
 ## Installation
 
-TBW
+Install with any mod manager.
+
+Requires [Mod Configuration Menu](https://www.nexusmods.com/mountandblade2bannerlord/mods/612).
+
+### Manual installation
+
+Manually install by extracting into the "Modules" folder under your M&B II game folder, e.g.:
+
+`C:\Games\Steam\steamapps\common\Mount & Blade II Bannerlord\Modules`
 
 ## Links
 
-TBW
+The mod page for this project is located on [Nexus](TBW).
+
+The repository for this project is located on [GitHub](https://github.com/jzebedee/ButterEquipped).
