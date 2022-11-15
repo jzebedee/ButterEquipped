@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -162,15 +163,60 @@ public class AutoEquipViewModel : ViewModel
         }
     }
 
-    public void ExecuteEquip() => OnEquip?.Invoke(this, EventArgs.Empty);
+    private bool _isEquipVisible;
+
+    [DataSourceProperty]
+    public bool IsEquipVisible
+    {
+        get => _isEquipVisible;
+        set
+        {
+            if (value != _isEquipVisible)
+            {
+                _isEquipVisible = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    private bool _isEquipPartyVisible;
+
+    [DataSourceProperty]
+    public bool IsEquipPartyVisible
+    {
+        get => _isEquipPartyVisible;
+        set
+        {
+            if (value != _isEquipPartyVisible)
+            {
+                _isEquipPartyVisible = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public void ExecuteEquip()
+        => OnEquip?.Invoke(this, new EquipHeroEventArgs(_SPInventoryVM.CharacterList.SelectedItem.Hero, !_SPInventoryVM.IsInWarSet));
+
+    public void ExecuteEquipParty()
+        => OnEquip?.Invoke(this, EquipPartyEventArgs.Empty);
+
+    public event EventHandler<AutoEquipEventArgs>? OnEquip;
 
     private readonly IEquipmentSlotLockSource _slotLockSource;
 
-    private SPInventoryVM _SPInventoryVM;
+    private readonly SPInventoryVM _SPInventoryVM;
 
     private BitArray _slotLocks;
 
-    public event EventHandler? OnEquip;
+    public record AutoEquipEventArgs;
+
+    public record EquipPartyEventArgs : AutoEquipEventArgs
+    {
+        public static readonly EquipPartyEventArgs Empty = new();
+    }
+
+    public record EquipHeroEventArgs(Hero Hero, bool Civilian) : AutoEquipEventArgs;
 
     public AutoEquipViewModel(SPInventoryVM SPInventoryVM, IEquipmentSlotLockSource slotLockSource)
     {
