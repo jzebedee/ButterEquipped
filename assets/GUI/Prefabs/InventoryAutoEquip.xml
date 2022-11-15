@@ -54,6 +54,16 @@
 								</Widget>
 							</Children>
 						</ButtonWidget>
+
+						<ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ExecuteEquipParty" MarginLeft="480" MarginTop="45" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="60" Brush="ButtonGoldBrush">
+							<Children>
+								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center">
+									<Children>
+										<TextWidget Brush="Popup.Button.Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Text="Party" />
+									</Children>
+								</Widget>
+							</Children>
+						</ButtonWidget>
 					</Children>
 				</Widget>
 			</Children>
