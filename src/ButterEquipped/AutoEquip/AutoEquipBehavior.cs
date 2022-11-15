@@ -112,7 +112,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
     {
         if (!fromCancel && options.AutoEquipOnClose)
         {
-            eqUpVm.ExecuteEquip();
+            eqUpVm.ExecuteEquipParty();
         }
     }
 
