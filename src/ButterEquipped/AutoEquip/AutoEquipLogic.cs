@@ -40,7 +40,39 @@ public class AutoEquipLogic
         _eqComparer = new EquipmentElementComparer();
     }
 
-    public void EquipAll(AutoEquipOptions options)
+    public bool Equip(AutoEquipOptions options, Hero hero, bool civilian)
+    {
+        if(hero?.CharacterObject is not CharacterObject character)
+        {
+            return false;
+        }
+
+        this.options = options;
+
+        var result = false;
+
+        if (options.EquipFromInventory)
+        {
+            result |= EquipHero(character, InventorySide.PlayerInventory, civilian);
+        }
+
+        if (ShouldEquipOtherSide())
+        {
+            result |= EquipHero(character, InventorySide.OtherInventory, civilian);
+        }
+
+        if (!result)
+        {
+            Message("Nothing to equip");
+        }
+
+        _updateRightCharacter.GetValue();
+        _refreshInformationValues.GetValue();
+
+        return result;
+    }
+
+    public bool EquipParty(AutoEquipOptions options)
     {
         this.options = options;
 
@@ -51,16 +83,7 @@ public class AutoEquipLogic
             result |= EquipAllHeroes(InventorySide.PlayerInventory).Select(t => t.result).LastOrDefault(t => t);
         }
 
-        var shouldEquipOtherSide = Mode switch
-        {
-            InventoryMode.Default when options.EquipFromDiscard => true,
-            InventoryMode.Loot when options.EquipFromLoot => true,
-            InventoryMode.Stash when options.EquipFromStash => true,
-            InventoryMode.Trade when options.EquipFromTrade => true,
-            _ => false
-        };
-
-        if(shouldEquipOtherSide)
+        if(ShouldEquipOtherSide())
         {
             result |= EquipAllHeroes(InventorySide.OtherInventory).Select(t => t.result).LastOrDefault(t => t);
         }
@@ -72,9 +95,20 @@ public class AutoEquipLogic
 
         _updateRightCharacter.GetValue();
         _refreshInformationValues.GetValue();
+
+        return result;
     }
 
-    public IEnumerable<(Hero hero, bool result)> EquipAllHeroes(InventorySide side)
+    private bool ShouldEquipOtherSide() => Mode switch
+    {
+        InventoryMode.Default when options.EquipFromDiscard => true,
+        InventoryMode.Loot when options.EquipFromLoot => true,
+        InventoryMode.Stash when options.EquipFromStash => true,
+        InventoryMode.Trade when options.EquipFromTrade => true,
+        _ => false
+    };
+
+    private IEnumerable<(Hero hero, bool result)> EquipAllHeroes(InventorySide side)
     {
         var heroes = PartyBase.MainParty.MemberRoster
             .GetTroopRoster()
@@ -103,7 +137,7 @@ public class AutoEquipLogic
         }
     }
 
-    public bool EquipHero(CharacterObject hero, InventorySide side, bool civilian = false)
+    private bool EquipHero(CharacterObject hero, InventorySide side, bool civilian = false)
     {
         bool result = false;
 
@@ -186,7 +220,7 @@ public class AutoEquipLogic
         };
     }
 
-    public ItemRosterElement FindBestItem(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, bool civilian)
+    private ItemRosterElement FindBestItem(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, bool civilian)
     {
         Equipment allEq = civilian ? hero.FirstCivilianEquipment : hero.FirstBattleEquipment;
         EquipmentElement slotEq = allEq[slotIndex];

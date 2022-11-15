@@ -8,7 +8,6 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.ScreenSystem;
-
 namespace ButterEquipped.AutoEquip;
 
 public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLockSource, IDisposable
@@ -70,8 +69,13 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
         var eqUpLogic = new AutoEquipLogic(spInventoryVm, this);
 
         eqUpVm = new AutoEquipViewModel(spInventoryVm, this);
-        eqUpVm.OnEquip += (sender, _) => eqUpLogic.EquipAll(options);
-        eqUpVm.UpdateSlotLocks();
+        eqUpVm.OnEquip += (sender, e) => _ = e switch
+        {
+            AutoEquipViewModel.EquipPartyEventArgs => eqUpLogic.EquipParty(options),
+            AutoEquipViewModel.EquipHeroEventArgs eqHero => eqUpLogic.Equip(options, eqHero.Hero, eqHero.Civilian),
+            _ => false
+        };
+        UpdateViewModel();
 
         spInventoryVm.PropertyChangedWithValue += (sender, e) =>
         {
@@ -80,7 +84,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
                 return;
             }
 
-            eqUpVm.UpdateSlotLocks();
+            UpdateViewModel();
         };
 
         const string inventoryAutoEquipPrefab = "InventoryAutoEquip";
@@ -90,6 +94,18 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
         inventoryScreen.AddLayer(gauntletLayer);
         gauntletLayer.InputRestrictions.SetInputRestrictions();
 
+        void UpdateViewModel()
+        {
+            var hero = spInventoryVm.CharacterList?.SelectedItem?.Hero;
+            if(hero is null)
+            {
+                return;
+            }
+
+            eqUpVm.IsEquipVisible = true;
+            eqUpVm.IsEquipPartyVisible = !spInventoryVm.CharacterList!.HasSingleItem && options.EquipCompanions;
+            eqUpVm.UpdateSlotLocks();
+        }
     }
 
     private void HandleClose(object sender, bool fromCancel)
