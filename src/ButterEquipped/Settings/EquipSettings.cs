@@ -18,9 +18,8 @@ internal static class EquipSettings
     {
         var builder = BaseSettingsBuilder.Create(SettingsId, SettingsName)!
             .SetFormat("json2")
-            //workaround for broken fluent per-save settings
             .SetFolderName(nameof(ButterEquipped))
-            .SetSubFolder(id)
+            //.SetSubFolder(id)
             .CreateGroup("Equip Targets", BuildEquipTargetsGroup)
             .CreateGroup("Equip From", BuildEquipFromGroup)
             .CreateGroup("Keep Items", BuildKeepItemsGroup)
