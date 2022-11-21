@@ -246,7 +246,7 @@ public class AutoEquipLogic
                 EquipmentIndex.HorseHarness when !allEq[EquipmentIndex.Horse].IsEmpty => ItemTypeEnum.HorseHarness,
                 _ => ItemTypeEnum.Invalid
             },
-            false when options.KeepCrafted && slotEq.Item.IsCraftedWeapon => null,
+            false when options.KeepCrafted && slotEq.Item.IsCraftedByPlayer => null,
             false => slotEq.Item.ItemType
         };
 
