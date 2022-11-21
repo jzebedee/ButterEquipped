@@ -157,7 +157,7 @@ public class AutoEquipLogic
 
         bool TryEquip(EquipmentIndex index)
         {
-            EquipmentElement startingEq = civilian ? hero.FirstCivilianEquipment[index] : hero.FirstBattleEquipment[index];
+            EquipmentElement startingEq = GetEquipment()[index];
             ItemRosterElement bestItem = FindBestItem(index, hero, side, civilian);
 
             if (bestItem.IsEmpty || bestItem.EquipmentElement.IsEqualTo(startingEq))
@@ -178,11 +178,20 @@ public class AutoEquipLogic
                 Message($"{hero.Name} equips {bestItem.EquipmentElement.GetModifiedItemName().ToString()}");
             }
 
+            if (index == EquipmentIndex.Horse)
+            {
+                //always unequip harness to avoid camels + horse harness
+                var unequipHarnessCmd = CreateUnequipCommand(GetEquipment()[EquipmentIndex.HorseHarness], EquipmentIndex.HorseHarness);
+                InvLogic.AddTransferCommand(unequipHarnessCmd);
+            }
+
             var equipCmd = CreateEquipCommand(bestItem, index);
             InvLogic.AddTransferCommand(equipCmd);
 
             return true;
         }
+
+        Equipment GetEquipment() => civilian ? hero.FirstCivilianEquipment : hero.FirstBattleEquipment;
 
         TransferCommand CreateUnequipCommand(EquipmentElement equipment, EquipmentIndex index)
             => TransferCommand.Transfer(1, InventorySide.Equipment, InventorySide.PlayerInventory, new ItemRosterElement(equipment, 1), index, EquipmentIndex.None, hero, civilian);
