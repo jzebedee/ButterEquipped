@@ -191,7 +191,7 @@ public class AutoEquipLogic
             return true;
         }
 
-        Equipment GetEquipment() => civilian ? hero.FirstCivilianEquipment : hero.FirstBattleEquipment;
+        Equipment GetEquipment() => this.GetEquipment(hero, civilian);
 
         TransferCommand CreateUnequipCommand(EquipmentElement equipment, EquipmentIndex index)
             => TransferCommand.Transfer(1, InventorySide.Equipment, InventorySide.PlayerInventory, new ItemRosterElement(equipment, 1), index, EquipmentIndex.None, hero, civilian);
@@ -228,7 +228,7 @@ public class AutoEquipLogic
             _ => true
         };
 
-        Equipment GetEquipment() => civilian ? hero.FirstCivilianEquipment : hero.FirstBattleEquipment;
+        Equipment GetEquipment() => this.GetEquipment(hero, civilian);
     }
 
     private ItemRosterElement FindBestItem(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, bool civilian)
@@ -266,4 +266,7 @@ public class AutoEquipLogic
 
         return bestItems.First();
     }
+
+    private Equipment GetEquipment(CharacterObject character, bool civilian)
+        => civilian ? character.FirstCivilianEquipment : character.FirstBattleEquipment;
 }
