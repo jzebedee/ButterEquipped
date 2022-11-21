@@ -178,10 +178,10 @@ public class AutoEquipLogic
                 Message($"{hero.Name} equips {bestItem.EquipmentElement.GetModifiedItemName().ToString()}");
             }
 
-            if (index == EquipmentIndex.Horse)
+            if (index == EquipmentIndex.Horse && GetEquipment()[EquipmentIndex.HorseHarness] is var harness && !harness.IsEmpty)
             {
                 //always unequip harness to avoid camels + horse harness
-                var unequipHarnessCmd = CreateUnequipCommand(GetEquipment()[EquipmentIndex.HorseHarness], EquipmentIndex.HorseHarness);
+                var unequipHarnessCmd = CreateUnequipCommand(harness, EquipmentIndex.HorseHarness);
                 InvLogic.AddTransferCommand(unequipHarnessCmd);
             }
 
