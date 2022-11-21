@@ -211,11 +211,11 @@ public class AutoEquipLogic
             return false;
         }
 
-        Equipment allEq = civilian ? hero.FirstCivilianEquipment : hero.FirstBattleEquipment;
-        if (options.KeepWeaponClass && eq.Item.PrimaryWeapon != null)
+        Equipment allEq = GetEquipment();
+        if (options.KeepWeaponClass && eq.Item.PrimaryWeapon is var primaryWeapon)
         {
             var initialEq = allEq[index];
-            if (initialEq.Item.PrimaryWeapon.WeaponClass != eq.Item.PrimaryWeapon.WeaponClass)
+            if (initialEq.Item.PrimaryWeapon.WeaponClass != primaryWeapon.WeaponClass)
             {
                 return false;
             }
@@ -227,6 +227,8 @@ public class AutoEquipLogic
             EquipmentIndex.HorseHarness => allEq.Horse.Item.HorseComponent.Monster.FamilyType == eq.Item.ArmorComponent.FamilyType,
             _ => true
         };
+
+        Equipment GetEquipment() => civilian ? hero.FirstCivilianEquipment : hero.FirstBattleEquipment;
     }
 
     private ItemRosterElement FindBestItem(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, bool civilian)
