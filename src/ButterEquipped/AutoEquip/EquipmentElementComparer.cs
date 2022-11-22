@@ -108,11 +108,11 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             }
             else if (primaryWeapon.IsMeleeWeapon)
             {
-                float num3 = thrustSpeed * thrustDamage * 0.01f;
-                float num4 = swingSpeed * swingDamage * 0.01f;
-                float num5 = MathF.Max(num4, num3);
-                float num6 = MathF.Min(num4, num3);
-                return ((num5 + num6 * num6 / num5) * 120f + handling * 15f + weaponLength * 20f + weight * 5f) * 0.01f * mod;
+                float modThrust = thrustSpeed * thrustDamage * 0.01f;
+                float modSwing = swingSpeed * swingDamage * 0.01f;
+                float modMax = MathF.Max(modSwing, modThrust);
+                float modMin = MathF.Min(modSwing, modThrust);
+                return ((modMax + modMin * modMin / modMax) * 120f + handling * 15f + weaponLength * 20f + weight * 5f) * 0.01f * mod;
             }
             else if (primaryWeapon.IsConsumable)
             {
