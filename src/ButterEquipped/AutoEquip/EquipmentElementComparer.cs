@@ -28,11 +28,11 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
         var type = item.ItemType;
         var weight = eq.Weight;
 
-        return (item.HasHorseComponent, item.HasWeaponComponent, item.HasArmorComponent) switch
+        return item.ItemComponent switch
         {
-            (true, _, _) => CalculateEffectivenessHorse(item.HorseComponent),
-            (_, true, _) => CalculateEffectivenessWeapon(item.WeaponComponent.PrimaryWeapon),
-            (_, _, true) => CalculateEffectivenessArmor(),
+            HorseComponent horse => CalculateEffectivenessHorse(horse),
+            WeaponComponent weapon => CalculateEffectivenessWeapon(weapon.PrimaryWeapon),
+            ArmorComponent => CalculateEffectivenessArmor(),
             _ => 1f
         };
 
