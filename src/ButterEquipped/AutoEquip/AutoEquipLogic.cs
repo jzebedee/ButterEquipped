@@ -3,11 +3,13 @@ using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
 using static TaleWorlds.CampaignSystem.Inventory.InventoryLogic;
 using static TaleWorlds.Core.ItemObject;
 
@@ -42,7 +44,7 @@ public class AutoEquipLogic
 
     public bool Equip(AutoEquipOptions options, Hero hero, bool civilian)
     {
-        if(hero?.CharacterObject is not CharacterObject character)
+        if (hero?.CharacterObject is not CharacterObject character)
         {
             return false;
         }
@@ -83,12 +85,12 @@ public class AutoEquipLogic
             result |= EquipAllHeroes(InventorySide.PlayerInventory).Select(t => t.result).LastOrDefault(t => t);
         }
 
-        if(ShouldEquipOtherSide())
+        if (ShouldEquipOtherSide())
         {
             result |= EquipAllHeroes(InventorySide.OtherInventory).Select(t => t.result).LastOrDefault(t => t);
         }
 
-        if(!result)
+        if (!result)
         {
             Message("Nothing to equip");
         }
@@ -206,16 +208,24 @@ public class AutoEquipLogic
 
     private bool ShouldEquip(EquipmentElement eq, CharacterObject hero, EquipmentIndex index, bool civilian)
     {
-        if (civilian && !eq.Item.IsCivilian)
+        var item = eq.Item;
+        if (civilian && !item.IsCivilian)
         {
             return false;
         }
 
         Equipment allEq = GetEquipment();
-        if (options.KeepWeaponClass && eq.Item.PrimaryWeapon is var primaryWeapon)
+        var initialEq = allEq[index];
+
+        if (item.HasWeaponComponent)
         {
-            var initialEq = allEq[index];
-            if (initialEq.Item.PrimaryWeapon.WeaponClass != primaryWeapon.WeaponClass)
+            var validInitialWeapons = initialEq.Item.Weapons.Where(wcd => !DisallowForUsage(GetUsageFlags(wcd)));
+            var validComparedWeapons = item.Weapons.Where(wcd => !DisallowForUsage(GetUsageFlags(wcd)));
+            var validMatchedWeapons = validInitialWeapons
+                .Zip(validComparedWeapons, (wcdInitial, wcdConsidered) => wcdInitial.WeaponClass == wcdConsidered.WeaponClass);
+
+            var disallowed = options.KeepWeaponClass && !validMatchedWeapons.Any();
+            if (disallowed)
             {
                 return false;
             }
@@ -224,11 +234,30 @@ public class AutoEquipLogic
         return index switch
         {
             EquipmentIndex.HorseHarness when allEq.Horse.IsEmpty => false,
-            EquipmentIndex.HorseHarness => allEq.Horse.Item.HorseComponent.Monster.FamilyType == eq.Item.ArmorComponent.FamilyType,
+            EquipmentIndex.HorseHarness => allEq.Horse.Item.HorseComponent.Monster.FamilyType == item.ArmorComponent.FamilyType,
             _ => true
         };
 
         Equipment GetEquipment() => this.GetEquipment(hero, civilian);
+
+        static ItemUsageSetFlags GetUsageFlags(WeaponComponentData wcd)
+            => wcd.ItemUsage switch
+            {
+                string usage => MBItem.GetItemUsageSetFlags(usage),
+                _ => default
+            };
+
+        bool DisallowForUsage(ItemUsageSetFlags usageFlags)
+            => usageFlags switch
+            {
+                var u when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) && item.ItemType == ItemTypeEnum.Bow => !allEq.Horse.IsEmpty && !hero.GetPerkValue(DefaultPerks.Bow.HorseMaster),
+
+                var u when u.HasFlag(ItemUsageSetFlags.RequiresMount) => allEq.Horse.IsEmpty,
+                var u when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => !allEq.Horse.IsEmpty,
+                var u when u.HasFlag(ItemUsageSetFlags.RequiresShield) => !allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield),
+                var u when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield),
+                _ => false
+            };
     }
 
     private ItemRosterElement FindBestItem(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, bool civilian)
@@ -259,6 +288,7 @@ public class AutoEquipLogic
 
         var bestItems = InvLogic.GetElementsInRoster(side)
             .Where(item => item.EquipmentElement.Item.ItemType == itemType)
+            .Where(item => Equipment.IsItemFitsToSlot(slotIndex, item.EquipmentElement.Item))
             .Where(item => CharacterHelper.CanUseItemBasedOnSkill(hero, item.EquipmentElement))
             .Where(item => ShouldEquip(item.EquipmentElement, hero, slotIndex, civilian))
             .Prepend(new ItemRosterElement(slotEq, 0))
