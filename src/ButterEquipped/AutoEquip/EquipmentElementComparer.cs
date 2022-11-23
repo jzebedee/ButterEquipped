@@ -8,13 +8,6 @@ namespace ButterEquipped.AutoEquip;
 
 public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
 {
-    public record struct ComparerUsageInfo(bool HasMount, bool HasShield);
-
-    private readonly ComparerUsageInfo _usageInfo;
-
-    public EquipmentElementComparer(ComparerUsageInfo usageInfo = default)
-        => _usageInfo = usageInfo;
-
     public int Compare(EquipmentElement x, EquipmentElement y)
         => (x.IsEmpty, y.IsEmpty) switch
         {
@@ -24,24 +17,14 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             (false, false) => CompareInternal(x, y),
         };
 
-    private int CompareInternal(EquipmentElement x, EquipmentElement y)
+    private static int CompareInternal(EquipmentElement x, EquipmentElement y)
     {
         var effX = CalculateEffectiveness(x);
         var effY = CalculateEffectiveness(y);
         return effX.CompareTo(effY);
     }
 
-    private bool AllowForUsage(ItemUsageSetFlags usageFlags)
-    => usageFlags switch
-    {
-        var u when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => _usageInfo.HasMount,
-        var u when u.HasFlag(ItemUsageSetFlags.RequiresMount) => !_usageInfo.HasMount,
-        var u when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => !_usageInfo.HasShield,
-        var u when u.HasFlag(ItemUsageSetFlags.RequiresShield) => _usageInfo.HasShield,
-        _ => true
-    };
-
-    private float CalculateEffectiveness(EquipmentElement eq)
+    private static float CalculateEffectiveness(EquipmentElement eq)
     {
         var item = eq.Item;
         var type = item.ItemType;
@@ -50,7 +33,7 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
         return item.ItemComponent switch
         {
             HorseComponent horse => CalculateEffectivenessHorse(horse),
-            WeaponComponent weapon => weapon.Weapons.Where(wcd => AllowForUsage(wcd.GetUsageFlags())).Select((wcd, i) => CalculateEffectivenessWeapon(wcd) / (i+1)*2).Sum(),
+            WeaponComponent weapon => weapon.Weapons.Select((wcd, i) => CalculateEffectivenessWeapon(wcd) / (i+1)*2).Sum(),
             ArmorComponent => CalculateEffectivenessArmor(),
             _ => 1f
         };
