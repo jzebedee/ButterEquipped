@@ -1,11 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static TaleWorlds.Core.ItemObject;
 
 namespace ButterEquipped.AutoEquip;
 
 public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
 {
+    public record struct ComparerUsageInfo(bool HasMount, bool HasShield);
+
+    private readonly ComparerUsageInfo _usageInfo;
+
+    public EquipmentElementComparer(ComparerUsageInfo usageInfo = default)
+        => _usageInfo = usageInfo;
+
     public int Compare(EquipmentElement x, EquipmentElement y)
         => (x.IsEmpty, y.IsEmpty) switch
         {
@@ -15,14 +24,24 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             (false, false) => CompareInternal(x, y),
         };
 
-    private static int CompareInternal(EquipmentElement x, EquipmentElement y)
+    private int CompareInternal(EquipmentElement x, EquipmentElement y)
     {
         var effX = CalculateEffectiveness(x);
         var effY = CalculateEffectiveness(y);
         return effX.CompareTo(effY);
     }
 
-    private static float CalculateEffectiveness(EquipmentElement eq)
+    private bool AllowForUsage(ItemUsageSetFlags usageFlags)
+    => usageFlags switch
+    {
+        var u when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => _usageInfo.HasMount,
+        var u when u.HasFlag(ItemUsageSetFlags.RequiresMount) => !_usageInfo.HasMount,
+        var u when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => !_usageInfo.HasShield,
+        var u when u.HasFlag(ItemUsageSetFlags.RequiresShield) => _usageInfo.HasShield,
+        _ => true
+    };
+
+    private float CalculateEffectiveness(EquipmentElement eq)
     {
         var item = eq.Item;
         var type = item.ItemType;
@@ -31,7 +50,7 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
         return item.ItemComponent switch
         {
             HorseComponent horse => CalculateEffectivenessHorse(horse),
-            WeaponComponent weapon => CalculateEffectivenessWeapon(weapon.PrimaryWeapon),
+            WeaponComponent weapon => weapon.Weapons.Where(wcd => AllowForUsage(wcd.GetUsageFlags())).Select((wcd, i) => CalculateEffectivenessWeapon(wcd) / (i+1)*2).Sum(),
             ArmorComponent => CalculateEffectivenessArmor(),
             _ => 1f
         };
@@ -53,9 +72,9 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             }
         }
 
-        float CalculateEffectivenessWeapon(WeaponComponentData primaryWeapon)
+        float CalculateEffectivenessWeapon(WeaponComponentData weapon)
         {
-            float mod = primaryWeapon.WeaponClass switch
+            float mod = weapon.WeaponClass switch
             {
                 WeaponClass.Dagger => 0.4f,
                 WeaponClass.OneHandedSword => 0.55f,
@@ -85,19 +104,19 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
                 _ => 1f,
             };
 
-            var missileDamage = primaryWeapon.GetModifiedMissileDamage(eq.ItemModifier);
-            var missileSpeed = primaryWeapon.GetModifiedMissileSpeed(eq.ItemModifier);
-            var accuracy = primaryWeapon.Accuracy;
-            var thrustSpeed = primaryWeapon.GetModifiedThrustSpeed(eq.ItemModifier);
-            var thrustDamage = primaryWeapon.GetModifiedThrustDamage(eq.ItemModifier);
-            var swingSpeed = primaryWeapon.GetModifiedSwingSpeed(eq.ItemModifier);
-            var swingDamage = primaryWeapon.GetModifiedSwingDamage(eq.ItemModifier);
-            var handling = primaryWeapon.GetModifiedHandling(eq.ItemModifier);
-            var weaponLength = primaryWeapon.WeaponLength;
-            var maxDataValue = primaryWeapon.MaxDataValue;
-            if (primaryWeapon.IsRangedWeapon)
+            var missileDamage = weapon.GetModifiedMissileDamage(eq.ItemModifier);
+            var missileSpeed = weapon.GetModifiedMissileSpeed(eq.ItemModifier);
+            var accuracy = weapon.Accuracy;
+            var thrustSpeed = weapon.GetModifiedThrustSpeed(eq.ItemModifier);
+            var thrustDamage = weapon.GetModifiedThrustDamage(eq.ItemModifier);
+            var swingSpeed = weapon.GetModifiedSwingSpeed(eq.ItemModifier);
+            var swingDamage = weapon.GetModifiedSwingDamage(eq.ItemModifier);
+            var handling = weapon.GetModifiedHandling(eq.ItemModifier);
+            var weaponLength = weapon.WeaponLength;
+            var maxDataValue = weapon.MaxDataValue;
+            if (weapon.IsRangedWeapon)
             {
-                if (primaryWeapon.IsConsumable)
+                if (weapon.IsConsumable)
                 {
                     return (missileDamage * missileSpeed * 1.775f + accuracy * maxDataValue * 25f + weaponLength * 4f) * 0.006944f * maxDataValue * mod;
                 }
@@ -106,7 +125,7 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
                     return (missileSpeed * missileDamage * 1.75f + thrustSpeed * accuracy * 0.3f) * 0.01f * maxDataValue * mod;
                 }
             }
-            else if (primaryWeapon.IsMeleeWeapon)
+            else if (weapon.IsMeleeWeapon)
             {
                 float modThrust = thrustSpeed * thrustDamage * 0.01f;
                 float modSwing = swingSpeed * swingDamage * 0.01f;
@@ -114,13 +133,13 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
                 float modMin = MathF.Min(modSwing, modThrust);
                 return ((modMax + modMin * modMin / modMax) * 120f + handling * 15f + weaponLength * 20f + weight * 5f) * 0.01f * mod;
             }
-            else if (primaryWeapon.IsConsumable)
+            else if (weapon.IsConsumable)
             {
                 return (missileDamage * 550f + missileSpeed * 15f + maxDataValue * 60f) * 0.01f * mod;
             }
-            else if (primaryWeapon.IsShield)
+            else if (weapon.IsShield)
             {
-                var bodyArmor = primaryWeapon.GetModifiedArmor(eq.ItemModifier);
+                var bodyArmor = weapon.GetModifiedArmor(eq.ItemModifier);
                 return (bodyArmor * 60f + thrustSpeed * 10f + maxDataValue * 40f + weaponLength * 20f) * 0.01f * mod;
             }
 

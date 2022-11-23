@@ -9,7 +9,6 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
 using static TaleWorlds.CampaignSystem.Inventory.InventoryLogic;
 using static TaleWorlds.Core.ItemObject;
 
@@ -27,8 +26,6 @@ public class AutoEquipLogic
 
     private readonly Traverse2 _refreshInformationValues;
 
-    private readonly IComparer<EquipmentElement> _eqComparer;
-
     private readonly IEquipmentSlotLockSource _equipmentSlotLocks;
 
     private AutoEquipOptions options;
@@ -39,7 +36,6 @@ public class AutoEquipLogic
         _updateRightCharacter = Traverse2.Create(spInventoryVm).Method("UpdateRightCharacter");
         _executeRemoveZeroCounts = Traverse2.Create(spInventoryVm).Method("ExecuteRemoveZeroCounts");
         _refreshInformationValues = Traverse2.Create(spInventoryVm).Method("RefreshInformationValues");
-        _eqComparer = new EquipmentElementComparer();
     }
 
     public bool Equip(AutoEquipOptions options, Hero hero, bool civilian)
@@ -205,8 +201,7 @@ public class AutoEquipLogic
     private static void Message(string information)
         => InformationManager.DisplayMessage(new InformationMessage(information));
 
-
-    private bool ShouldEquip(EquipmentElement eq, CharacterObject hero, EquipmentIndex index, bool civilian)
+    private bool ShouldEquip(EquipmentElement eq, CharacterObject hero, EquipmentIndex index, bool civilian, EquipmentElementComparer.ComparerUsageInfo usageInfo)
     {
         var item = eq.Item;
         if (civilian && !item.IsCivilian)
@@ -217,15 +212,18 @@ public class AutoEquipLogic
         Equipment allEq = GetEquipment();
         var initialEq = allEq[index];
 
-        if (item.HasWeaponComponent)
+        if (options.KeepWeaponClass && item.HasWeaponComponent)
         {
-            var validInitialWeapons = initialEq.Item.Weapons.Where(wcd => !DisallowForUsage(GetUsageFlags(wcd)));
-            var validComparedWeapons = item.Weapons.Where(wcd => !DisallowForUsage(GetUsageFlags(wcd)));
-            var validMatchedWeapons = validInitialWeapons
-                .Zip(validComparedWeapons, (wcdInitial, wcdConsidered) => wcdInitial.WeaponClass == wcdConsidered.WeaponClass);
+            bool anyAllowed = false;
+            for (int i = 0; i < item.Weapons.Count && i < initialEq.Item.Weapons.Count; i++)
+            {
+                var initialWcd = initialEq.Item.Weapons[i];
+                var wcd = item.Weapons[i];
 
-            var disallowed = options.KeepWeaponClass && !validMatchedWeapons.Any();
-            if (disallowed)
+                anyAllowed |= initialWcd.WeaponClass == wcd.WeaponClass && AllowForUsage(item.ItemType, wcd.GetUsageFlags());
+            }
+
+            if (!anyAllowed)
             {
                 return false;
             }
@@ -234,29 +232,22 @@ public class AutoEquipLogic
         return index switch
         {
             EquipmentIndex.HorseHarness when allEq.Horse.IsEmpty => false,
-            EquipmentIndex.HorseHarness => allEq.Horse.Item.HorseComponent.Monster.FamilyType == item.ArmorComponent.FamilyType,
+            EquipmentIndex.HorseHarness => allEq.Horse.Item.HorseComponent.Monster.FamilyType == item.ArmorComponent.FamilyType, //camelizer
             _ => true
         };
 
         Equipment GetEquipment() => this.GetEquipment(hero, civilian);
 
-        static ItemUsageSetFlags GetUsageFlags(WeaponComponentData wcd)
-            => wcd.ItemUsage switch
+        bool AllowForUsage(ItemTypeEnum itemType, ItemUsageSetFlags usageFlags)
+            => (itemType, usageFlags) switch
             {
-                string usage => MBItem.GetItemUsageSetFlags(usage),
-                _ => default
-            };
-
-        bool DisallowForUsage(ItemUsageSetFlags usageFlags)
-            => usageFlags switch
-            {
-                var u when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) && item.ItemType == ItemTypeEnum.Bow => !allEq.Horse.IsEmpty && !hero.GetPerkValue(DefaultPerks.Bow.HorseMaster),
-
-                var u when u.HasFlag(ItemUsageSetFlags.RequiresMount) => allEq.Horse.IsEmpty,
-                var u when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => !allEq.Horse.IsEmpty,
-                var u when u.HasFlag(ItemUsageSetFlags.RequiresShield) => !allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield),
-                var u when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield),
-                _ => false
+                (ItemTypeEnum.Bow, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => usageInfo.HasMount || hero.GetPerkValue(DefaultPerks.Bow.HorseMaster),
+                (ItemTypeEnum.Bow, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => true,
+                (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => usageInfo.HasMount,
+                (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresMount) => !usageInfo.HasMount,
+                (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => !usageInfo.HasShield,
+                (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresShield) => usageInfo.HasShield,
+                _ => true
             };
     }
 
@@ -286,13 +277,14 @@ public class AutoEquipLogic
             return ItemRosterElement.Invalid;
         }
 
+        EquipmentElementComparer.ComparerUsageInfo usageInfo = new(HasMount: !allEq.Horse.IsEmpty, HasShield: allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield));
         var bestItems = InvLogic.GetElementsInRoster(side)
             .Where(item => item.EquipmentElement.Item.ItemType == itemType)
             .Where(item => Equipment.IsItemFitsToSlot(slotIndex, item.EquipmentElement.Item))
             .Where(item => CharacterHelper.CanUseItemBasedOnSkill(hero, item.EquipmentElement))
-            .Where(item => ShouldEquip(item.EquipmentElement, hero, slotIndex, civilian))
+            .Where(item => ShouldEquip(item.EquipmentElement, hero, slotIndex, civilian, usageInfo))
             .Prepend(new ItemRosterElement(slotEq, 0))
-            .OrderByDescending(item => item.EquipmentElement, _eqComparer);
+            .OrderByDescending(item => item.EquipmentElement, new EquipmentElementComparer(usageInfo));
 
         return bestItems.First();
     }
