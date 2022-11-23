@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static TaleWorlds.Core.ItemObject;
 
 namespace ButterEquipped.AutoEquip;
 
@@ -28,11 +30,11 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
         var type = item.ItemType;
         var weight = eq.Weight;
 
-        return (item.HasHorseComponent, item.HasWeaponComponent, item.HasArmorComponent) switch
+        return item.ItemComponent switch
         {
-            (true, _, _) => CalculateEffectivenessHorse(item.HorseComponent),
-            (_, true, _) => CalculateEffectivenessWeapon(item.WeaponComponent.PrimaryWeapon),
-            (_, _, true) => CalculateEffectivenessArmor(),
+            HorseComponent horse => CalculateEffectivenessHorse(horse),
+            WeaponComponent weapon => weapon.Weapons.Select((wcd, i) => CalculateEffectivenessWeapon(wcd) / (i+1)*2).Sum(),
+            ArmorComponent => CalculateEffectivenessArmor(),
             _ => 1f
         };
 
@@ -53,9 +55,9 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             }
         }
 
-        float CalculateEffectivenessWeapon(WeaponComponentData primaryWeapon)
+        float CalculateEffectivenessWeapon(WeaponComponentData weapon)
         {
-            float mod = primaryWeapon.WeaponClass switch
+            float mod = weapon.WeaponClass switch
             {
                 WeaponClass.Dagger => 0.4f,
                 WeaponClass.OneHandedSword => 0.55f,
@@ -85,43 +87,46 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
                 _ => 1f,
             };
 
-            var missileDamage = primaryWeapon.GetModifiedMissileDamage(eq.ItemModifier);
-            var missileSpeed = primaryWeapon.GetModifiedMissileSpeed(eq.ItemModifier);
-            var accuracy = primaryWeapon.Accuracy;
-            var thrustSpeed = primaryWeapon.GetModifiedThrustSpeed(eq.ItemModifier);
-            var thrustDamage = primaryWeapon.GetModifiedThrustDamage(eq.ItemModifier);
-            var swingSpeed = primaryWeapon.GetModifiedSwingSpeed(eq.ItemModifier);
-            var swingDamage = primaryWeapon.GetModifiedSwingDamage(eq.ItemModifier);
-            var handling = primaryWeapon.GetModifiedHandling(eq.ItemModifier);
-            var weaponLength = primaryWeapon.WeaponLength;
-            var maxDataValue = primaryWeapon.MaxDataValue;
-            if (primaryWeapon.IsRangedWeapon)
+            var missileDamage = weapon.GetModifiedMissileDamage(eq.ItemModifier);
+            var missileSpeed = weapon.GetModifiedMissileSpeed(eq.ItemModifier);
+            var accuracy = weapon.Accuracy;
+            var thrustSpeed = weapon.GetModifiedThrustSpeed(eq.ItemModifier);
+            var thrustDamage = weapon.GetModifiedThrustDamage(eq.ItemModifier);
+            var swingSpeed = weapon.GetModifiedSwingSpeed(eq.ItemModifier);
+            var swingDamage = weapon.GetModifiedSwingDamage(eq.ItemModifier);
+            var handling = weapon.GetModifiedHandling(eq.ItemModifier);
+            var weaponLength = weapon.WeaponLength;
+            //uses MaxDataValue, must be IsConsumable and not shield
+            var stackCount = weapon.GetModifiedStackCount(eq.ItemModifier);
+            if (weapon.IsRangedWeapon)
             {
-                if (primaryWeapon.IsConsumable)
+                if (weapon.IsConsumable)
                 {
-                    return (missileDamage * missileSpeed * 1.775f + accuracy * maxDataValue * 25f + weaponLength * 4f) * 0.006944f * maxDataValue * mod;
+                    return (missileDamage * missileSpeed * 1.775f + accuracy * stackCount * 25f + weaponLength * 4f) * 0.006944f * stackCount * mod;
                 }
                 else
                 {
-                    return (missileSpeed * missileDamage * 1.75f + thrustSpeed * accuracy * 0.3f) * 0.01f * maxDataValue * mod;
+                    return (missileSpeed * missileDamage * 1.75f + thrustSpeed * accuracy * 0.3f) * 0.01f * stackCount * mod;
                 }
             }
-            else if (primaryWeapon.IsMeleeWeapon)
+            else if (weapon.IsMeleeWeapon)
             {
-                float num3 = thrustSpeed * thrustDamage * 0.01f;
-                float num4 = swingSpeed * swingDamage * 0.01f;
-                float num5 = MathF.Max(num4, num3);
-                float num6 = MathF.Min(num4, num3);
-                return ((num5 + num6 * num6 / num5) * 120f + handling * 15f + weaponLength * 20f + weight * 5f) * 0.01f * mod;
+                float modThrust = thrustSpeed * thrustDamage * 0.01f;
+                float modSwing = swingSpeed * swingDamage * 0.01f;
+                float modMax = MathF.Max(modSwing, modThrust);
+                float modMin = MathF.Min(modSwing, modThrust);
+                return ((modMax + modMin * modMin / modMax) * 120f + handling * 15f + weaponLength * 20f + weight * 5f) * 0.01f * mod;
             }
-            else if (primaryWeapon.IsConsumable)
+            else if (weapon.IsConsumable)
             {
-                return (missileDamage * 550f + missileSpeed * 15f + maxDataValue * 60f) * 0.01f * mod;
+                return (missileDamage * 550f + missileSpeed * 15f + stackCount * 60f) * 0.01f * mod;
             }
-            else if (primaryWeapon.IsShield)
+            else if (weapon.IsShield)
             {
-                var bodyArmor = primaryWeapon.GetModifiedArmor(eq.ItemModifier);
-                return (bodyArmor * 60f + thrustSpeed * 10f + maxDataValue * 40f + weaponLength * 20f) * 0.01f * mod;
+                var bodyArmor = weapon.GetModifiedArmor(eq.ItemModifier);
+                //uses MaxDataValue
+                var hp = weapon.GetModifiedMaximumHitPoints(eq.ItemModifier);
+                return (bodyArmor * 60f + thrustSpeed * 10f + hp * 40f + weaponLength * 20f) * 0.01f * mod;
             }
 
             return 1f;
