@@ -28,6 +28,8 @@ public class AutoEquipLogic
 
     private readonly IEquipmentSlotLockSource _equipmentSlotLocks;
 
+    private readonly IComparer<EquipmentElement> _eqComparer;
+
     private AutoEquipOptions options;
 
     public AutoEquipLogic(SPInventoryVM spInventoryVm, IEquipmentSlotLockSource equipmentSlotLocks)
@@ -36,6 +38,7 @@ public class AutoEquipLogic
         _updateRightCharacter = Traverse2.Create(spInventoryVm).Method("UpdateRightCharacter");
         _executeRemoveZeroCounts = Traverse2.Create(spInventoryVm).Method("ExecuteRemoveZeroCounts");
         _refreshInformationValues = Traverse2.Create(spInventoryVm).Method("RefreshInformationValues");
+        _eqComparer = new EquipmentElementComparer();
     }
 
     public bool Equip(AutoEquipOptions options, Hero hero, bool civilian)
@@ -201,7 +204,7 @@ public class AutoEquipLogic
     private static void Message(string information)
         => InformationManager.DisplayMessage(new InformationMessage(information));
 
-    private bool ShouldEquip(EquipmentElement eq, CharacterObject hero, EquipmentIndex index, bool civilian, EquipmentElementComparer.ComparerUsageInfo usageInfo)
+    private bool ShouldEquip(EquipmentElement eq, CharacterObject hero, EquipmentIndex index, bool civilian, EquipmentUsageInfo usageInfo)
     {
         var item = eq.Item;
         if (civilian && !item.IsCivilian)
@@ -277,14 +280,14 @@ public class AutoEquipLogic
             return ItemRosterElement.Invalid;
         }
 
-        EquipmentElementComparer.ComparerUsageInfo usageInfo = new(HasMount: !allEq.Horse.IsEmpty, HasShield: allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield));
+        EquipmentUsageInfo usageInfo = new(HasMount: !allEq.Horse.IsEmpty, HasShield: allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield));
         var bestItems = InvLogic.GetElementsInRoster(side)
             .Where(item => item.EquipmentElement.Item.ItemType == itemType)
             .Where(item => Equipment.IsItemFitsToSlot(slotIndex, item.EquipmentElement.Item))
             .Where(item => CharacterHelper.CanUseItemBasedOnSkill(hero, item.EquipmentElement))
             .Where(item => ShouldEquip(item.EquipmentElement, hero, slotIndex, civilian, usageInfo))
             .Prepend(new ItemRosterElement(slotEq, 0))
-            .OrderByDescending(item => item.EquipmentElement, new EquipmentElementComparer(usageInfo));
+            .OrderByDescending(item => item.EquipmentElement, _eqComparer);
 
         return bestItems.First();
     }
