@@ -113,16 +113,17 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             var swingDamage = weapon.GetModifiedSwingDamage(eq.ItemModifier);
             var handling = weapon.GetModifiedHandling(eq.ItemModifier);
             var weaponLength = weapon.WeaponLength;
-            var maxDataValue = weapon.MaxDataValue;
+            //uses MaxDataValue, must be IsConsumable and not shield
+            var stackCount = weapon.GetModifiedStackCount(eq.ItemModifier);
             if (weapon.IsRangedWeapon)
             {
                 if (weapon.IsConsumable)
                 {
-                    return (missileDamage * missileSpeed * 1.775f + accuracy * maxDataValue * 25f + weaponLength * 4f) * 0.006944f * maxDataValue * mod;
+                    return (missileDamage * missileSpeed * 1.775f + accuracy * stackCount * 25f + weaponLength * 4f) * 0.006944f * stackCount * mod;
                 }
                 else
                 {
-                    return (missileSpeed * missileDamage * 1.75f + thrustSpeed * accuracy * 0.3f) * 0.01f * maxDataValue * mod;
+                    return (missileSpeed * missileDamage * 1.75f + thrustSpeed * accuracy * 0.3f) * 0.01f * stackCount * mod;
                 }
             }
             else if (weapon.IsMeleeWeapon)
@@ -135,12 +136,14 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             }
             else if (weapon.IsConsumable)
             {
-                return (missileDamage * 550f + missileSpeed * 15f + maxDataValue * 60f) * 0.01f * mod;
+                return (missileDamage * 550f + missileSpeed * 15f + stackCount * 60f) * 0.01f * mod;
             }
             else if (weapon.IsShield)
             {
                 var bodyArmor = weapon.GetModifiedArmor(eq.ItemModifier);
-                return (bodyArmor * 60f + thrustSpeed * 10f + maxDataValue * 40f + weaponLength * 20f) * 0.01f * mod;
+                //uses MaxDataValue
+                var hp = weapon.GetModifiedMaximumHitPoints(eq.ItemModifier);
+                return (bodyArmor * 60f + thrustSpeed * 10f + hp * 40f + weaponLength * 20f) * 0.01f * mod;
             }
 
             return 1f;
