@@ -223,7 +223,7 @@ public class AutoEquipLogic
                 var initialWcd = initialEq.Item.Weapons[i];
                 var wcd = item.Weapons[i];
 
-                anyAllowed |= initialWcd.WeaponClass == wcd.WeaponClass && AllowForUsage(item.ItemType, wcd.GetUsageFlags());
+                anyAllowed |= initialWcd.WeaponClass == wcd.WeaponClass && AllowForUsage(item.ItemType, wcd);
             }
 
             if (!anyAllowed)
@@ -243,8 +243,8 @@ public class AutoEquipLogic
 
         Equipment GetEquipment() => this.GetEquipment(hero, civilian);
 
-        bool AllowForUsage(ItemTypeEnum itemType, ItemUsageSetFlags usageFlags)
-            => (itemType, usageFlags) switch
+        bool AllowForUsage(ItemTypeEnum itemType, WeaponComponentData weapon)
+            => (itemType, weapon.GetUsageFlags()) switch
             {
                 (ItemTypeEnum.Bow, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => usageInfo.HasMount || hero.GetPerkValue(DefaultPerks.Bow.HorseMaster),
                 (ItemTypeEnum.Bow, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => true,
@@ -252,6 +252,7 @@ public class AutoEquipLogic
                 (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresMount) => !usageInfo.HasMount,
                 (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => !usageInfo.HasShield,
                 (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresShield) => usageInfo.HasShield,
+                _ when weapon.IsAmmo => usageInfo.UsableAmmoClasses.Contains(weapon.WeaponClass),
                 _ => true
             };
     }
@@ -282,7 +283,16 @@ public class AutoEquipLogic
             return ItemRosterElement.Invalid;
         }
 
-        EquipmentUsageInfo usageInfo = new(HasMount: !allEq.Horse.IsEmpty, HasShield: allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield));
+        EquipmentUsageInfo usageInfo = new(
+            HasMount: !allEq.Horse.IsEmpty,
+            HasShield: allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield),
+            UsableAmmoClasses: allEq.WeaponSlots()
+                                    .Where(slot => !slot.IsEmpty)
+                                    .Select(slot => slot.Item.PrimaryWeapon)
+                                    .OfType<WeaponComponentData>()
+                                    .Select(wcd => wcd.AmmoClass)
+                                    .Where(ammoClass => ammoClass != WeaponClass.Undefined)
+                                    .ToArray());
         var bestItems = InvLogic.GetElementsInRoster(side)
             .Where(item => item.EquipmentElement.Item.ItemType == itemType)
             .Where(item => Equipment.IsItemFitsToSlot(slotIndex, item.EquipmentElement.Item))
