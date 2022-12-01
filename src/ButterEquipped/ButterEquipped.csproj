@@ -17,7 +17,7 @@
     <HarmonyVersion>2.2.2</HarmonyVersion>
     <UIExtenderExVersion>2.3.1</UIExtenderExVersion>
     <ButterLibVersion>2.5.1</ButterLibVersion>
-    <MCMVersion>5.3.2</MCMVersion>
+    <MCMVersion>5.3.1</MCMVersion>
   </PropertyGroup>
 
   <ItemGroup>
