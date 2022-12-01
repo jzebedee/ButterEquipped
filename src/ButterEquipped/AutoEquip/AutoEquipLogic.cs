@@ -236,6 +236,8 @@ public class AutoEquipLogic
         {
             EquipmentIndex.HorseHarness when allEq.Horse.IsEmpty => false,
             EquipmentIndex.HorseHarness => allEq.Horse.Item.HorseComponent.Monster.FamilyType == item.ArmorComponent.FamilyType, //camelizer
+            EquipmentIndex.ExtraWeaponSlot when allEq[EquipmentIndex.ExtraWeaponSlot].IsEmpty => false,
+            EquipmentIndex.ExtraWeaponSlot => allEq[EquipmentIndex.ExtraWeaponSlot].Item.BannerComponent.BannerEffect.StringId == item.BannerComponent.BannerEffect?.StringId, //banners
             _ => true
         };
 
