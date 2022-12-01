@@ -32,11 +32,17 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
 
         return item.ItemComponent switch
         {
+            BannerComponent banner => CalculateEffectivenessBanner(banner),
             HorseComponent horse => CalculateEffectivenessHorse(horse),
             WeaponComponent weapon => weapon.Weapons.Select((wcd, i) => CalculateEffectivenessWeapon(wcd) / (i+1)*2).Sum(),
             ArmorComponent => CalculateEffectivenessArmor(),
             _ => 1f
         };
+
+        float CalculateEffectivenessBanner(BannerComponent banner)
+        {
+            return MathF.Abs(banner.GetBannerEffectBonus());
+        }
 
         float CalculateEffectivenessArmor(/*ArmorComponent armor*/)
         {
