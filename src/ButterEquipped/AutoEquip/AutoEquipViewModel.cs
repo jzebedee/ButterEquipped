@@ -66,6 +66,20 @@ public class AutoEquipViewModel : ViewModel
     }
 
     [DataSourceProperty]
+    public bool ExtraWeaponLocked
+    {
+        get => _slotLocks[(int)EquipmentIndex.ExtraWeaponSlot];
+        set
+        {
+            if (value != _slotLocks[(int)EquipmentIndex.ExtraWeaponSlot])
+            {
+                _slotLocks[(int)EquipmentIndex.ExtraWeaponSlot] = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    [DataSourceProperty]
     public bool HelmetLocked
     {
         get => _slotLocks[(int)EquipmentIndex.Head];
@@ -248,5 +262,6 @@ public class AutoEquipViewModel : ViewModel
         this.OnPropertyChanged(nameof(Weapon1Locked));
         this.OnPropertyChanged(nameof(Weapon2Locked));
         this.OnPropertyChanged(nameof(Weapon3Locked));
+        this.OnPropertyChanged(nameof(ExtraWeaponLocked));
     }
 }

@@ -40,6 +40,8 @@
 						<ButtonWidget Id="LockWeapon2" Brush="Inventory.Lock" IsSelected="@Weapon2Locked" ButtonType="Toggle" MarginTop="245" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
 
 						<ButtonWidget Id="LockWeapon3" Brush="Inventory.Lock" IsSelected="@Weapon3Locked" ButtonType="Toggle" MarginTop="330" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
+
+						<ButtonWidget Id="LockExtraWeapon" Brush="Inventory.Lock" IsSelected="@ExtraWeaponLocked" ButtonType="Toggle" MarginTop="535" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
 					</Children>
 				</Widget>
 
