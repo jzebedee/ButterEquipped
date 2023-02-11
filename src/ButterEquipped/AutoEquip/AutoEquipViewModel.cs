@@ -18,7 +18,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.Weapon0])
             {
                 _slotLocks[(int)EquipmentIndex.Weapon0] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -32,7 +32,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.Weapon1])
             {
                 _slotLocks[(int)EquipmentIndex.Weapon1] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -46,7 +46,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.Weapon2])
             {
                 _slotLocks[(int)EquipmentIndex.Weapon2] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -60,7 +60,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.Weapon3])
             {
                 _slotLocks[(int)EquipmentIndex.Weapon3] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -74,7 +74,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.ExtraWeaponSlot])
             {
                 _slotLocks[(int)EquipmentIndex.ExtraWeaponSlot] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -88,7 +88,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.Head])
             {
                 _slotLocks[(int)EquipmentIndex.Head] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -102,7 +102,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.Cape])
             {
                 _slotLocks[(int)EquipmentIndex.Cape] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -116,7 +116,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.Body])
             {
                 _slotLocks[(int)EquipmentIndex.Body] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -130,7 +130,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.Gloves])
             {
                 _slotLocks[(int)EquipmentIndex.Gloves] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -144,7 +144,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.Leg])
             {
                 _slotLocks[(int)EquipmentIndex.Leg] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -158,7 +158,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.Horse])
             {
                 _slotLocks[(int)EquipmentIndex.Horse] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -172,7 +172,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _slotLocks[(int)EquipmentIndex.HorseHarness])
             {
                 _slotLocks[(int)EquipmentIndex.HorseHarness] = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -188,7 +188,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _isEquipVisible)
             {
                 _isEquipVisible = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
@@ -204,7 +204,7 @@ public class AutoEquipViewModel : ViewModel
             if (value != _isEquipPartyVisible)
             {
                 _isEquipPartyVisible = value;
-                OnPropertyChanged();
+                OnPropertyChangedWithValue(value);
             }
         }
     }
