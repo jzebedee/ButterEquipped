@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
+using TaleWorlds.Library.EventSystem;
 using TaleWorlds.ScreenSystem;
 namespace ButterEquipped.AutoEquip;
 
@@ -15,19 +16,18 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
     private bool eventsRegistered;
     private bool disposed;
 
-    private AutoEquipViewModel eqUpVm;
-
-    private GauntletLayer gauntletLayer;
-
     private Dictionary<HeroEquipmentSet, BitArray> slotLocks;
     public Dictionary<HeroEquipmentSet, BitArray> SlotLocks => slotLocks;
 
     private AutoEquipOptions options;
 
+    private SPInventoryVM spInventoryVm;
+    private AutoEquipViewModel eqUpVm;
+    private GauntletLayer gauntletLayer;
+
     private static readonly HashSet<string> UpdateOnProperties = new()
     {
-        nameof(SPInventoryVM.CurrentCharacterName),
-        nameof(SPInventoryVM.IsInWarSet)
+        nameof(SPInventoryVM.RightInventoryOwnerName)
     };
 
     public AutoEquipBehavior(AutoEquipOptions options)
@@ -37,11 +37,32 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
 
     public override void RegisterEvents()
     {
+        if(Game.Current.EventManager is EventManager manager)
+        {
+            manager.RegisterEvent<InventoryEquipmentTypeChangedEvent>(OnInventoryEquipmentTypeChanged);
+        }
+
         ScreenManager.OnPushScreen += ScreenManager_OnPushScreen;
         ScreenManager.OnPopScreen += ScreenManager_OnPopScreen;
         AutoEquipPatches_InventoryManager_CloseInventoryPresentation.OnClosing += HandleClose;
         eventsRegistered = true;
     }
+
+    private void UpdateViewModel()
+    {
+        var hero = spInventoryVm.CharacterList?.SelectedItem?.Hero;
+        if (hero is null)
+        {
+            return;
+        }
+
+        eqUpVm.IsEquipVisible = true;
+        eqUpVm.IsEquipPartyVisible = !spInventoryVm.CharacterList!.HasSingleItem && options.EquipCompanions;
+        eqUpVm.UpdateSlotLocks();
+    }
+
+    private void OnInventoryEquipmentTypeChanged(InventoryEquipmentTypeChangedEvent e)
+        => UpdateViewModel();
 
     private void ScreenManager_OnPopScreen(ScreenBase poppedScreen)
     {
@@ -65,6 +86,8 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
         {
             return;
         }
+
+        this.spInventoryVm = spInventoryVm;
 
         var eqUpLogic = new AutoEquipLogic(spInventoryVm, this);
 
@@ -93,19 +116,6 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
 
         inventoryScreen.AddLayer(gauntletLayer);
         gauntletLayer.InputRestrictions.SetInputRestrictions();
-
-        void UpdateViewModel()
-        {
-            var hero = spInventoryVm.CharacterList?.SelectedItem?.Hero;
-            if(hero is null)
-            {
-                return;
-            }
-
-            eqUpVm.IsEquipVisible = true;
-            eqUpVm.IsEquipPartyVisible = !spInventoryVm.CharacterList!.HasSingleItem && options.EquipCompanions;
-            eqUpVm.UpdateSlotLocks();
-        }
     }
 
     private void HandleClose(object sender, bool fromCancel)
@@ -142,6 +152,11 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
 
         if (eventsRegistered)
         {
+            if (Game.Current.EventManager is EventManager manager)
+            {
+                manager.UnregisterEvent<InventoryEquipmentTypeChangedEvent>(OnInventoryEquipmentTypeChanged);
+            }
+
             ScreenManager.OnPushScreen -= ScreenManager_OnPushScreen;
             ScreenManager.OnPopScreen -= ScreenManager_OnPopScreen;
             AutoEquipPatches_InventoryManager_CloseInventoryPresentation.OnClosing -= HandleClose;
