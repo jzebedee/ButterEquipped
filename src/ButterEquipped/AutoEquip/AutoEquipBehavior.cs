@@ -25,11 +25,6 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
     private AutoEquipViewModel eqUpVm;
     private GauntletLayer gauntletLayer;
 
-    private static readonly HashSet<string> UpdateOnProperties = new()
-    {
-        nameof(SPInventoryVM.RightInventoryOwnerName)
-    };
-
     public AutoEquipBehavior(AutoEquipOptions options)
     {
         this.options = options;
@@ -102,7 +97,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
 
         spInventoryVm.PropertyChangedWithValue += (sender, e) =>
         {
-            if (!UpdateOnProperties.Contains(e.PropertyName))
+            if (e.PropertyName is not nameof(SPInventoryVM.CurrentCharacterName))
             {
                 return;
             }
