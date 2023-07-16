@@ -210,12 +210,12 @@ public class AutoEquipViewModel : ViewModel
     }
 
     public void ExecuteEquip()
-        => OnEquip?.Invoke(this, new EquipHeroEventArgs(_SPInventoryVM.CharacterList.SelectedItem.Hero, !_SPInventoryVM.IsInWarSet));
+        => OnEquip?.Invoke(new EquipHeroEventArgs(_SPInventoryVM.CharacterList.SelectedItem.Hero, !_SPInventoryVM.IsInWarSet));
 
     public void ExecuteEquipParty()
-        => OnEquip?.Invoke(this, EquipPartyEventArgs.Empty);
+        => OnEquip?.Invoke(EquipPartyEventArgs.Empty);
 
-    public event EventHandler<AutoEquipEventArgs>? OnEquip;
+    public event Func<AutoEquipEventArgs?, bool> OnEquip;
 
     private readonly IEquipmentSlotLockSource _slotLockSource;
 
