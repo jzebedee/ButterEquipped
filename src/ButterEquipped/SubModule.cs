@@ -33,11 +33,6 @@ public class SubModule : MBSubModuleBase
 
     protected override void OnGameStart(Game game, IGameStarter gameStarter)
     {
-        if (game.GameType is not Campaign campaign)
-        {
-            return;
-        }
-
         if (gameStarter is not CampaignGameStarter campaignGameStarter)
         {
             return;
