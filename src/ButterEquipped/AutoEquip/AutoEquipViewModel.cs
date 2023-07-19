@@ -209,6 +209,9 @@ public class AutoEquipViewModel : ViewModel
         }
     }
 
+    [DataSourceProperty]
+    public bool IsInWarSet => _SPInventoryVM.IsInWarSet;
+
     public void ExecuteEquip()
         => OnEquip?.Invoke(new EquipHeroEventArgs(_SPInventoryVM.CharacterList.SelectedItem.Hero, !_SPInventoryVM.IsInWarSet));
 
@@ -240,8 +243,7 @@ public class AutoEquipViewModel : ViewModel
 
     public void UpdateSlotLocks()
     {
-        var heroId = _SPInventoryVM.CharacterList?.SelectedItem?.CharacterID;
-        if (heroId is null)
+        if(_SPInventoryVM is not { CharacterList.SelectedItem.CharacterID: string heroId })
         {
             return;
         }
@@ -263,5 +265,7 @@ public class AutoEquipViewModel : ViewModel
         this.OnPropertyChanged(nameof(Weapon2Locked));
         this.OnPropertyChanged(nameof(Weapon3Locked));
         this.OnPropertyChanged(nameof(ExtraWeaponLocked));
+
+        this.OnPropertyChanged(nameof(IsInWarSet));
     }
 }
