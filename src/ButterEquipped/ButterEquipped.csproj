@@ -10,8 +10,6 @@
     <ModuleId>$(MSBuildProjectName)</ModuleId>
     <ModuleName>$(MSBuildProjectName)</ModuleName>
     <GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
-
-	<OverrideGameVersion>v1.1.0</OverrideGameVersion>
   </PropertyGroup>
 
   <!-- Development Variables -->
