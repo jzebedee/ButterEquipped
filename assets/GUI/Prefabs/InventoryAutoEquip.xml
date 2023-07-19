@@ -3,8 +3,8 @@
 		<Constant Name="LeftPanel.Width" BrushLayer="Default" BrushName="Inventory.Tuple.Left" BrushValueType="Width" />
 		<Constant Name="RightPanel.Width" BrushLayer="Default" BrushName="Inventory.Tuple.Right" BrushValueType="Width" />
 
-		<Constant Name="ArmorEquipmentSlots.MarginTop" Value="205" />
-		<Constant Name="WeaponEquipmentSlots.MarginTop" Value="205" />
+		<Constant Name="ArmorEquipmentSlots.MarginTop" Value="190" />
+		<Constant Name="WeaponEquipmentSlots.MarginTop" Value="190" />
 		<Constant Name="EquipButtons.MarginTop" Value="75" />
 
 		<Constant Name="LeftSlots.MarginLeft" Value="!LeftPanel.Width" Additive="35" />
@@ -15,33 +15,33 @@
 			<Children>
 				<Widget Id="ArmorEquipmentSlots" DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="!LeftSlots.MarginLeft" MarginTop="!ArmorEquipmentSlots.MarginTop">
 					<Children>
-						<ButtonWidget Id="LockHelmet" Brush="Inventory.Lock" IsSelected="@HelmetLocked" ButtonType="Toggle" MarginTop="40" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockHelmet" Brush="Inventory.Lock" IsSelected="@HelmetLocked" ButtonType="Toggle" MarginTop="50" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockCloak" Brush="Inventory.Lock" IsSelected="@CloakLocked" ButtonType="Toggle" MarginTop="125" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockCloak" Brush="Inventory.Lock" IsSelected="@CloakLocked" ButtonType="Toggle" MarginTop="150" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockArmor" Brush="Inventory.Lock" IsSelected="@ArmorLocked" ButtonType="Toggle" MarginTop="210" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockArmor" Brush="Inventory.Lock" IsSelected="@ArmorLocked" ButtonType="Toggle" MarginTop="250" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockGlove" Brush="Inventory.Lock" IsSelected="@GloveLocked" ButtonType="Toggle" MarginTop="295" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockGlove" Brush="Inventory.Lock" IsSelected="@GloveLocked" ButtonType="Toggle" MarginTop="350" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockBoot" Brush="Inventory.Lock" IsSelected="@BootLocked" ButtonType="Toggle" MarginTop="380" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockBoot" Brush="Inventory.Lock" IsSelected="@BootLocked" ButtonType="Toggle" MarginTop="450" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockMount" Brush="Inventory.Lock" IsSelected="@MountLocked" ButtonType="Toggle" MarginTop="500" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockMount" Brush="Inventory.Lock" IsSelected="@MountLocked" ButtonType="Toggle" MarginTop="600" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockMountArmor" Brush="Inventory.Lock" IsSelected="@MountArmorLocked" ButtonType="Toggle" MarginTop="585" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockMountArmor" Brush="Inventory.Lock" IsSelected="@MountArmorLocked" ButtonType="Toggle" MarginTop="700" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
 					</Children>
 				</Widget>
 
 				<Widget Id="WeaponEquipmentSlots" DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" MarginRight="!RightSlots.MarginRight" MarginTop="!WeaponEquipmentSlots.MarginTop">
 					<Children>
-						<ButtonWidget Id="LockWeapon0" Brush="Inventory.Lock" IsSelected="@Weapon0Locked" ButtonType="Toggle" MarginTop="75" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockWeapon0" Brush="Inventory.Lock" IsSelected="@Weapon0Locked" ButtonType="Toggle" MarginTop="50" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockWeapon1" Brush="Inventory.Lock" IsSelected="@Weapon1Locked" ButtonType="Toggle" MarginTop="160" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockWeapon1" Brush="Inventory.Lock" IsSelected="@Weapon1Locked" ButtonType="Toggle" MarginTop="150" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockWeapon2" Brush="Inventory.Lock" IsSelected="@Weapon2Locked" ButtonType="Toggle" MarginTop="245" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockWeapon2" Brush="Inventory.Lock" IsSelected="@Weapon2Locked" ButtonType="Toggle" MarginTop="250" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockWeapon3" Brush="Inventory.Lock" IsSelected="@Weapon3Locked" ButtonType="Toggle" MarginTop="330" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockWeapon3" Brush="Inventory.Lock" IsSelected="@Weapon3Locked" ButtonType="Toggle" MarginTop="350" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockExtraWeapon" Brush="Inventory.Lock" IsSelected="@ExtraWeaponLocked" ButtonType="Toggle" MarginTop="535" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockExtraWeapon" Brush="Inventory.Lock" IsSelected="@ExtraWeaponLocked" IsVisible="@IsInWarSet" ButtonType="Toggle" MarginTop="600" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
 					</Children>
 				</Widget>
 
