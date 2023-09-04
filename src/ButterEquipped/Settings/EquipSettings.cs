@@ -42,6 +42,7 @@ internal static class EquipSettings
                 .SetPropertyValue("equip_from_trade", opt.EquipFromTrade)
 
                 .SetPropertyValue("keep_weapon_class", opt.KeepWeaponClass)
+                .SetPropertyValue("keep_mount_type", opt.KeepMountType)
                 .SetPropertyValue("keep_crafted", opt.KeepCrafted)
 
                 .SetPropertyValue("auto_equip_on_inventory_close", opt.AutoEquipOnClose);
@@ -91,8 +92,15 @@ internal static class EquipSettings
                 .AddBool("keep_weapon_class",
                          "Keep Weapon Class",
                          new ProxyRef<bool>(() => opt.KeepWeaponClass, value => opt.KeepWeaponClass = value),
-                         propBuilder => propBuilder.SetRequireRestart(false)
-                                                   .SetHintText("When enabled, only weapons of the same class will be equipped (e.g., One Handed Maces will only be upgraded with One Handed Maces)"))
+                         propBuilder =>
+                            propBuilder.SetRequireRestart(false)
+                                       .SetHintText("When enabled, only weapons of the same class will be equipped (e.g., One Handed Maces will only be upgraded with One Handed Maces)"))
+                .AddBool("keep_mount_type",
+                         "Keep Mount Type",
+                         new ProxyRef<bool>(() => opt.KeepMountType, value => opt.KeepMountType = value),
+                         propBuilder =>
+                            propBuilder.SetRequireRestart(false)
+                                       .SetHintText("When enabled, only mounts of the same type will be equipped (e.g., only horses for equipped horse, or camels for equipped camel)"))
                 .AddBool("keep_crafted",
                          "Keep Crafted Weapons",
                          new ProxyRef<bool>(() => opt.KeepCrafted, value => opt.KeepCrafted = value),

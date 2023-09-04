@@ -13,6 +13,7 @@ public record class AutoEquipOptions()
     public bool EquipFromTrade { get; set; } = false;
 
     public bool KeepWeaponClass { get; set; } = true;
+    public bool KeepMountType { get; set; } = false;
     public bool KeepCrafted { get; set; } = false;
 
     public bool AutoEquipOnClose { get; set; } = false;
