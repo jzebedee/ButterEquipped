@@ -14,6 +14,7 @@ public record class AutoEquipOptions()
 
     public bool KeepWeaponClass { get; set; } = true;
     public bool KeepCrafted { get; set; } = false;
+    public bool KeepCulture { get; set; } = false;
 
     public bool AutoEquipOnClose { get; set; } = false;
 }

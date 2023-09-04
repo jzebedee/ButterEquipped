@@ -43,6 +43,7 @@ internal static class EquipSettings
 
                 .SetPropertyValue("keep_weapon_class", opt.KeepWeaponClass)
                 .SetPropertyValue("keep_crafted", opt.KeepCrafted)
+                .SetPropertyValue("keep_culture", opt.KeepCulture)
 
                 .SetPropertyValue("auto_equip_on_inventory_close", opt.AutoEquipOnClose);
 
@@ -97,6 +98,12 @@ internal static class EquipSettings
                          "Keep Crafted Weapons",
                          new ProxyRef<bool>(() => opt.KeepCrafted, value => opt.KeepCrafted = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
+                .AddBool("keep_culture",
+                         "Keep Culture",
+                         new ProxyRef<bool>(() => opt.KeepCulture, value => opt.KeepCulture = value),
+                         propBuilder =>
+                            propBuilder.SetRequireRestart(false)
+                                       .SetHintText("When enabled, only equipment from the same culture as the hero will be equipped (e.g., only Khuzait armor for Khuzait-culture heroes)"))
                 .SetGroupOrder(3);
 
         void BuildAutoEquipGroup(ISettingsPropertyGroupBuilder builder)
