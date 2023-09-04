@@ -215,6 +215,14 @@ public class AutoEquipLogic
         Equipment allEq = GetEquipment();
         var initialEq = allEq[index];
 
+        if(options.KeepCulture)
+        {
+            if(item.Culture != hero.Culture)
+            {
+                return false;
+            }
+        }
+
         if (options.KeepWeaponClass && item.HasWeaponComponent)
         {
             bool anyAllowed = false;
