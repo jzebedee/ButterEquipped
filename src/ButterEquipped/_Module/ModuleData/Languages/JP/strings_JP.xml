@@ -23,5 +23,8 @@
   <string id="ButterEquip015" text="鍛造した武器"/>
   <string id="ButterEquip016" text="文化"/>
   <string id="ButterEquip016Hint" text="有効にすると、同じ文化の武器のみを装備します (例えば、クーザイトのヒーローはクーザイト文化の鎧のみ装備します)"/>
+  <string id="ButterEquipMSG001" text="装備できるものがない"/>
+  <string id="ButterEquipMSG002" text="{HERO}が{ITEM}を{BESTITEM}に置き換えた"/>
+  <string id="ButterEquipMSG003" text="{HERO}が{BESTITEM}を装備した"/>
  </strings>
 </base>

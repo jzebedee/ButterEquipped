@@ -23,6 +23,8 @@
   <string id="ButterEquip015" text="Keep Crafted Weapons"/>
   <string id="ButterEquip016" text="Keep Culture"/>
   <string id="ButterEquip016Hint" text="When enabled, only equipment from the same culture as the hero will be equipped (e.g., only Khuzait armor for Khuzait-culture heroes)"/>
-  <string id="ButterEquip017" text="Auto Equip"/>
+  <string id="ButterEquipMSG001" text="Nothing to equip"/>
+  <string id="ButterEquipMSG002" text="{HERO} replaced {ITEM} with {BESTITEM}"/>
+  <string id="ButterEquipMSG003" text="{HERO} equips {BESTITEM}"/>
  </strings>
 </base>
