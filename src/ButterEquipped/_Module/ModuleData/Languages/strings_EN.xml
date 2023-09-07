@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+ <tags>
+  <tag language="English"/>
+ </tags>
+ <strings>
+  <string id="ButterEquip001" text="Equip Targets"/>
+  <string id="ButterEquip002" text="Equip From"/>
+  <string id="ButterEquip003" text="Keep Items"/>
+  <string id="ButterEquip004" text="Auto Equip"/>
+  <string id="ButterEquip005" text="Equip Player Hero"/>
+  <string id="ButterEquip006" text="Equip Companions"/>
+  <string id="ButterEquip007" text="Equip Civilian Equipment"/>
+  <string id="ButterEquip008" text="Equip from Loot"/>
+  <string id="ButterEquip009" text="Equip from Stash"/>
+  <string id="ButterEquip010" text="Equip from Inventory"/>
+  <string id="ButterEquip011" text="Equip from Discard"/>
+  <string id="ButterEquip012" text="Equip from Trade"/>
+  <string id="ButterEquip013" text="Keep Weapon Class"/> 
+  <string id="ButterEquip013Hint" text="When enabled, only weapons of the same class will be equipped (e.g., One Handed Maces will only be upgraded with One Handed Maces)"/>
+  <string id="ButterEquip014" text="Keep Mount Type"/>
+  <string id="ButterEquip014Hint" text="When enabled, only mounts of the same type will be equipped (e.g., only horses for equipped horse, or camels for equipped camel)"/>
+  <string id="ButterEquip015" text="Keep Crafted Weapons"/>
+  <string id="ButterEquip016" text="Keep Culture"/>
+  <string id="ButterEquip016Hint" text="When enabled, only equipment from the same culture as the hero will be equipped (e.g., only Khuzait armor for Khuzait-culture heroes)"/>
+  <string id="ButterEquip017" text="Auto Equip"/>
+ </strings>
+</base>

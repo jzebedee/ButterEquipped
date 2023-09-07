@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+ <tags>
+  <tag language="日本語"/>
+ </tags>
+ <strings>
+  <string id="ButterEquip001" text="装備対象"/>
+  <string id="ButterEquip002" text="装備の取得元"/>
+  <string id="ButterEquip003" text="維持する条件"/>
+  <string id="ButterEquip004" text="自動装備"/>
+  <string id="ButterEquip005" text="プレイヤーキャラクター"/>
+  <string id="ButterEquip006" text="仲間の装備"/>
+  <string id="ButterEquip007" text="市民装備"/>
+  <string id="ButterEquip008" text="戦利品から"/>
+  <string id="ButterEquip009" text="保管場所から"/>
+  <string id="ButterEquip010" text="インベントリから"/>
+  <string id="ButterEquip011" text="捨てるアイテムから"/>
+  <string id="ButterEquip012" text="交易中のアイテムから"/>
+  <string id="ButterEquip013" text="武器の種類"/> 
+  <string id="ButterEquip013Hint" text="有効にすると、同じ種類の武器のみを装備します (例えば、片手鈍器を装備していれば片手鈍器でのみ更新されます)"/>
+  <string id="ButterEquip014" text="乗騎の種類"/>
+  <string id="ButterEquip014Hint" text="有効にすると、同じ種類の乗騎のみを装備します (例えば、馬を装備していれば馬のみ、駱駝を装備していれば駱駝のみ装備します)"/>
+  <string id="ButterEquip015" text="鍛造した武器"/>
+  <string id="ButterEquip016" text="文化"/>
+  <string id="ButterEquip016Hint" text="有効にすると、同じ文化の武器のみを装備します (例えば、クーザイトのヒーローはクーザイト文化の鎧のみ装備します)"/>
+ </strings>
+</base>
