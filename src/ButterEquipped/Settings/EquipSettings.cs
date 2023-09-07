@@ -20,10 +20,10 @@ internal static class EquipSettings
             .SetFormat("json2")
             .SetFolderName(nameof(ButterEquipped))
             //.SetSubFolder(id)
-            .CreateGroup("Equip Targets", BuildEquipTargetsGroup)
-            .CreateGroup("Equip From", BuildEquipFromGroup)
-            .CreateGroup("Keep Items", BuildKeepItemsGroup)
-            .CreateGroup("Auto Equip", BuildAutoEquipGroup)
+            .CreateGroup("{=ButterEquip001}Equip Targets", BuildEquipTargetsGroup)
+            .CreateGroup("{=ButterEquip002}Equip From", BuildEquipFromGroup)
+            .CreateGroup("{=ButterEquip003}Keep Items", BuildKeepItemsGroup)
+            .CreateGroup("{=ButterEquip004}Auto Equip", BuildAutoEquipGroup)
             //.WithoutDefaultPreset()
             .CreatePreset(BaseSettings.DefaultPresetId, BaseSettings.DefaultPresetName, builder => BuildDefaultPreset(builder, new()));
 
@@ -51,15 +51,15 @@ internal static class EquipSettings
         void BuildEquipTargetsGroup(ISettingsPropertyGroupBuilder builder)
             => builder
                 .AddBool("equip_player",
-                         "Equip Player Hero",
+                         "{=ButterEquip005}Equip Player Hero",
                          new ProxyRef<bool>(() => opt.EquipHero, value => opt.EquipHero = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_companions",
-                         "Equip Companions",
+                         "{=ButterEquip006}Equip Companions",
                          new ProxyRef<bool>(() => opt.EquipCompanions, value => opt.EquipCompanions = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_civilian",
-                         "Equip Civilian Equipment",
+                         "{=ButterEquip007}Equip Civilian Equipment",
                          new ProxyRef<bool>(() => opt.EquipCivilian, value => opt.EquipCivilian = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .SetGroupOrder(1);
@@ -67,23 +67,23 @@ internal static class EquipSettings
         void BuildEquipFromGroup(ISettingsPropertyGroupBuilder builder)
             => builder
                 .AddBool("equip_from_loot",
-                         "Equip from Loot",
+                         "{=ButterEquip008}Equip from Loot",
                          new ProxyRef<bool>(() => opt.EquipFromLoot, value => opt.EquipFromLoot = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_from_stash",
-                         "Equip from Stash",
+                         "{=ButterEquip009}Equip from Stash",
                          new ProxyRef<bool>(() => opt.EquipFromStash, value => opt.EquipFromStash = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_from_inventory",
-                         "Equip from Inventory",
+                         "{=ButterEquip010}Equip from Inventory",
                          new ProxyRef<bool>(() => opt.EquipFromInventory, value => opt.EquipFromInventory = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_from_discard",
-                         "Equip from Discard",
+                         "{=ButterEquip011}Equip from Discard",
                          new ProxyRef<bool>(() => opt.EquipFromDiscard, value => opt.EquipFromDiscard = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_from_trade",
-                         "Equip from Trade",
+                         "{=ButterEquip012}Equip from Trade",
                          new ProxyRef<bool>(() => opt.EquipFromTrade, value => opt.EquipFromTrade = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .SetGroupOrder(2);
@@ -91,33 +91,33 @@ internal static class EquipSettings
         void BuildKeepItemsGroup(ISettingsPropertyGroupBuilder builder)
             => builder
                 .AddBool("keep_weapon_class",
-                         "Keep Weapon Class",
+                         "{=ButterEquip013}Keep Weapon Class",
                          new ProxyRef<bool>(() => opt.KeepWeaponClass, value => opt.KeepWeaponClass = value),
                          propBuilder =>
                             propBuilder.SetRequireRestart(false)
-                                       .SetHintText("When enabled, only weapons of the same class will be equipped (e.g., One Handed Maces will only be upgraded with One Handed Maces)"))
+                                       .SetHintText("{=ButterEquip013Hint}When enabled, only weapons of the same class will be equipped (e.g., One Handed Maces will only be upgraded with One Handed Maces)"))
                 .AddBool("keep_mount_type",
-                         "Keep Mount Type",
+                         "{=ButterEquip014}Keep Mount Type",
                          new ProxyRef<bool>(() => opt.KeepMountType, value => opt.KeepMountType = value),
                          propBuilder =>
                             propBuilder.SetRequireRestart(false)
-                                       .SetHintText("When enabled, only mounts of the same type will be equipped (e.g., only horses for equipped horse, or camels for equipped camel)"))
+                                       .SetHintText("{=ButterEquip014Hint}When enabled, only mounts of the same type will be equipped (e.g., only horses for equipped horse, or camels for equipped camel)"))
                 .AddBool("keep_crafted",
-                         "Keep Crafted Weapons",
+                         "{=ButterEquip015}Keep Crafted Weapons",
                          new ProxyRef<bool>(() => opt.KeepCrafted, value => opt.KeepCrafted = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("keep_culture",
-                         "Keep Culture",
+                         "{=ButterEquip016}Keep Culture",
                          new ProxyRef<bool>(() => opt.KeepCulture, value => opt.KeepCulture = value),
                          propBuilder =>
                             propBuilder.SetRequireRestart(false)
-                                       .SetHintText("When enabled, only equipment from the same culture as the hero will be equipped (e.g., only Khuzait armor for Khuzait-culture heroes)"))
+                                       .SetHintText("{=ButterEquip016Hint}When enabled, only equipment from the same culture as the hero will be equipped (e.g., only Khuzait armor for Khuzait-culture heroes)"))
                 .SetGroupOrder(3);
 
         void BuildAutoEquipGroup(ISettingsPropertyGroupBuilder builder)
             => builder
                 .AddBool("auto_equip_on_inventory_close",
-                         "Auto Equip",
+                         "{=ButterEquip004}Auto Equip",
                          new ProxyRef<bool>(() => opt.AutoEquipOnClose, value => opt.AutoEquipOnClose = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .SetGroupOrder(4);
