@@ -11,6 +11,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using static TaleWorlds.CampaignSystem.Inventory.InventoryLogic;
 using static TaleWorlds.Core.ItemObject;
+using TaleWorlds.Localization;
 
 namespace ButterEquipped.AutoEquip;
 
@@ -64,7 +65,7 @@ public class AutoEquipLogic
 
         if (!result)
         {
-            Message("Nothing to equip");
+            Message(new TextObject("{=ButterEquipMSG001}Nothing to equip").ToString());
         }
 
         _updateRightCharacter.GetValue();
@@ -91,7 +92,7 @@ public class AutoEquipLogic
 
         if (!result)
         {
-            Message("Nothing to equip");
+            Message(new TextObject("{=ButterEquipMSG001}Nothing to equip").ToString());
         }
 
         _updateRightCharacter.GetValue();
@@ -172,11 +173,21 @@ public class AutoEquipLogic
                 InvLogic.AddTransferCommand(unequipCmd);
 
                 //these duplicate if passed to the formatter without explicitly ToString()'ing them
-                Message($"{hero.Name} replaced {startingEq.GetModifiedItemName().ToString()} with {bestItem.EquipmentElement.GetModifiedItemName().ToString()}");
+                Message(new TextObject("{=ButterEquipMSG002}{HERO} replaced {ITEM} with {BESTITEM}",
+                    new Dictionary<string, object>() {
+                        { "HERO", hero.Name },
+                        { "ITEM", startingEq.GetModifiedItemName() },
+                        { "BESTITEM", bestItem.EquipmentElement.GetModifiedItemName() }
+                    }).ToString());
             }
             else
             {
-                Message($"{hero.Name} equips {bestItem.EquipmentElement.GetModifiedItemName().ToString()}");
+                Message(new TextObject("{=ButterEquipMSG003}{HERO} equips {BESTITEM}",
+                    new Dictionary<string, object>()
+                    {
+                        { "HERO", hero.Name },
+                        { "BESTITEM", bestItem.EquipmentElement.GetModifiedItemName() }
+                    }).ToString());
             }
 
             if (index == EquipmentIndex.Horse && GetEquipment()[EquipmentIndex.HorseHarness] is var harness && !harness.IsEmpty)
