@@ -26,5 +26,7 @@
   <string id="ButterEquipMSG001" text="Nothing to equip"/>
   <string id="ButterEquipMSG002" text="{HERO} replaced {ITEM} with {BESTITEM}"/>
   <string id="ButterEquipMSG003" text="{HERO} equips {BESTITEM}"/>
+  <string id="ButterEquipVM001" text="Equip"/>
+  <string id="ButterEquipVM002" text="Party"/>
  </strings>
 </base>
