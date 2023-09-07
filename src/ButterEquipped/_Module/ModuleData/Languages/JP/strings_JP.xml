@@ -26,5 +26,7 @@
   <string id="ButterEquipMSG001" text="装備できるものがない"/>
   <string id="ButterEquipMSG002" text="{HERO}が{ITEM}を{BESTITEM}に置き換えた"/>
   <string id="ButterEquipMSG003" text="{HERO}が{BESTITEM}を装備した"/>
+  <string id="ButterEquipVM001" text="装備"/>
+  <string id="ButterEquipVM002" text="部隊"/>
  </strings>
 </base>

@@ -51,7 +51,7 @@
 							<Children>
 								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center">
 									<Children>
-										<TextWidget Brush="Popup.Button.Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Text="Equip" />
+										<TextWidget Brush="Popup.Button.Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Text="@Equip" />
 									</Children>
 								</Widget>
 							</Children>
@@ -61,7 +61,7 @@
 							<Children>
 								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center">
 									<Children>
-										<TextWidget Brush="Popup.Button.Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Text="Party" />
+										<TextWidget Brush="Popup.Button.Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Text="@Party" />
 									</Children>
 								</Widget>
 							</Children>

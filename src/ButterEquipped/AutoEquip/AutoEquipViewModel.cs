@@ -4,6 +4,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace ButterEquipped.AutoEquip;
 
@@ -211,6 +212,16 @@ public class AutoEquipViewModel : ViewModel
 
     [DataSourceProperty]
     public bool IsInWarSet => _SPInventoryVM.IsInWarSet;
+    [DataSourceProperty]
+    public string Equip
+    {
+        get => new TextObject("{=ButterEquipVM001}Equip").ToString();
+    }
+    [DataSourceProperty]
+    public string Party
+    {
+        get => new TextObject("{=ButterEquipVM002}Party").ToString();
+    }
 
     public void ExecuteEquip()
         => OnEquip?.Invoke(new EquipHeroEventArgs(_SPInventoryVM.CharacterList.SelectedItem.Hero, !_SPInventoryVM.IsInWarSet));
