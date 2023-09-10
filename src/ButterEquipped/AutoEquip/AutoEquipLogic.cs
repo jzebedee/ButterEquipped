@@ -21,6 +21,26 @@ public class AutoEquipLogic
 
     private static InventoryMode Mode => InventoryManager.Instance.CurrentMode;
 
+    private static class Messages
+    {
+        public static readonly TextObject NothingToEquip = new("{=ButterEquipMSG001}Nothing to equip");
+
+        public static TextObject HeroReplacedItem(TextObject heroName, TextObject oldItemName, TextObject newItemName)
+            => new("{=ButterEquipMSG002}{HERO} replaced {ITEM} with {BESTITEM}",
+                new() {
+                    { "HERO", heroName },
+                    { "ITEM", oldItemName },
+                    { "BESTITEM", newItemName }
+                });
+
+        public static TextObject HeroEquipsItem(TextObject heroName, TextObject itemName)
+            => new("{=ButterEquipMSG003}{HERO} equips {BESTITEM}",
+                new() {
+                    { "HERO", heroName },
+                    { "BESTITEM", itemName }
+                });
+    }
+
     private readonly Traverse2 _updateRightCharacter;
 
     private readonly Traverse2 _executeRemoveZeroCounts;
@@ -65,7 +85,7 @@ public class AutoEquipLogic
 
         if (!result)
         {
-            Message(new TextObject("{=ButterEquipMSG001}Nothing to equip").ToString());
+            Message(Messages.NothingToEquip.ToString());
         }
 
         _updateRightCharacter.GetValue();
@@ -92,7 +112,7 @@ public class AutoEquipLogic
 
         if (!result)
         {
-            Message(new TextObject("{=ButterEquipMSG001}Nothing to equip").ToString());
+            Message(Messages.NothingToEquip.ToString());
         }
 
         _updateRightCharacter.GetValue();
@@ -172,22 +192,11 @@ public class AutoEquipLogic
                 var unequipCmd = CreateUnequipCommand(startingEq, index);
                 InvLogic.AddTransferCommand(unequipCmd);
 
-                //these duplicate if passed to the formatter without explicitly ToString()'ing them
-                Message(new TextObject("{=ButterEquipMSG002}{HERO} replaced {ITEM} with {BESTITEM}",
-                    new Dictionary<string, object>() {
-                        { "HERO", hero.Name },
-                        { "ITEM", startingEq.GetModifiedItemName() },
-                        { "BESTITEM", bestItem.EquipmentElement.GetModifiedItemName() }
-                    }).ToString());
+                Message(Messages.HeroReplacedItem(hero.Name, startingEq.GetModifiedItemName(), bestItem.EquipmentElement.GetModifiedItemName()).ToString());
             }
             else
             {
-                Message(new TextObject("{=ButterEquipMSG003}{HERO} equips {BESTITEM}",
-                    new Dictionary<string, object>()
-                    {
-                        { "HERO", hero.Name },
-                        { "BESTITEM", bestItem.EquipmentElement.GetModifiedItemName() }
-                    }).ToString());
+                Message(Messages.HeroEquipsItem(hero.Name, bestItem.EquipmentElement.GetModifiedItemName()).ToString());
             }
 
             if (index == EquipmentIndex.Horse && GetEquipment()[EquipmentIndex.HorseHarness] is var harness && !harness.IsEmpty)
@@ -226,9 +235,9 @@ public class AutoEquipLogic
         Equipment allEq = GetEquipment();
         var initialEq = allEq[index];
 
-        if(options.KeepCulture)
+        if (options.KeepCulture)
         {
-            if(item.Culture != hero.Culture)
+            if (item.Culture != hero.Culture)
             {
                 return false;
             }
