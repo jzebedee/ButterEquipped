@@ -10,6 +10,13 @@ namespace ButterEquipped.AutoEquip;
 
 public class AutoEquipViewModel : ViewModel
 {
+    private static class Messages
+    {
+        public static readonly TextObject Equip = new("{=ButterEquipVM001}Equip");
+
+        public static readonly TextObject Party = new("{=ButterEquipVM002}Party");
+    }
+
     [DataSourceProperty]
     public bool Weapon0Locked
     {
@@ -212,16 +219,12 @@ public class AutoEquipViewModel : ViewModel
 
     [DataSourceProperty]
     public bool IsInWarSet => _SPInventoryVM.IsInWarSet;
+
     [DataSourceProperty]
-    public string Equip
-    {
-        get => new TextObject("{=ButterEquipVM001}Equip").ToString();
-    }
+    public string EquipText { get; } = Messages.Equip.ToString();
+
     [DataSourceProperty]
-    public string Party
-    {
-        get => new TextObject("{=ButterEquipVM002}Party").ToString();
-    }
+    public string PartyText { get; } = Messages.Party.ToString();
 
     public void ExecuteEquip()
         => OnEquip?.Invoke(new EquipHeroEventArgs(_SPInventoryVM.CharacterList.SelectedItem.Hero, !_SPInventoryVM.IsInWarSet));
