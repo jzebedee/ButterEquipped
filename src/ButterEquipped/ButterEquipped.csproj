@@ -1,34 +1,44 @@
-﻿<Project Sdk="Bannerlord.BUTRModule.Sdk/1.0.1.89">
+﻿<Project Sdk="Bannerlord.BUTRModule.Sdk/1.1.0.104">
 
   <PropertyGroup>
-    <Version>1.6.1</Version>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.6.2</Version>
+    <TargetFrameworks>net472;net6</TargetFrameworks>
     <Platforms>x64</Platforms>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+
+    <BuildForWindows>false</BuildForWindows>
+    <BuildForWindowsStore>false</BuildForWindowsStore>
     
     <ModuleId>$(MSBuildProjectName)</ModuleId>
     <ModuleName>$(MSBuildProjectName)</ModuleName>
+    <ModuleUrl></ModuleUrl>
     <GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
+    <!-- Module manually override GameVersion -->
+    <!-- <OverrideGameVersion>v1.0.0</OverrideGameVersion> -->
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(TargetFramework) == 'net472'">
+    <!-- Steam/GOG/Epic versions of the game -->
+    <BuildForWindows>true</BuildForWindows>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(TargetFramework) == 'net6'">
+    <!-- Xbox Game Pass PC version of the game -->
+    <BuildForWindowsStore>false</BuildForWindowsStore>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 
   <!-- Development Variables -->
   <PropertyGroup>
     <HarmonyVersion>2.2.2</HarmonyVersion>
+    <HarmonyExtensionsVersion>3.2.0.77</HarmonyExtensionsVersion>
     <UIExtenderExVersion>2.6.0</UIExtenderExVersion>
     <ButterLibVersion>2.6.3</ButterLibVersion>
     <MCMVersion>5.5.5</MCMVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Harmony.Extensions" Version="3.2.0.73" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
-    <PackageReference Include="BUTR.Harmony.Analyzer" Version="1.0.1.44" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
-    <PackageReference Include="PolySharp" Version="1.13.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
+  <!-- Required for GUI assets -->
   <ItemGroup>
     <Content Include="../../assets/GUI/**/*" LinkBase="GUI" />
   </ItemGroup>
