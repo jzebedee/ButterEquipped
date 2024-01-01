@@ -7,19 +7,16 @@ on:
 
 jobs:
   build_submodule:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.1
-    - name: Get GameFolder path
-      run: |
-        mkdir ./bannerlord
-        $gamefolder = Resolve-Path ./bannerlord
-        echo "gamefolder=$gamefolder" | Out-File -FilePath $env:GITHUB_ENV -Append
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.x.x
     - name: Build
       run: |
-        MsBuild.exe -noLogo -r -p:Configuration=Release -p:GameFolder="${env:gamefolder}" -p:DebugType=None
+        mkdir bannerlord
+        dotnet build -c Release -p:GameFolder="$(pwd)/bannerlord"
     - name: Upload assets
       uses: actions/upload-artifact@v3
       with:
