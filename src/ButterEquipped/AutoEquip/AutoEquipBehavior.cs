@@ -45,13 +45,14 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
 
     private void UpdateViewModel()
     {
-        if (spInventoryVm is { CharacterList.SelectedItem.Hero: null })
+        //InventoryEquipmentTypeChanged can fire before the inventory screen is initialized
+        //when first opening inventory in a civilian mission from a campaign / war inventory
+        if (eqUpVm is null)
         {
-            eqUpVm.IsEquipVisible = false;
             return;
         }
 
-        eqUpVm.IsEquipVisible = true;
+        eqUpVm.IsEquipVisible = spInventoryVm is { CharacterList.SelectedItem.Hero: not null };
         eqUpVm.IsEquipPartyVisible = options.EquipCompanions && spInventoryVm is { CharacterList.HasSingleItem: false };
         eqUpVm.UpdateSlotLocks();
     }
