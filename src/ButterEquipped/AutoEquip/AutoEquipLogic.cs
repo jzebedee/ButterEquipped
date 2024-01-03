@@ -1,5 +1,6 @@
 using HarmonyLib.BUTR.Extensions;
 using Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -42,11 +43,11 @@ public class AutoEquipLogic
                 });
     }
 
-    private readonly Traverse2 _updateRightCharacter;
+    private readonly Action _updateRightCharacter;
 
-    private readonly Traverse2 _executeRemoveZeroCounts;
+    private readonly Action _executeRemoveZeroCounts;
 
-    private readonly Traverse2 _refreshInformationValues;
+    private readonly Action _refreshInformationValues;
 
     private readonly IEquipmentSlotLockSource _equipmentSlotLocks;
 
@@ -57,9 +58,9 @@ public class AutoEquipLogic
     public AutoEquipLogic(SPInventoryVM spInventoryVm, IEquipmentSlotLockSource equipmentSlotLocks)
     {
         _equipmentSlotLocks = equipmentSlotLocks;
-        _updateRightCharacter = Traverse2.Create(spInventoryVm).Method("UpdateRightCharacter");
-        _executeRemoveZeroCounts = Traverse2.Create(spInventoryVm).Method("ExecuteRemoveZeroCounts");
-        _refreshInformationValues = Traverse2.Create(spInventoryVm).Method("RefreshInformationValues");
+        _updateRightCharacter = AccessTools2.GetDelegate<Action>(spInventoryVm, typeof(SPInventoryVM), "UpdateRightCharacter");
+        _executeRemoveZeroCounts = AccessTools2.GetDelegate<Action>(spInventoryVm, typeof(SPInventoryVM), "ExecuteRemoveZeroCounts");
+        _refreshInformationValues = AccessTools2.GetDelegate<Action>(spInventoryVm, typeof(SPInventoryVM), "RefreshInformationValues");
         _eqComparer = new EquipmentElementComparer();
     }
 
@@ -89,8 +90,8 @@ public class AutoEquipLogic
             Message(Messages.NothingToEquip.ToString());
         }
 
-        _updateRightCharacter.GetValue();
-        _refreshInformationValues.GetValue();
+        _updateRightCharacter();
+        _refreshInformationValues();
 
         return result;
     }
@@ -116,8 +117,8 @@ public class AutoEquipLogic
             Message(Messages.NothingToEquip.ToString());
         }
 
-        _updateRightCharacter.GetValue();
-        _refreshInformationValues.GetValue();
+        _updateRightCharacter();
+        _refreshInformationValues();
 
         return result;
     }
@@ -175,7 +176,7 @@ public class AutoEquipLogic
             result |= TryEquip(index);
         }
 
-        _executeRemoveZeroCounts.GetValue();
+        _executeRemoveZeroCounts();
         return result;
 
         bool TryEquip(EquipmentIndex index)
