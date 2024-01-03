@@ -9,11 +9,12 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static TaleWorlds.CampaignSystem.Inventory.InventoryLogic;
-using static TaleWorlds.Core.ItemObject;
 using TaleWorlds.Localization;
 
 namespace ButterEquipped.AutoEquip;
+using InventorySide = InventoryLogic.InventorySide;
+using ItemTypeEnum = ItemObject.ItemTypeEnum;
+using ItemUsageSetFlags = ItemObject.ItemUsageSetFlags;
 
 public class AutoEquipLogic
 {
