@@ -3,7 +3,7 @@ using SandBox.GauntletUI;
 using System;
 using TaleWorlds.CampaignSystem.Inventory;
 
-namespace ButterEquipped.AutoEquip;
+namespace ButterEquipped.Patches;
 
 //TaleWorlds.CampaignSystem.Inventory.InventoryManager.CloseInventoryPresentation(bool) : void @060012C4
 //// Token: 0x060012C4 RID: 4804 RVA: 0x000522C8 File Offset: 0x000504C8
