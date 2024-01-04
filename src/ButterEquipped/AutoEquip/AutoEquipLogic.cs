@@ -214,7 +214,7 @@ public class AutoEquipLogic
             return true;
         }
 
-        Equipment GetEquipment() => this.GetEquipment(hero, civilian);
+        Equipment GetEquipment() => AutoEquipLogic.GetEquipment(hero, civilian);
 
         TransferCommand CreateUnequipCommand(EquipmentElement equipment, EquipmentIndex index)
             => TransferCommand.Transfer(1, InventorySide.Equipment, InventorySide.PlayerInventory, new ItemRosterElement(equipment, 1), index, EquipmentIndex.None, hero, civilian);
@@ -226,16 +226,10 @@ public class AutoEquipLogic
     private static void Message(string information)
         => InformationManager.DisplayMessage(new InformationMessage(information));
 
-    private bool ShouldEquip(EquipmentElement eq, CharacterObject hero, EquipmentIndex index, bool civilian, EquipmentUsageInfo usageInfo)
+    private bool ShouldEquip(Equipment allEq, EquipmentElement eq, EquipmentIndex index, EquipmentUsageInfo usageInfo)
     {
-        var item = eq.Item;
-        if (civilian && !item.IsCivilian)
-        {
-            return false;
-        }
-
-        Equipment allEq = GetEquipment();
         var initialEq = allEq[index];
+        var initialItem = initialEq.Item;
 
         if (options.KeepCulture)
         {
@@ -245,21 +239,15 @@ public class AutoEquipLogic
             }
         }
 
-        if (options.KeepWeaponClass && item.HasWeaponComponent)
+        if (initialItem is null)
         {
-            bool anyAllowed = false;
-            for (int i = 0; i < item.Weapons.Count && i < initialEq.Item.Weapons.Count; i++)
-            {
-                var initialWcd = initialEq.Item.Weapons[i];
-                var wcd = item.Weapons[i];
+            ;
+        }
 
-                anyAllowed |= initialWcd.WeaponClass == wcd.WeaponClass && AllowForUsage(item.ItemType, wcd);
-            }
-
-            if (!anyAllowed)
-            {
-                return false;
-            }
+        var item = eq.Item;
+        if (item.ItemComponent is WeaponComponent weapon && !ValidateWeapon(weapon))
+        {
+            return false;
         }
 
         return index switch
@@ -272,16 +260,33 @@ public class AutoEquipLogic
             _ => true
         };
 
-        Equipment GetEquipment() => this.GetEquipment(hero, civilian);
+        bool ValidateWeapon(WeaponComponent weapon)
+        {
+            var initialDetails = GetWeaponDetails(initialItem.WeaponComponent);
+            var weaponDetails = GetWeaponDetails(weapon);
 
-        bool AllowForUsage(ItemTypeEnum itemType, WeaponComponentData weapon)
-            => (itemType, weapon.GetUsageFlags()) switch
+            if(options.KeepWeaponClass)
             {
-                (ItemTypeEnum.Bow, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => usageInfo.HasMount || hero.GetPerkValue(DefaultPerks.Bow.HorseMaster),
-                (ItemTypeEnum.Bow, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => true,
-                (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => usageInfo.HasMount,
-                (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresMount) => !usageInfo.HasMount,
-                (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => !usageInfo.HasShield,
+                return initialDetails.Intersect(weaponDetails).Any();
+            }
+
+            var initialCompare = initialDetails.Select(tup => (WeaponComponentData.GetItemTypeFromWeaponClass(tup.weaponClass), tup.weaponDescription, tup.allowed));
+            var weaponCompare = weaponDetails.Select(tup => (WeaponComponentData.GetItemTypeFromWeaponClass(tup.weaponClass), tup.weaponDescription, tup.allowed));
+            return initialCompare.Intersect(weaponCompare).Any();
+        }
+
+        IEnumerable<(WeaponClass weaponClass, string weaponDescription, bool allowed)> GetWeaponDetails(WeaponComponent weapon)
+            => weapon.Weapons
+                .OfType<WeaponComponentData>()
+                .Select(wcd => (wcd.WeaponClass, wcd.WeaponDescriptionId, AllowForUsage(wcd)));
+
+        bool AllowForUsage(WeaponComponentData weapon)
+            => (weapon.WeaponClass, weapon.GetUsageFlags()) switch
+            {
+                (WeaponClass.Bow, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => !usageInfo.HasMount || usageInfo.CanUseAllBowsOnHorseback,
+                (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoMount) => !usageInfo.HasMount,
+                (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresMount) => usageInfo.HasMount,
+                //(_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresNoShield) => !usageInfo.HasShield,
                 (_, var u) when u.HasFlag(ItemUsageSetFlags.RequiresShield) => usageInfo.HasShield,
                 _ when weapon.IsAmmo => usageInfo.UsableAmmoClasses.Contains(weapon.WeaponClass),
                 _ => true
@@ -293,7 +298,7 @@ public class AutoEquipLogic
         Equipment allEq = civilian ? hero.FirstCivilianEquipment : hero.FirstBattleEquipment;
         EquipmentElement slotEq = allEq[slotIndex];
 
-        ItemTypeEnum? itemType = slotEq.IsEmpty switch
+        ItemTypeEnum itemType = slotEq.IsEmpty switch
         {
             true => slotIndex switch
             {
@@ -305,11 +310,11 @@ public class AutoEquipLogic
                 EquipmentIndex.HorseHarness when !allEq[EquipmentIndex.Horse].IsEmpty => ItemTypeEnum.HorseHarness,
                 _ => ItemTypeEnum.Invalid
             },
-            false when options.KeepCrafted && slotEq.Item.IsCraftedByPlayer => null,
+            false when options.KeepCrafted && slotEq.Item.IsCraftedByPlayer => ItemTypeEnum.Invalid,
             false => slotEq.Item.ItemType
         };
 
-        if (itemType is null)
+        if (itemType is ItemTypeEnum.Invalid)
         {
             return ItemRosterElement.Invalid;
         }
@@ -317,24 +322,34 @@ public class AutoEquipLogic
         EquipmentUsageInfo usageInfo = new(
             HasMount: !allEq.Horse.IsEmpty,
             HasShield: allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield),
-            UsableAmmoClasses: allEq.WeaponSlots()
-                                    .Where(slot => !slot.IsEmpty)
-                                    .Select(slot => slot.Item.PrimaryWeapon)
-                                    .OfType<WeaponComponentData>()
-                                    .Select(wcd => wcd.AmmoClass)
-                                    .Where(ammoClass => ammoClass != WeaponClass.Undefined)
-                                    .ToArray());
+            UsableAmmoClasses: new(GetUsableAmmoClasses(allEq)),
+            CanUseAllBowsOnHorseback: hero.GetPerkValue(DefaultPerks.Bow.HorseMaster));
+
         var bestItems = InvLogic.GetElementsInRoster(side)
-            .Where(item => item.EquipmentElement.Item.ItemType == itemType)
+            .Where(item => item switch
+            {
+                //disallow war items in civilian mode
+                { IsEmpty: false, EquipmentElement.Item.IsCivilian: false } when civilian => false,
+                { IsEmpty: false } => true,
+                _ => false
+            })
             .Where(item => Equipment.IsItemFitsToSlot(slotIndex, item.EquipmentElement.Item))
             .Where(item => CharacterHelper.CanUseItemBasedOnSkill(hero, item.EquipmentElement))
-            .Where(item => ShouldEquip(item.EquipmentElement, hero, slotIndex, civilian, usageInfo))
+            .Where(item => ShouldEquip(GetEquipment(hero, civilian), item.EquipmentElement, slotIndex, usageInfo))
             .Prepend(new ItemRosterElement(slotEq, 0))
             .OrderByDescending(item => item.EquipmentElement, _eqComparer);
 
         return bestItems.First();
     }
 
-    private Equipment GetEquipment(CharacterObject character, bool civilian)
+    private static IEnumerable<WeaponClass> GetUsableAmmoClasses(Equipment allEq)
+        => allEq.WeaponSlots()
+                .Where(slot => !slot.IsEmpty)
+                .Select(slot => slot.Item.PrimaryWeapon)
+                .OfType<WeaponComponentData>()
+                .Select(wcd => wcd.AmmoClass)
+                .Where(ammoClass => ammoClass != WeaponClass.Undefined);
+
+    private static Equipment GetEquipment(CharacterObject character, bool civilian)
         => civilian ? character.FirstCivilianEquipment : character.FirstBattleEquipment;
 }
