@@ -231,10 +231,7 @@ public class AutoEquipLogic
         var initialEq = allEq[index];
         var initialItem = initialEq.Item;
 
-        if (initialItem is null)
-        {
-            ;
-        }
+        System.Diagnostics.Debug.Assert(initialItem is not null);
 
         var item = eq.Item;
         if (usageInfo.TargetCulture is BasicCultureObject targetCulture
@@ -265,6 +262,8 @@ public class AutoEquipLogic
 
             if (options.KeepWeaponClass)
             {
+                //Keep weapon class will force an exact match of the current:
+                // weapon class (ex: , weapon description
                 return initialDetails.Intersect(weaponDetails).Any();
             }
 
