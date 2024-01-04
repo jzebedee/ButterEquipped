@@ -136,15 +136,16 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
                 float modArmor = weapon.GetModifiedArmor(eq.ItemModifier) * 60f * 0.03f;
                 var BE_NONSTANDARD_score = (modDamage + modHandling + modLength + modWeight + modArmor) * 0.01f * mod;
                 score = BE_NONSTANDARD_score;
-//#else
-                float o_modThrust = thrustSpeed * thrustDamage * 0.01f;
-                float o_modSwing = swingSpeed * swingDamage * 0.01f;
-                float o_modMax = MathF.Max(o_modSwing, o_modThrust);
-                float o_modMin = MathF.Min(o_modSwing, o_modThrust);
-                float o_modDamage = (o_modMax + (o_modMin * o_modMin / o_modMax)) * 120f; //ORIGINAL: 120f
-                float o_modLength = weaponLength * 20f; //ORIGINAL: 20f
-                float o_modWeight = weight * 5f; //ORIGINAL: 5f
-                var TW_STANDARD_score = (o_modDamage + modHandling + o_modLength + o_modWeight) * 0.01f * mod;
+#else
+                float modThrust = thrustSpeed * thrustDamage * 0.01f;
+                float modSwing = swingSpeed * swingDamage * 0.01f;
+                float modMax = MathF.Max(modSwing, modThrust);
+                float modMin = MathF.Min(modSwing, modThrust);
+                float modDamage = (modMax + (modMin * modMin / modMax)) * 120f;
+                float modHandling = handling * 15f;
+                float modLength = weaponLength * 20f;
+                float modWeight = weight * 5f;
+                score = (modDamage + modHandling + modLength + modWeight) * 0.01f * mod;
 #endif
 
                 return score;
@@ -170,6 +171,10 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             var speed = horse.Speed;//eq.GetModifiedMountSpeed();
             var manuever = horse.Maneuver;//eq.GetModifiedMountManeuver();
             var bodyLength = horse.BodyLength;
+            if(horse.HitPoints != eq.GetModifiedMountHitPoints())
+            {
+                ;
+            }
             var hitPoints = eq.GetModifiedMountHitPoints();
             return (chargeDamage * speed + manuever * speed + bodyLength * weight * 0.025f) * hitPoints * 0.0001f;
         }
