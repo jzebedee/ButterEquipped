@@ -231,20 +231,18 @@ public class AutoEquipLogic
         var initialEq = allEq[index];
         var initialItem = initialEq.Item;
 
-        if (options.KeepCulture)
-        {
-            if (item.Culture != hero.Culture)
-            {
-                return false;
-            }
-        }
-
         if (initialItem is null)
         {
             ;
         }
 
         var item = eq.Item;
+        if (usageInfo.TargetCulture is BasicCultureObject targetCulture
+         && item.Culture != targetCulture)
+        {
+            return false;
+        }
+
         if (item.ItemComponent is WeaponComponent weapon && !ValidateWeapon(weapon))
         {
             return false;
@@ -265,7 +263,7 @@ public class AutoEquipLogic
             var initialDetails = GetWeaponDetails(initialItem.WeaponComponent);
             var weaponDetails = GetWeaponDetails(weapon);
 
-            if(options.KeepWeaponClass)
+            if (options.KeepWeaponClass)
             {
                 return initialDetails.Intersect(weaponDetails).Any();
             }
@@ -323,7 +321,8 @@ public class AutoEquipLogic
             HasMount: !allEq.Horse.IsEmpty,
             HasShield: allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield),
             UsableAmmoClasses: new(GetUsableAmmoClasses(allEq)),
-            CanUseAllBowsOnHorseback: hero.GetPerkValue(DefaultPerks.Bow.HorseMaster));
+            CanUseAllBowsOnHorseback: hero.GetPerkValue(DefaultPerks.Bow.HorseMaster),
+            TargetCulture: options.KeepCulture ? hero.Culture : null);
 
         var bestItems = InvLogic.GetElementsInRoster(side)
             .Where(item => item switch

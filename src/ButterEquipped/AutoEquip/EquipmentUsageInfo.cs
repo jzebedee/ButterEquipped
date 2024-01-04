@@ -3,4 +3,4 @@ using TaleWorlds.Core;
 
 namespace ButterEquipped.AutoEquip;
 
-public record struct EquipmentUsageInfo(bool HasMount, bool HasShield, HashSet<WeaponClass> UsableAmmoClasses, bool CanUseAllBowsOnHorseback);
+public record EquipmentUsageInfo(bool HasMount, bool HasShield, HashSet<WeaponClass> UsableAmmoClasses, bool CanUseAllBowsOnHorseback, BasicCultureObject? TargetCulture = null);
