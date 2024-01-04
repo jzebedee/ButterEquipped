@@ -2,7 +2,6 @@
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static TaleWorlds.Core.ItemObject;
 
 namespace ButterEquipped.AutoEquip;
 
@@ -34,7 +33,7 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
         {
             BannerComponent banner => CalculateEffectivenessBanner(banner),
             HorseComponent horse => CalculateEffectivenessHorse(horse),
-            WeaponComponent weapon => weapon.Weapons.Select((wcd, i) => CalculateEffectivenessWeapon(wcd) / (i+1)*2).Sum(),
+            WeaponComponent weapon => weapon.Weapons.Select((wcd, i) => CalculateEffectivenessWeapon(wcd) / (i + 1) * 2).Sum(),
             ArmorComponent => CalculateEffectivenessArmor(),
             _ => 1f
         };
@@ -117,11 +116,38 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             }
             else if (weapon.IsMeleeWeapon)
             {
-                float modThrust = thrustSpeed * thrustDamage * 0.01f;
-                float modSwing = swingSpeed * swingDamage * 0.01f;
+                float score;
+
+#if BE_NONSTANDARD
+                //TaleWorlds.MountAndBlade.MissionCombatMechanicsHelper.ConvertBaseAttackMagnitude(WeaponComponentData, StrikeType, float) : float @06001F7D
+                float modThrustFactor = MathF.Sqrt(thrustDamage * weapon.ThrustDamageFactor * 0.01f);
+                float modThrust = thrustSpeed * (thrustDamage + modThrustFactor) * 0.01f;
+                float modSwingFactor = MathF.Sqrt(swingDamage * weapon.SwingDamageFactor * 0.01f);
+                float modSwing = swingSpeed * (swingDamage * modSwingFactor) * 0.01f;
                 float modMax = MathF.Max(modSwing, modThrust);
                 float modMin = MathF.Min(modSwing, modThrust);
-                return ((modMax + modMin * modMin / modMax) * 120f + handling * 15f + weaponLength * 20f + weight * 5f) * 0.01f * mod;
+                //avoid going negative, which will incorrectly add to the score when averaged as (modMin * modMin / modMax)
+                modMin = MathF.Max(modMin, 0f);
+                float modDamage = (modMax + (modMin * modMin / modMax)) * 120f; //ORIGINAL: 120f
+                float modHandling = handling * 15f; //ORIGINAL: 15f
+                //Damage factors are already calculated against a weapon's length and weight
+                float modLength = weaponLength * 18f; //ORIGINAL: 20f
+                float modWeight = 1 / (weight + 1) * 5f; //ORIGINAL: 5f
+                float modArmor = weapon.GetModifiedArmor(eq.ItemModifier) * 60f * 0.03f;
+                var BE_NONSTANDARD_score = (modDamage + modHandling + modLength + modWeight + modArmor) * 0.01f * mod;
+                score = BE_NONSTANDARD_score;
+//#else
+                float o_modThrust = thrustSpeed * thrustDamage * 0.01f;
+                float o_modSwing = swingSpeed * swingDamage * 0.01f;
+                float o_modMax = MathF.Max(o_modSwing, o_modThrust);
+                float o_modMin = MathF.Min(o_modSwing, o_modThrust);
+                float o_modDamage = (o_modMax + (o_modMin * o_modMin / o_modMax)) * 120f; //ORIGINAL: 120f
+                float o_modLength = weaponLength * 20f; //ORIGINAL: 20f
+                float o_modWeight = weight * 5f; //ORIGINAL: 5f
+                var TW_STANDARD_score = (o_modDamage + modHandling + o_modLength + o_modWeight) * 0.01f * mod;
+#endif
+
+                return score;
             }
             else if (weapon.IsConsumable)
             {
