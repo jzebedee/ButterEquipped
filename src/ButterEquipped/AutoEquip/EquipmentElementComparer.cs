@@ -171,10 +171,6 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             var speed = horse.Speed;//eq.GetModifiedMountSpeed();
             var manuever = horse.Maneuver;//eq.GetModifiedMountManeuver();
             var bodyLength = horse.BodyLength;
-            if(horse.HitPoints != eq.GetModifiedMountHitPoints())
-            {
-                ;
-            }
             var hitPoints = eq.GetModifiedMountHitPoints();
             return (chargeDamage * speed + manuever * speed + bodyLength * weight * 0.025f) * hitPoints * 0.0001f;
         }
