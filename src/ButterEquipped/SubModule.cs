@@ -32,6 +32,7 @@ public class SubModule : MBSubModuleBase
     public static UIExtender UIExtender => _extender.Value;
 
     private AutoEquipBehavior? eqUpBehavior;
+    private HighlightBetterBehavior? highlightBehavior;
 
     private FluentPerSaveSettings? settings;
 
@@ -54,7 +55,7 @@ public class SubModule : MBSubModuleBase
 
         Options ??= new();
         campaignGameStarter.AddBehavior(eqUpBehavior = new AutoEquipBehavior(Options));
-        campaignGameStarter.AddBehavior(new HighlightBetterBehavior());
+        campaignGameStarter.AddBehavior(highlightBehavior = new HighlightBetterBehavior());
     }
 
     public override void OnAfterGameInitializationFinished(Game game, object starterObject)
@@ -72,9 +73,11 @@ public class SubModule : MBSubModuleBase
 
     public override void OnGameEnd(Game game)
     {
-        var oldBehavior = eqUpBehavior;
-        oldBehavior?.Dispose();
+        eqUpBehavior?.Dispose();
         eqUpBehavior = null;
+
+        highlightBehavior?.Dispose();
+        highlightBehavior = null;
 
         var oldSettings = settings;
         oldSettings?.Unregister();
