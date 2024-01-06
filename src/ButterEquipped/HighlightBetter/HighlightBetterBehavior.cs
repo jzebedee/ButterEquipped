@@ -53,6 +53,8 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 
     public void Dispose()
     {
-        throw new NotImplementedException();
+        InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState -= OnWidgetUpdated;
+        SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment -= SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
+        SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment -= SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
     }
 }
