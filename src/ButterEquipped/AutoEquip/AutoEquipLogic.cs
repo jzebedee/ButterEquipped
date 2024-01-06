@@ -228,11 +228,6 @@ public class AutoEquipLogic
 
     private bool ShouldEquip(Equipment allEq, EquipmentElement eq, EquipmentIndex index, EquipmentUsageInfo usageInfo)
     {
-        var initialEq = allEq[index];
-        var initialItem = initialEq.Item;
-
-        System.Diagnostics.Debug.Assert(initialItem is not null);
-
         var item = eq.Item;
         if (usageInfo.TargetCulture is BasicCultureObject targetCulture
          && item.Culture != targetCulture)
@@ -257,7 +252,13 @@ public class AutoEquipLogic
 
         bool ValidateWeapon(WeaponComponent weapon)
         {
-            var initialDetails = GetWeaponDetails(initialItem.WeaponComponent);
+            var initialEq = allEq[index];
+            if (initialEq.IsEmpty)
+            {
+                return false;
+            }
+
+            var initialDetails = GetWeaponDetails(initialEq.Item.WeaponComponent);
             var weaponDetails = GetWeaponDetails(weapon);
 
             if (options.KeepWeaponClass)
@@ -290,7 +291,7 @@ public class AutoEquipLogic
             };
     }
 
-    private ItemRosterElement FindBestItem(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, bool civilian)
+    private IEnumerable<ItemRosterElement> CompareItems(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, bool civilian)
     {
         Equipment allEq = civilian ? hero.FirstCivilianEquipment : hero.FirstBattleEquipment;
         EquipmentElement slotEq = allEq[slotIndex];
@@ -313,7 +314,7 @@ public class AutoEquipLogic
 
         if (itemType is ItemTypeEnum.Invalid)
         {
-            return ItemRosterElement.Invalid;
+            return Enumerable.Empty<ItemRosterElement>();
         }
 
         EquipmentUsageInfo usageInfo = new(
@@ -323,7 +324,7 @@ public class AutoEquipLogic
             CanUseAllBowsOnHorseback: hero.GetPerkValue(DefaultPerks.Bow.HorseMaster),
             TargetCulture: options.KeepCulture ? hero.Culture : null);
 
-        var bestItems = InvLogic.GetElementsInRoster(side)
+        return InvLogic.GetElementsInRoster(side)
             .Where(item => item switch
             {
                 //disallow war items in civilian mode
@@ -336,9 +337,10 @@ public class AutoEquipLogic
             .Where(item => ShouldEquip(GetEquipment(hero, civilian), item.EquipmentElement, slotIndex, usageInfo))
             .Prepend(new ItemRosterElement(slotEq, 0))
             .OrderByDescending(item => item.EquipmentElement, _eqComparer);
-
-        return bestItems.First();
     }
+
+    private ItemRosterElement FindBestItem(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, bool civilian)
+        => CompareItems(slotIndex, hero, side, civilian).DefaultIfEmpty(ItemRosterElement.Invalid).First();
 
     private static IEnumerable<WeaponClass> GetUsableAmmoClasses(Equipment allEq)
         => allEq.WeaponSlots()

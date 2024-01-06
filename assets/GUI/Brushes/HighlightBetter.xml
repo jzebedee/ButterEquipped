@@ -1,0 +1,40 @@
+<Brushes>
+  <Brush Name="ButterEquipped.BetterItem.Left">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="Inventory\tuple_right" ExtendTop="2" ExtendBottom="2" Color="#40EF40FF"/>
+    </Layers>
+    <Styles>
+      <Style Name="Default">
+        <BrushLayer Name="Default" Sprite="Inventory\tuple_right" ExtendTop="2" ExtendBottom="2" />
+      </Style>
+      <Style Name="Hovered">
+        <BrushLayer Name="Default" Sprite="Inventory\tuple_right" ExtendTop="2" ExtendBottom="2" ColorFactor="1.2"/>
+      </Style>
+      <Style Name="Pressed">
+        <BrushLayer Name="Default" Sprite="Inventory\tuple_right_pressed" ExtendTop="2" ExtendBottom="2" ExtendLeft="2" ExtendRight="2" />
+      </Style>
+      <Style Name="Selected">
+        <BrushLayer Name="Default" Sprite="Inventory\tuple_right" ExtendTop="2" ExtendBottom="2" SaturationFactor="15" ValueFactor="5" />
+      </Style>
+    </Styles>
+  </Brush>
+  <Brush Name="ButterEquipped.BetterItem.Right">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="Inventory\tuple_right" ExtendTop="2" ExtendBottom="2" Color="#40EF40FF"/>
+    </Layers>
+    <Styles>
+      <Style Name="Default">
+        <BrushLayer Name="Default" Sprite="Inventory\tuple_right" ExtendTop="2" ExtendBottom="2" />
+      </Style>
+      <Style Name="Hovered">
+        <BrushLayer Name="Default" Sprite="Inventory\tuple_right" ExtendTop="2" ExtendBottom="2" SaturationFactor="20" ValueFactor="10" />
+      </Style>
+      <Style Name="Pressed">
+        <BrushLayer Name="Default" Sprite="Inventory\tuple_right_pressed" ExtendTop="2" ExtendBottom="2" ExtendLeft="2" ExtendRight="2" ValueFactor="-30" />
+      </Style>
+      <Style Name="Selected">
+        <BrushLayer Name="Default" Sprite="Inventory\tuple_right" ExtendTop="2" ExtendBottom="2" SaturationFactor="15" ValueFactor="5" />
+      </Style>
+    </Styles>
+  </Brush>
+</Brushes>

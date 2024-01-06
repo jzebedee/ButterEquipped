@@ -1,8 +1,11 @@
-﻿using ButterEquipped.AutoEquip;
+﻿using Bannerlord.UIExtenderEx;
+using ButterEquipped.AutoEquip;
+using ButterEquipped.HighlightBetter;
 using HarmonyLib;
 using MCM.Abstractions.Base.PerSave;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -16,7 +19,17 @@ public class SubModule : MBSubModuleBase
 
     private static readonly Lazy<Harmony> _harmony = new(() => new Harmony(HarmonyId));
 
+    private static readonly Lazy<UIExtender> _extender = new(() =>
+    {
+        var extender = new UIExtender(nameof(ButterEquipped));
+        extender.Register(typeof(SubModule).Assembly);
+        return extender;
+    });
+
+    public static string ModuleDirectory => Path.GetDirectoryName(typeof(SubModule).Assembly.Location);
+
     public static Harmony Harmony => _harmony.Value;
+    public static UIExtender UIExtender => _extender.Value;
 
     private AutoEquipBehavior? eqUpBehavior;
 
@@ -28,6 +41,7 @@ public class SubModule : MBSubModuleBase
     {
         base.OnSubModuleLoad();
 
+        UIExtender.Enable();
         Harmony.PatchAll(Assembly.GetExecutingAssembly());
     }
 
@@ -40,6 +54,7 @@ public class SubModule : MBSubModuleBase
 
         Options ??= new();
         campaignGameStarter.AddBehavior(eqUpBehavior = new AutoEquipBehavior(Options));
+        campaignGameStarter.AddBehavior(new HighlightBetterBehavior());
     }
 
     public override void OnAfterGameInitializationFinished(Game game, object starterObject)
