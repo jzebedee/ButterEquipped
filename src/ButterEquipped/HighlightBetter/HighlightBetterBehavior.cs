@@ -1,11 +1,12 @@
 ﻿using ButterEquipped.Patches;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.MountAndBlade.GauntletUI.Widgets.Inventory;
 
 namespace ButterEquipped.HighlightBetter;
 
-internal class HighlightBetterBehavior : CampaignBehaviorBase
+internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 {
     public override void RegisterEvents()
     {
@@ -16,18 +17,26 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase
 
     private void SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment(SPInventoryVM spInventoryVm)
     {
+        //switching war set / hero
         SPItemVMMixin.CurrentInventory = spInventoryVm;
     }
 
     private void SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment(SPInventoryVM spInventoryVm)
     {
+        //moving items in or out of current character equipment
         SPItemVMMixin.CurrentInventory = spInventoryVm;
     }
 
     private void OnWidgetUpdated(InventoryItemTupleWidget widget)
     {
-        if(widget is not InventoryItemTupleInterceptWidget interceptWidget)
+        if (widget is not InventoryItemTupleInterceptWidget interceptWidget)
         {
+            return;
+        }
+
+        if(!widget.MainContainer.Brush.IsCloneRelated(widget.DefaultBrush))
+        {
+            //can't use / civilian
             return;
         }
 
@@ -40,5 +49,10 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase
 
     public override void SyncData(IDataStore dataStore)
     {
+    }
+
+    public void Dispose()
+    {
+        throw new NotImplementedException();
     }
 }
