@@ -112,7 +112,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
             _ => false
         };
 
-    private void HandleClose(object sender, bool fromCancel)
+    private void HandleClose(bool fromCancel)
     {
         if (!fromCancel && options.AutoEquipOnClose)
         {

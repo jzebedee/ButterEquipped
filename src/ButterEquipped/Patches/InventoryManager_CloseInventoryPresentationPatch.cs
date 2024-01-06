@@ -9,8 +9,8 @@ namespace ButterEquipped.Patches;
 [HarmonyPatch(typeof(InventoryManager), nameof(InventoryManager.CloseInventoryPresentation))]
 internal static class InventoryManager_CloseInventoryPresentationPatch
 {
-    internal static event EventHandler<bool>? OnClosing;
+    internal static event Action<bool>? OnClosing;
 
     public static void Prefix(object __instance, bool fromCancel)
-        => OnClosing?.Invoke(__instance, fromCancel);
+        => OnClosing?.Invoke(fromCancel);
 }
