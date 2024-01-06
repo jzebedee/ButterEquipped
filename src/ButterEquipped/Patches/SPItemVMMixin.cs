@@ -21,61 +21,24 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
     private static readonly Func<SPInventoryVM, EquipmentIndex, SPItemVM>? GetItemFromIndex
         = AccessTools2.GetDelegate<Func<SPInventoryVM, EquipmentIndex, SPItemVM>>(typeof(SPInventoryVM), nameof(GetItemFromIndex));
 
-    //private static readonly AccessTools.FieldRef<SPItemVM, InventoryLogic>? ActiveEquipment
-    //    = AccessTools2.FieldRefAccess<SPInventoryVM, Equipment>("ActiveEquipment");
+    private static bool IsValid
+        => GetItemFromIndex is not null && CurrentInventory is not null;
 
-    private static Action<SPInventoryVM>? OnCurrentInventoryChanged;
-    private static SPInventoryVM currentInventory;
-    internal static SPInventoryVM CurrentInventory
+    private static Action<SPInventoryVM>? OnEquipmentUpdate;
+    private static SPInventoryVM? currentInventory;
+    internal static SPInventoryVM? CurrentInventory
     {
         get => currentInventory;
         set
         {
-            //if (currentInventory != value)
-            {
-                currentInventory = value;
-                OnCurrentInventoryChanged?.Invoke(currentInventory);
-            }
+            currentInventory = value;
+            OnEquipmentUpdate?.Invoke(currentInventory);
         }
     }
 
     public SPItemVMMixin(SPItemVM vm) : base(vm)
     {
-        //piggyback off of SPInventoryVM.RefreshCharacterCanUseItem()
-        //ViewModel.PropertyChanged += (sender, e) =>
-        //{
-        //    if (e.PropertyName is not nameof(ViewModel.CanCharacterUseItem))
-        //    {
-        //        return;
-        //    }
-
-        //    ;
-        //};
-        OnCurrentInventoryChanged += spInventoryVm =>
-        {
-            spInventoryVm.PropertyChanged += (sender, e) =>
-            {
-                if(e.PropertyName is not nameof(SPInventoryVM.IsInWarSet))
-                {
-                    return;
-                }
-                OnPropertyChanged(nameof(ButterEquippedIsItemBetter));
-
-            };
-
-            OnPropertyChanged(nameof(ButterEquippedIsItemBetter));
-        };
-        //ViewModel.PropertyChangedWithBoolValue += ViewModel_PropertyChangedWithBoolValue;
-    }
-
-    private void ViewModel_PropertyChangedWithBoolValue(object sender, PropertyChangedWithBoolValueEventArgs e)
-    {
-        if (e.PropertyName is not nameof(ViewModel.IsEquipableItem))
-        {
-            return;
-        }
-
-        OnPropertyChanged(nameof(ButterEquippedIsItemBetter));
+        OnEquipmentUpdate += spInventoryVm => OnPropertyChanged(nameof(ButterEquippedIsItemBetter));
     }
 
     [DataSourceProperty]
@@ -83,40 +46,27 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
     {
         get
         {
+            if (!IsValid)
+            {
+                System.Diagnostics.Debug.Fail($"{nameof(SPItemVMMixin)} is invalid");
+                return false;
+            }
+
             if (ViewModel is { InventorySide: InventoryLogic.InventorySide.Equipment })
             {
                 return false;
             }
 
-            if (ViewModel is not { ItemRosterElement.EquipmentElement: var itemEqEl })
+            if (ViewModel is not
+                {
+                    ItemRosterElement.EquipmentElement: var itemEqEl,
+                    ItemType: >= EquipmentIndex.WeaponItemBeginSlot and <= EquipmentIndex.NumEquipmentSetSlots
+                })
             {
                 return false;
             }
 
-            if (ViewModel.ItemType is not >= EquipmentIndex.WeaponItemBeginSlot and <= EquipmentIndex.NumEquipmentSetSlots)
-            {
-                return false;
-            }
-
-            //if (CurrentInventory switch
-            //{
-            //    SPInventoryVM vm => ActiveEquipment(vm),
-            //    null => InventoryManager.InventoryLogic.InitialEquipmentCharacter.Equipment
-            //} is not Equipment currentEq)
-            //{
-            //    return false;
-            //}
-            if (CurrentInventory is not SPInventoryVM inventoryVm)
-            {
-                return false;
-            }
-
-            var otherType = ViewModel.GetItemTypeWithItemObject();
-            if (otherType != ViewModel.ItemType)
-            {
-                ;
-            }
-            if (GetItemFromIndex(inventoryVm, ViewModel.ItemType) is not SPItemVM equippedItem)
+            if (GetItemFromIndex!(CurrentInventory, ViewModel.ItemType) is not SPItemVM equippedItem)
             {
                 return false;
             }
