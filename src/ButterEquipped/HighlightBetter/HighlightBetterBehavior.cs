@@ -23,13 +23,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState += OnWidgetUpdated;
         SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment += SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
         SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment += SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
-        GauntletInventoryScreen_OnInitializePatch.OnInitialize += GauntletInventoryScreen_OnInitializePatch_OnInitialize;
         _eventsRegistered = true;
-    }
-
-    private void GauntletInventoryScreen_OnInitializePatch_OnInitialize(SandBox.GauntletUI.GauntletInventoryScreen obj)
-    {
-        SPItemVMMixin.ResetDebug();
     }
 
     private void SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment(SPInventoryVM spInventoryVm)
@@ -87,7 +81,6 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
             InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState -= OnWidgetUpdated;
             SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment -= SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
             SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment -= SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
-            GauntletInventoryScreen_OnInitializePatch.OnInitialize -= GauntletInventoryScreen_OnInitializePatch_OnInitialize;
         }
         _disposed = true;
     }
