@@ -27,7 +27,7 @@ public class SubModule : MBSubModuleBase
         return extender;
     });
 
-    public static string ModuleDirectory => Path.GetDirectoryName(typeof(SubModule).Assembly.Location);
+    public static string? ModuleDirectory => Path.GetDirectoryName(typeof(SubModule).Assembly.Location);
 
     public static Harmony Harmony => _harmony.Value;
     public static UIExtender UIExtender => _extender.Value;
