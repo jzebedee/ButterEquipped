@@ -4,7 +4,6 @@ using ButterEquipped.AutoEquip;
 using ButterEquipped.HighlightBetter;
 using HarmonyLib.BUTR.Extensions;
 using System;
-using System.Threading;
 using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
@@ -87,14 +86,6 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
         ButterEquippedIsItemBetter = CompareEquipment(e.Value as SPItemVM);
     }
 
-    internal static void ResetDebug()
-    {
-        var totalCalls = Interlocked.Exchange(ref TotalCalls, 0);
-        System.Diagnostics.Debug.Print("{0} called {1} times before reset", nameof(ButterEquippedIsItemBetter), totalCalls);
-    }
-
-    private static int TotalCalls = 0;
-
     private SPItemVM? EquipmentReference
         => (IsValid, ViewModel, CurrentInventory) switch
         {
@@ -148,11 +139,7 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
     [DataSourceProperty]
     public bool ButterEquippedIsItemBetter
     {
-        get
-        {
-            Interlocked.Increment(ref TotalCalls);
-            return _isItemBetter ??= CompareEquipment();
-        }
+        get => _isItemBetter ??= CompareEquipment();
         set
         {
             if (_isItemBetter != value)
