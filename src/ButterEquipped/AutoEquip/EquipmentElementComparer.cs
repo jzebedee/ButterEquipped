@@ -40,6 +40,13 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
 
         float CalculateEffectivenessBanner(BannerComponent banner)
         {
+            //Banner pieces in story mode will crash because they have no banner effect
+            //and GetBannerEffectBonus() doesn't check for null
+            if(banner is not { BannerEffect: not null })
+            {
+                return default;
+            }
+
             return MathF.Abs(banner.GetBannerEffectBonus());
         }
 
