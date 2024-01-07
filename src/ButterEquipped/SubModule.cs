@@ -1,6 +1,7 @@
 ﻿using Bannerlord.UIExtenderEx;
 using ButterEquipped.AutoEquip;
 using ButterEquipped.HighlightBetter;
+using ButterEquipped.Settings;
 using HarmonyLib;
 using MCM.Abstractions.Base.PerSave;
 using System;
@@ -36,7 +37,9 @@ public class SubModule : MBSubModuleBase
 
     private FluentPerSaveSettings? settings;
 
-    public AutoEquipOptions? Options { get; private set; }
+    public AutoEquipOptions? AutoEquipOptions { get; private set; }
+
+    public HighlightBetterOptions? HighlightBetterOptions { get; private set; }
 
     protected override void OnSubModuleLoad()
     {
@@ -53,9 +56,10 @@ public class SubModule : MBSubModuleBase
             return;
         }
 
-        Options ??= new();
-        campaignGameStarter.AddBehavior(eqUpBehavior = new AutoEquipBehavior(Options));
-        campaignGameStarter.AddBehavior(highlightBehavior = new HighlightBetterBehavior());
+        AutoEquipOptions ??= new();
+        HighlightBetterOptions ??= new();
+        campaignGameStarter.AddBehavior(eqUpBehavior = new AutoEquipBehavior(AutoEquipOptions));
+        campaignGameStarter.AddBehavior(highlightBehavior = new HighlightBetterBehavior(HighlightBetterOptions));
     }
 
     public override void OnAfterGameInitializationFinished(Game game, object starterObject)
@@ -66,7 +70,7 @@ public class SubModule : MBSubModuleBase
         }
 
         Debug.Assert(settings is null);
-        var builder = Settings.EquipSettings.AddEquipSettings(Options!, campaign.UniqueGameId);
+        var builder = EquipSettings.AddEquipSettings(AutoEquipOptions!, HighlightBetterOptions!, campaign.UniqueGameId);
         settings = builder.BuildAsPerSave();
         settings?.Register();
     }
@@ -83,6 +87,7 @@ public class SubModule : MBSubModuleBase
         oldSettings?.Unregister();
         settings = null;
 
-        Options = null;
+        AutoEquipOptions = null;
+        HighlightBetterOptions = null;
     }
 }

@@ -10,8 +10,15 @@ namespace ButterEquipped.HighlightBetter;
 
 internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 {
+    private readonly HighlightBetterOptions _options;
+
     private bool _eventsRegistered;
     private bool _disposed;
+
+    public HighlightBetterBehavior(HighlightBetterOptions options)
+    {
+        _options = options;
+    }
 
     public override void RegisterEvents()
     {

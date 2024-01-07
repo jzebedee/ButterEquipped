@@ -1,4 +1,5 @@
 ﻿using ButterEquipped.AutoEquip;
+using ButterEquipped.HighlightBetter;
 using MCM.Abstractions.Base;
 using MCM.Abstractions.FluentBuilder;
 using MCM.Common;
@@ -14,7 +15,7 @@ internal static class EquipSettings
 
     private static string SettingsName => $"Butter Equipped {CurrentVersion?.ToString(3)}";
 
-    public static ISettingsBuilder AddEquipSettings(AutoEquipOptions opt, string id)
+    public static ISettingsBuilder AddEquipSettings(AutoEquipOptions eqOpt, HighlightBetterOptions hiOpt, string id)
     {
         var builder = BaseSettingsBuilder.Create(SettingsId, SettingsName)!
             .SetFormat("json2")
@@ -24,6 +25,7 @@ internal static class EquipSettings
             .CreateGroup("{=ButterEquip002}Equip From", BuildEquipFromGroup)
             .CreateGroup("{=ButterEquip003}Keep Items", BuildKeepItemsGroup)
             .CreateGroup("{=ButterEquip004}Auto Equip", BuildAutoEquipGroup)
+            .CreateGroup("{=ButterEquip017}Highlight Better Items", BuildHighlightItemsGroup)
             //.WithoutDefaultPreset()
             .CreatePreset(BaseSettings.DefaultPresetId, BaseSettings.DefaultPresetName, builder => BuildDefaultPreset(builder, new()));
 
@@ -52,15 +54,15 @@ internal static class EquipSettings
             => builder
                 .AddBool("equip_player",
                          "{=ButterEquip005}Equip Player Hero",
-                         new ProxyRef<bool>(() => opt.EquipHero, value => opt.EquipHero = value),
+                         new ProxyRef<bool>(() => eqOpt.EquipHero, value => eqOpt.EquipHero = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_companions",
                          "{=ButterEquip006}Equip Companions",
-                         new ProxyRef<bool>(() => opt.EquipCompanions, value => opt.EquipCompanions = value),
+                         new ProxyRef<bool>(() => eqOpt.EquipCompanions, value => eqOpt.EquipCompanions = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_civilian",
                          "{=ButterEquip007}Equip Civilian Equipment",
-                         new ProxyRef<bool>(() => opt.EquipCivilian, value => opt.EquipCivilian = value),
+                         new ProxyRef<bool>(() => eqOpt.EquipCivilian, value => eqOpt.EquipCivilian = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .SetGroupOrder(1);
 
@@ -68,23 +70,23 @@ internal static class EquipSettings
             => builder
                 .AddBool("equip_from_loot",
                          "{=ButterEquip008}Equip from Loot",
-                         new ProxyRef<bool>(() => opt.EquipFromLoot, value => opt.EquipFromLoot = value),
+                         new ProxyRef<bool>(() => eqOpt.EquipFromLoot, value => eqOpt.EquipFromLoot = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_from_stash",
                          "{=ButterEquip009}Equip from Stash",
-                         new ProxyRef<bool>(() => opt.EquipFromStash, value => opt.EquipFromStash = value),
+                         new ProxyRef<bool>(() => eqOpt.EquipFromStash, value => eqOpt.EquipFromStash = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_from_inventory",
                          "{=ButterEquip010}Equip from Inventory",
-                         new ProxyRef<bool>(() => opt.EquipFromInventory, value => opt.EquipFromInventory = value),
+                         new ProxyRef<bool>(() => eqOpt.EquipFromInventory, value => eqOpt.EquipFromInventory = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_from_discard",
                          "{=ButterEquip011}Equip from Discard",
-                         new ProxyRef<bool>(() => opt.EquipFromDiscard, value => opt.EquipFromDiscard = value),
+                         new ProxyRef<bool>(() => eqOpt.EquipFromDiscard, value => eqOpt.EquipFromDiscard = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("equip_from_trade",
                          "{=ButterEquip012}Equip from Trade",
-                         new ProxyRef<bool>(() => opt.EquipFromTrade, value => opt.EquipFromTrade = value),
+                         new ProxyRef<bool>(() => eqOpt.EquipFromTrade, value => eqOpt.EquipFromTrade = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .SetGroupOrder(2);
 
@@ -92,23 +94,23 @@ internal static class EquipSettings
             => builder
                 .AddBool("keep_weapon_class",
                          "{=ButterEquip013}Keep Weapon Class",
-                         new ProxyRef<bool>(() => opt.KeepWeaponClass, value => opt.KeepWeaponClass = value),
+                         new ProxyRef<bool>(() => eqOpt.KeepWeaponClass, value => eqOpt.KeepWeaponClass = value),
                          propBuilder =>
                             propBuilder.SetRequireRestart(false)
                                        .SetHintText("{=ButterEquip013Hint}When enabled, only weapons of the same class will be equipped (e.g., One Handed Maces will only be upgraded with One Handed Maces)"))
                 .AddBool("keep_mount_type",
                          "{=ButterEquip014}Keep Mount Type",
-                         new ProxyRef<bool>(() => opt.KeepMountType, value => opt.KeepMountType = value),
+                         new ProxyRef<bool>(() => eqOpt.KeepMountType, value => eqOpt.KeepMountType = value),
                          propBuilder =>
                             propBuilder.SetRequireRestart(false)
                                        .SetHintText("{=ButterEquip014Hint}When enabled, only mounts of the same type will be equipped (e.g., only horses for equipped horse, or camels for equipped camel)"))
                 .AddBool("keep_crafted",
                          "{=ButterEquip015}Keep Crafted Weapons",
-                         new ProxyRef<bool>(() => opt.KeepCrafted, value => opt.KeepCrafted = value),
+                         new ProxyRef<bool>(() => eqOpt.KeepCrafted, value => eqOpt.KeepCrafted = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .AddBool("keep_culture",
                          "{=ButterEquip016}Keep Culture",
-                         new ProxyRef<bool>(() => opt.KeepCulture, value => opt.KeepCulture = value),
+                         new ProxyRef<bool>(() => eqOpt.KeepCulture, value => eqOpt.KeepCulture = value),
                          propBuilder =>
                             propBuilder.SetRequireRestart(false)
                                        .SetHintText("{=ButterEquip016Hint}When enabled, only equipment from the same culture as the hero will be equipped (e.g., only Khuzait armor for Khuzait-culture heroes)"))
@@ -118,9 +120,37 @@ internal static class EquipSettings
             => builder
                 .AddBool("auto_equip_on_inventory_close",
                          "{=ButterEquip004}Auto Equip",
-                         new ProxyRef<bool>(() => opt.AutoEquipOnClose, value => opt.AutoEquipOnClose = value),
+                         new ProxyRef<bool>(() => eqOpt.AutoEquipOnClose, value => eqOpt.AutoEquipOnClose = value),
                          propBuilder => propBuilder.SetRequireRestart(false))
                 .SetGroupOrder(4);
+
+        void BuildHighlightItemsGroup(ISettingsPropertyGroupBuilder builder)
+            => builder
+                .AddBool("highlight_better_items",
+                         "{=ButterEquip017}Highlight Better Items",
+                         new ProxyRef<bool>(() => hiOpt.HighlightBetterItems, value => hiOpt.HighlightBetterItems = value),
+                         propBuilder => propBuilder.SetRequireRestart(false))
+                .AddBool("highlight_from_loot",
+                         "{=ButterEquip018}Highlight from Loot",
+                         new ProxyRef<bool>(() => hiOpt.HighlightFromLoot, value => hiOpt.HighlightFromLoot = value),
+                         propBuilder => propBuilder.SetRequireRestart(false))
+                .AddBool("highlight_from_stash",
+                         "{=ButterEquip019}Highlight from Stash",
+                         new ProxyRef<bool>(() => hiOpt.HighlightFromStash, value => hiOpt.HighlightFromStash = value),
+                         propBuilder => propBuilder.SetRequireRestart(false))
+                .AddBool("highlight_from_inventory",
+                         "{=ButterEquip020}Highlight from Inventory",
+                         new ProxyRef<bool>(() => hiOpt.HighlightFromInventory, value => hiOpt.HighlightFromInventory = value),
+                         propBuilder => propBuilder.SetRequireRestart(false))
+                .AddBool("highlight_from_discard",
+                         "{=ButterEquip021}Highlight from Discard",
+                         new ProxyRef<bool>(() => hiOpt.HighlightFromDiscard, value => hiOpt.HighlightFromDiscard = value),
+                         propBuilder => propBuilder.SetRequireRestart(false))
+                .AddBool("highlight_from_trade",
+                         "{=ButterEquip022}Highlight from Trade",
+                         new ProxyRef<bool>(() => hiOpt.HighlightFromTrade, value => hiOpt.HighlightFromTrade = value),
+                         propBuilder => propBuilder.SetRequireRestart(false))
+                .SetGroupOrder(5);
 
     }
 }
