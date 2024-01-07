@@ -8,11 +8,11 @@ namespace ButterEquipped.Settings;
 
 internal static class EquipSettings
 {
-    private static Version CurrentVersion => typeof(EquipSettings).Assembly.GetName().Version;
+    private static Version? CurrentVersion => typeof(EquipSettings).Assembly.GetName().Version;
 
-    private static string SettingsId => $"{nameof(ButterEquipped)}_v{CurrentVersion.ToString(1)}";
+    private static string SettingsId => $"{nameof(ButterEquipped)}_v{CurrentVersion?.ToString(1)}";
 
-    private static string SettingsName => $"Butter Equipped {CurrentVersion.ToString(3)}";
+    private static string SettingsName => $"Butter Equipped {CurrentVersion?.ToString(3)}";
 
     public static ISettingsBuilder AddEquipSettings(AutoEquipOptions opt, string id)
     {
