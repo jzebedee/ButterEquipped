@@ -7,7 +7,7 @@ namespace ButterEquipped.HighlightBetter;
 
 public class InventoryItemTupleInterceptWidget : InventoryItemTupleWidget
 {
-    private static readonly Action<InventoryItemTupleWidget> UpdateCivilianState
+    private static readonly Action<InventoryItemTupleWidget>? UpdateCivilianState
         = AccessTools2.GetDelegate<Action<InventoryItemTupleWidget>>(typeof(InventoryItemTupleWidget), nameof(UpdateCivilianState));
 
     public InventoryItemTupleInterceptWidget(UIContext context) : base(context)
@@ -39,13 +39,13 @@ public class InventoryItemTupleInterceptWidget : InventoryItemTupleWidget
             {
                 _isBetterItem = value;
                 OnPropertyChanged(value);
-                UpdateCivilianState(this);
+                UpdateCivilianState?.Invoke(this);
             }
         }
     }
 
     [Editor(false)]
-    public Brush BetterItemHighlightBrush
+    public Brush? BetterItemHighlightBrush
     {
         get => _betterItemHighlightBrush;
         set
@@ -60,5 +60,5 @@ public class InventoryItemTupleInterceptWidget : InventoryItemTupleWidget
 
     private float _betterItemScore;
     private bool _isBetterItem;
-    private Brush _betterItemHighlightBrush;
+    private Brush? _betterItemHighlightBrush;
 }
