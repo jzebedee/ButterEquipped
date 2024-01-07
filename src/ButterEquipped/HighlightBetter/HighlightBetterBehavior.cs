@@ -1,40 +1,64 @@
 ﻿using ButterEquipped.Patches;
 using System;
+using System.Diagnostics;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
+using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade.GauntletUI.Widgets.Inventory;
 
 namespace ButterEquipped.HighlightBetter;
 
 internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 {
+    private bool _eventsRegistered;
+    private bool _disposed;
+
     public override void RegisterEvents()
     {
+        if (_eventsRegistered)
+        {
+            return;
+        }
+
         InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState += OnWidgetUpdated;
         SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment += SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
         SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment += SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
+        GauntletInventoryScreen_OnInitializePatch.OnInitialize += GauntletInventoryScreen_OnInitializePatch_OnInitialize;
+        _eventsRegistered = true;
+    }
+
+    private void GauntletInventoryScreen_OnInitializePatch_OnInitialize(SandBox.GauntletUI.GauntletInventoryScreen obj)
+    {
+        SPItemVMMixin.ResetDebug();
     }
 
     private void SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment(SPInventoryVM spInventoryVm)
     {
+        Debug.Assert(!_disposed);
+
         //switching war set / hero
         SPItemVMMixin.CurrentInventory = spInventoryVm;
     }
 
-    private void SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment(SPInventoryVM spInventoryVm)
+    private void SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment(SPInventoryVM spInventoryVm, SPItemVM spItemVm, EquipmentIndex equipmentIndex)
     {
+        Debug.Assert(!_disposed);
+
+        spInventoryVm.OnPropertyChangedWithValue(spItemVm, equipmentIndex.GetPropertyNameFromIndex());
         //moving items in or out of current character equipment
         SPItemVMMixin.CurrentInventory = spInventoryVm;
     }
 
     private void OnWidgetUpdated(InventoryItemTupleWidget widget)
     {
+        Debug.Assert(!_disposed);
+
         if (widget is not InventoryItemTupleInterceptWidget interceptWidget)
         {
             return;
         }
 
-        if(!widget.MainContainer.Brush.IsCloneRelated(widget.DefaultBrush))
+        if (!widget.MainContainer.Brush.IsCloneRelated(widget.DefaultBrush))
         {
             //can't use / civilian
             return;
@@ -53,8 +77,18 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 
     public void Dispose()
     {
-        InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState -= OnWidgetUpdated;
-        SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment -= SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
-        SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment -= SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
+        if (_disposed)
+        {
+            return;
+        }
+
+        if (_eventsRegistered)
+        {
+            InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState -= OnWidgetUpdated;
+            SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment -= SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
+            SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment -= SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
+            GauntletInventoryScreen_OnInitializePatch.OnInitialize -= GauntletInventoryScreen_OnInitializePatch_OnInitialize;
+        }
+        _disposed = true;
     }
 }

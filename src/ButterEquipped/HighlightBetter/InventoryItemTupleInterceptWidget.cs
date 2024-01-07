@@ -2,7 +2,6 @@
 using System;
 using TaleWorlds.GauntletUI;
 using TaleWorlds.MountAndBlade.GauntletUI.Widgets.Inventory;
-using TaleWorlds.MountAndBlade.Launcher.Library;
 
 namespace ButterEquipped.HighlightBetter;
 
@@ -13,6 +12,21 @@ public class InventoryItemTupleInterceptWidget : InventoryItemTupleWidget
 
     public InventoryItemTupleInterceptWidget(UIContext context) : base(context)
     {
+    }
+
+    [Editor(false)]
+    public float BetterItemScore
+    {
+        get => _betterItemScore;
+        set
+        {
+            if (_betterItemScore != value)
+            {
+                _betterItemScore = value;
+                OnPropertyChanged(value);
+                //UpdateCivilianState(this);
+            }
+        }
     }
 
     [Editor(false)]
@@ -44,6 +58,7 @@ public class InventoryItemTupleInterceptWidget : InventoryItemTupleWidget
         }
     }
 
+    private float _betterItemScore;
     private bool _isBetterItem;
     private Brush _betterItemHighlightBrush;
 }
