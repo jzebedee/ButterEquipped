@@ -23,6 +23,12 @@
   <string id="ButterEquip015" text="Keep Crafted Weapons"/>
   <string id="ButterEquip016" text="Keep Culture"/>
   <string id="ButterEquip016Hint" text="When enabled, only equipment from the same culture as the hero will be equipped (e.g., only Khuzait armor for Khuzait-culture heroes)"/>
+  <string id="ButterEquip017" text="Highlight Better Items"/>
+  <string id="ButterEquip018" text="Highlight from Loot"/>
+  <string id="ButterEquip019" text="Highlight from Stash"/>
+  <string id="ButterEquip020" text="Highlight from Inventory"/>
+  <string id="ButterEquip021" text="Highlight from Discard"/>
+  <string id="ButterEquip022" text="Highlight from Trade"/>
   <string id="ButterEquipMSG001" text="Nothing to equip"/>
   <string id="ButterEquipMSG002" text="{HERO} replaced {ITEM} with {BESTITEM}"/>
   <string id="ButterEquipMSG003" text="{HERO} equips {BESTITEM}"/>
