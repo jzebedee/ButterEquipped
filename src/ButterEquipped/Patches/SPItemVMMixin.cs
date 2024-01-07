@@ -42,7 +42,7 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
 
     private void HandleEquipmentUpdate(SPInventoryVM? vm)
     {
-        if(vm is null)
+        if (vm is null)
         {
             return;
         }
@@ -55,10 +55,6 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
         var watchedSlotName = ViewModel?.ItemType.GetPropertyNameFromIndex();
         if (!e.PropertyName.Equals(watchedSlotName))
         {
-            //if(e.PropertyName != "CurrentFocusedItem")
-            //{
-            //    System.Diagnostics.Debug.Print("Rejected property change: {0}, wanted {1} (current VM type: {2})", e.PropertyName, watchedSlotName, ViewModel?.ItemType);
-            //}
             return;
         }
 
