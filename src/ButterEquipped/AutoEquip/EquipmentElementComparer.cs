@@ -23,7 +23,7 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
         return effX.CompareTo(effY);
     }
 
-    private static float CalculateEffectiveness(EquipmentElement eq)
+    internal static float CalculateEffectiveness(EquipmentElement eq)
     {
         var item = eq.Item;
         var type = item.ItemType;
