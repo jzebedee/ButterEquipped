@@ -1,6 +1,6 @@
 ﻿namespace ButterEquipped.AutoEquip;
 
-public record class AutoEquipOptions()
+public record class AutoEquipOptions
 {
     public bool EquipHero { get; set; } = true;
     public bool EquipCompanions { get; set; } = true;

@@ -122,7 +122,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
 
     public BitArray GetSlotLocks(HeroEquipmentSet set)
     {
-        var setLocks = slotLocks ??= new Dictionary<HeroEquipmentSet, BitArray>();
+        var setLocks = slotLocks ??= [];
 
         if (!setLocks.TryGetValue(set, out var locks))
         {
