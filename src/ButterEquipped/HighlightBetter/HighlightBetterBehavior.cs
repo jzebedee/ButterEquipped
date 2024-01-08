@@ -22,7 +22,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 
     public override void RegisterEvents()
     {
-        if (_eventsRegistered || _options is { HighlightBetterItems: false })
+        if (_eventsRegistered)
         {
             return;
         }
@@ -38,16 +38,16 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         Debug.Assert(!_disposed);
 
         //switching war set / hero
-        (SPItemVMMixin.CurrentOptions, SPItemVMMixin.CurrentInventory) = (_options, spInventoryVm);
+        SPItemVMMixin.CurrentInventory = spInventoryVm;
     }
 
     private void SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment(SPInventoryVM spInventoryVm, SPItemVM spItemVm, EquipmentIndex equipmentIndex)
     {
         Debug.Assert(!_disposed);
 
-        //moving items in or out of current character equipment
-        (SPItemVMMixin.CurrentOptions, SPItemVMMixin.CurrentInventory) = (_options, spInventoryVm);
         spInventoryVm.OnPropertyChangedWithValue(spItemVm, equipmentIndex.GetPropertyNameFromIndex());
+        //moving items in or out of current character equipment
+        SPItemVMMixin.CurrentInventory = spInventoryVm;
     }
 
     private void OnWidgetUpdated(InventoryItemTupleWidget widget)
