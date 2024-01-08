@@ -127,17 +127,11 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
 
     [DataSourceProperty]
     public float ButterEquippedScore
-    {
-        get
+        => ViewModel switch
         {
-            if (ViewModel is not { ItemRosterElement.EquipmentElement: var eqEl })
-            {
-                return -1f;
-            }
-
-            return EquipmentElementComparer.CalculateEffectiveness(eqEl);
-        }
-    }
+            { ItemRosterElement.EquipmentElement: var eqEl } => EquipmentElementComparer.CalculateEffectiveness(eqEl),
+            _ => -1f
+        };
 
     [DataSourceProperty]
     public bool ButterEquippedIsItemBetter
