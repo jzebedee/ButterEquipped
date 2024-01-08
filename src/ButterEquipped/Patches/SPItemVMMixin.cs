@@ -108,17 +108,17 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
 
     private bool CompareEquipment(SPItemVM? equippedItem)
     {
-        var isWeapon = equippedItem is { ItemType: >= EquipmentIndex.WeaponItemBeginSlot and < EquipmentIndex.NonWeaponItemBeginSlot };
-        if (equippedItem is null or { ItemRosterElement.IsEmpty: true })
-        {
-            return !isWeapon;
-        }
-
+        var isWeapon = ViewModel is { ItemType: >= EquipmentIndex.WeaponItemBeginSlot and < EquipmentIndex.NonWeaponItemBeginSlot };
         //ignore weapons, their index is always Weapon0/WeaponExtra (banners) so in the future we need 
         //to fully model the auto equip logic to match them with an appropriate equipped slot
         if (isWeapon)
         {
             return false;
+        }
+
+        if (equippedItem is null or { ItemRosterElement.IsEmpty: true })
+        {
+            return !isWeapon;
         }
 
         var eqEffectiveness = EquipmentElementComparer.CalculateEffectiveness(equippedItem.ItemRosterElement.EquipmentElement);
