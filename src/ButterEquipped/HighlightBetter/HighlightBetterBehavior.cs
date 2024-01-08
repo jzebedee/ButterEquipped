@@ -38,16 +38,18 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         Debug.Assert(!_disposed);
 
         //switching war set / hero
-        SPItemVMMixin.CurrentInventory = spInventoryVm;
+        //SPItemVMMixin.CurrentInventory = spInventoryVm;
+        (SPItemVMMixin.CurrentOptions, SPItemVMMixin.CurrentInventory) = (_options with { }, spInventoryVm);
     }
 
     private void SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment(SPInventoryVM spInventoryVm, SPItemVM spItemVm, EquipmentIndex equipmentIndex)
     {
         Debug.Assert(!_disposed);
 
-        spInventoryVm.OnPropertyChangedWithValue(spItemVm, equipmentIndex.GetPropertyNameFromIndex());
         //moving items in or out of current character equipment
-        SPItemVMMixin.CurrentInventory = spInventoryVm;
+        //SPItemVMMixin.CurrentInventory = spInventoryVm;
+        (SPItemVMMixin.CurrentOptions, SPItemVMMixin.CurrentInventory) = (_options with { }, spInventoryVm);
+        spInventoryVm.OnPropertyChangedWithValue(spItemVm, equipmentIndex.GetPropertyNameFromIndex());
     }
 
     private void OnWidgetUpdated(InventoryItemTupleWidget widget)
