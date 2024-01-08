@@ -35,10 +35,78 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
         }
     }
 
+    private static Action<HighlightBetterOptions>? OnOptionsUpdate;
+    private static HighlightBetterOptions? currentOptions;
+    internal static HighlightBetterOptions CurrentOptions
+    {
+        get => currentOptions!;
+        set
+        {
+            if (currentOptions != value)
+            {
+                currentOptions = value;
+                OnOptionsUpdate?.Invoke(value);
+            }
+        }
+    }
+
+
     public SPItemVMMixin(SPItemVM vm) : base(vm)
     {
         OnEquipmentUpdate += HandleEquipmentUpdate;
+        OnOptionsUpdate += HandleOptionsUpdate;
     }
+
+    private void HandleOptionsUpdate(HighlightBetterOptions options)
+    {
+        //if (options is { HighlightBetterItems: false })
+        //{
+        //    OnEquipmentUpdate -= HandleEquipmentUpdate;
+        //    ButterEquippedIsItemBetter = false;
+        //    return;
+        //}
+
+        //if (ViewModel is not { InventorySide: var side })
+        //{
+        //    return;
+        //}
+
+        //switch (side)
+        //{
+        //    case InventoryLogic.InventorySide.None:
+        //        break;
+        //    case InventoryLogic.InventorySide.OtherInventory:
+        //        if (InventoryManager.Instance is not { CurrentMode: var mode })
+        //        {
+        //            return;
+        //        }
+
+        //        if (ShouldHighlightOtherSide(mode))
+        //        {
+        //            goto case InventoryLogic.InventorySide.PlayerInventory;
+        //        }
+        //        break;
+        //    case InventoryLogic.InventorySide.PlayerInventory:
+        //        OnEquipmentUpdate += HandleEquipmentUpdate;
+        //        _isItemBetter = null;
+        //        break;
+        //    case InventoryLogic.InventorySide.Equipment:
+        //        _isItemBetter = false;
+        //        break;
+        //}
+
+        //return;
+
+        //bool ShouldHighlightOtherSide(InventoryMode mode) => mode switch
+        //{
+        //    InventoryMode.Default when options.HighlightFromDiscard => true,
+        //    InventoryMode.Loot when options.HighlightFromLoot => true,
+        //    InventoryMode.Stash when options.HighlightFromStash => true,
+        //    InventoryMode.Trade when options.HighlightFromTrade => true,
+        //    _ => false
+        //};
+    }
+
 
     private void HandleEquipmentUpdate(SPInventoryVM? vm)
     {
@@ -47,6 +115,8 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
             return;
         }
 
+        //necessary?
+        vm.PropertyChangedWithValue -= HandleVmPropertyChanged;
         vm.PropertyChangedWithValue += HandleVmPropertyChanged;
     }
 
