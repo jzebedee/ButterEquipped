@@ -10,10 +10,21 @@ namespace ButterEquipped.HighlightBetter;
 
 internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 {
-    private readonly HighlightBetterOptions _options;
+    private static HighlightBetterOptions _options;
 
     private bool _eventsRegistered;
     private bool _disposed;
+
+    private static readonly WeakReference<SPInventoryVM> _currentVm = new(null!);
+
+    public static HighlightBetterOptions CurrentOptions => _options with { }; //shallow record clone
+
+    public static SPInventoryVM? CurrentVm
+        => _currentVm.TryGetTarget(out var vm) switch
+        {
+            true => vm,
+            false => null
+        };
 
     public HighlightBetterBehavior(HighlightBetterOptions options)
     {
@@ -38,8 +49,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         Debug.Assert(!_disposed);
 
         //switching war set / hero
-        //SPItemVMMixin.CurrentInventory = spInventoryVm;
-        (SPItemVMMixin.CurrentOptions, SPItemVMMixin.CurrentInventory) = (_options with { }, spInventoryVm);
+        _currentVm.SetTarget(spInventoryVm);
     }
 
     private void SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment(SPInventoryVM spInventoryVm, SPItemVM spItemVm, EquipmentIndex equipmentIndex)
@@ -47,8 +57,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         Debug.Assert(!_disposed);
 
         //moving items in or out of current character equipment
-        //SPItemVMMixin.CurrentInventory = spInventoryVm;
-        (SPItemVMMixin.CurrentOptions, SPItemVMMixin.CurrentInventory) = (_options with { }, spInventoryVm);
+        _currentVm.SetTarget(spInventoryVm);
         spInventoryVm.OnPropertyChangedWithValue(spItemVm, equipmentIndex.GetPropertyNameFromIndex());
     }
 
@@ -91,6 +100,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
             SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment -= SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
             SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment -= SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
         }
+
         _disposed = true;
     }
 }
