@@ -27,7 +27,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
             return;
         }
 
-        InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState += OnWidgetUpdated;
+        InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState += OnWidgetUpdateCivilianState;
         SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment += SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
         SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment += SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
         _eventsRegistered = true;
@@ -52,7 +52,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         spInventoryVm.OnPropertyChangedWithValue(spItemVm, equipmentIndex.GetPropertyNameFromIndex());
     }
 
-    private void OnWidgetUpdated(InventoryItemTupleWidget widget)
+    private void OnWidgetUpdateCivilianState(InventoryItemTupleWidget widget)
     {
         Debug.Assert(!_disposed);
 
@@ -87,7 +87,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 
         if (_eventsRegistered)
         {
-            InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState -= OnWidgetUpdated;
+            InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState -= OnWidgetUpdateCivilianState;
             SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment -= SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
             SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment -= SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
         }
