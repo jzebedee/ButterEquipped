@@ -30,7 +30,7 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
             //if (currentInventory != value)
             {
                 currentInventory = value;
-                OnEquipmentUpdate?.Invoke(currentInventory);
+                OnEquipmentUpdate?.Invoke(value);
             }
         }
     }
