@@ -17,8 +17,6 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
     private static readonly Func<SPInventoryVM, EquipmentIndex, SPItemVM>? GetItemFromIndex
         = AccessTools2.GetDelegate<Func<SPInventoryVM, EquipmentIndex, SPItemVM>>(typeof(SPInventoryVM), nameof(GetItemFromIndex));
 
-    public static Action<SPItemVM> OnEquipmentUpdated;
-
     public SPItemVMMixin(SPItemVM vm) : base(vm)
     {
         if (vm is null)
@@ -26,22 +24,11 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
             return;
         }
 
-        vm.PropertyChanged += (sender, e) =>
-        {
-            System.Diagnostics.Debug.WriteLine("[{0}] {1}", DateTimeOffset.Now, e.PropertyName);
-        };
-
         vm.PropertyChangedWithBoolValue += HandleUnderlyingItemUpdate;
     }
 
     void HandleUnderlyingItemUpdate(object sender, PropertyChangedWithBoolValueEventArgs e)
     {
-        if (e.PropertyName is not nameof(SPItemVM.IsFocused))
-        {
-            //spammy
-            System.Diagnostics.Debug.WriteLine("[{0}] {1} = {2}", DateTimeOffset.Now, e.PropertyName, e.Value);
-        }
-
         if (e.PropertyName switch
         {
             nameof(SPItemVM.IsNew) => false,
@@ -54,13 +41,11 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
             return;
         }
 
-        if(_isItemBetter != null)
-        {
-            ;
-        }
-
-        ButterEquippedIsItemBetter = CompareEquipment();
+        Refresh();
     }
+
+    public void Refresh()
+        => ButterEquippedIsItemBetter = CompareEquipment();
 
     bool ShouldHighlightSide()
     {

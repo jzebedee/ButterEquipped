@@ -54,26 +54,26 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
     private void SPItemVM_RefreshWithPatch_OnRefreshWith(SPItemVM instance, SPItemVM itemVM, InventorySide inventorySide)
     {
         Debug.Assert(!_disposed);
+        return;
 
-        if(instance is null || itemVM is null)
+        if (instance is null || itemVM is null)
         {
             return;
         }
 
         var instanceRef = TwoWayViewModelMixin<SPItemVM>.GetVmMixin(instance);
-        if(!instanceRef.TryGetTarget(out var instanceBase) || instanceBase is not SPItemVMMixin instanceMixin)
+        if (!instanceRef.TryGetTarget(out var instanceBase) || instanceBase is not SPItemVMMixin instanceMixin)
         {
             return;
         }
 
         var itemRef = TwoWayViewModelMixin<SPItemVM>.GetVmMixin(itemVM);
-        if (!itemRef.TryGetTarget(out var itemBase) || instanceBase is not SPItemVMMixin itemMixin)
+        if (!itemRef.TryGetTarget(out var itemBase) || itemBase is not SPItemVMMixin itemMixin)
         {
             return;
         }
 
-        //instanceMixin.ButterEquippedIsItemBetter = itemMixin.ButterEquippedIsItemBetter;
-        itemMixin.ButterEquippedIsItemBetter = instanceMixin.ButterEquippedIsItemBetter;
+        instanceMixin.ButterEquippedIsItemBetter = itemMixin.ButterEquippedIsItemBetter;
         DebugLog();
     }
 
@@ -84,6 +84,9 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         //switching war set / hero
         _currentVm.SetTarget(spInventoryVm);
         DebugLog();
+
+        spInventoryVm.LeftItemListVM.ApplyActionOnAllItems(vm => vm.GetMixinForVM()?.Refresh());
+        spInventoryVm.RightItemListVM.ApplyActionOnAllItems(vm => vm.GetMixinForVM()?.Refresh());
     }
 
     private void SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment(SPInventoryVM spInventoryVm, SPItemVM spItemVm, EquipmentIndex equipmentIndex)
@@ -94,7 +97,8 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         _currentVm.SetTarget(spInventoryVm);
         DebugLog();
 
-        //spInventoryVm.OnPropertyChangedWithValue(spItemVm, equipmentIndex.GetPropertyNameFromIndex());
+        spInventoryVm.LeftItemListVM.ApplyActionOnAllItems(vm => vm.GetMixinForVM()?.Refresh());
+        spInventoryVm.RightItemListVM.ApplyActionOnAllItems(vm => vm.GetMixinForVM()?.Refresh());
     }
 
     private void OnWidgetUpdateCivilianState(InventoryItemTupleWidget widget)
