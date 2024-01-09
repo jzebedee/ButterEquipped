@@ -21,63 +21,12 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
     {
         //we are trying to avoid subscribing to property notifications from the underlying VM
         //to avoid having to deal with weak events or leaking a reference to our mixin class
-        Subscribe();
-    }
-
-    private void Subscribe()
-    {
-        if (ViewModel is not SPItemVM itemVM)
-        {
-            return;
-        }
-
-        itemVM.PropertyChangedWithBoolValue += HandleUnderlyingItemUpdate;
-
-        _subscribed = true;
-    }
-    private void Unsubscribe()
-    {
-        if(!_subscribed)
-        {
-            return;
-        }
-
-        if(ViewModel is not SPItemVM itemVM)
-        {
-            return;
-        }
-
-        itemVM.PropertyChangedWithBoolValue -= HandleUnderlyingItemUpdate;
-    }
-
-    void HandleUnderlyingItemUpdate(object sender, PropertyChangedWithBoolValueEventArgs e)
-    {
-        if (e.PropertyName switch
-        {
-            nameof(SPItemVM.IsNew) => false,
-            nameof(SPItemVM.IsFiltered) => false,
-            nameof(SPItemVM.IsEquipableItem) => false,
-            //why? it's called in SPInventoryVM.AfterTransfer
-            //and is required to highlight/unhighlight after moving non-equipment between sides
-            nameof(SPItemVM.CanBeSlaughtered) => false,
-            nameof(SPItemVM.CanCharacterUseItem) => false,
-            _ => true,
-        })
-        {
-            return;
-        }
-
-        Refresh();
     }
 
     public override void OnRefresh()
     {
+        Refresh();
         base.OnRefresh();
-    }
-    public override void OnFinalize()
-    {
-        base.OnFinalize();
-        Unsubscribe();
     }
 
     public void Refresh()
@@ -199,5 +148,5 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
     }
 
     private bool _isItemBetter;
-    private bool _subscribed;
+
 }
