@@ -3,14 +3,11 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade.GauntletUI.Widgets.Inventory;
 
 namespace ButterEquipped.HighlightBetter;
-using InventorySide = InventoryLogic.InventorySide;
-
 internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 {
     private static HighlightBetterOptions _options;
@@ -47,23 +44,9 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState += OnWidgetUpdateCivilianState;
         SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment += SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
         SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment += SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
-        SPItemVM_RefreshWithPatch.OnRefreshWith += SPItemVM_RefreshWithPatch_OnRefreshWith;
         _eventsRegistered = true;
     }
 
-    private void SPItemVM_RefreshWithPatch_OnRefreshWith(SPItemVM instance, SPItemVM itemVM, InventorySide inventorySide)
-    {
-        Debug.Assert(!_disposed);
-
-        if(instance.GetMixinForVM() is not SPItemVMMixin instanceMixin
-        || itemVM.GetMixinForVM() is not SPItemVMMixin itemMixin)
-        {
-            return;
-        }
-
-        instanceMixin.ButterEquippedIsItemBetter = itemMixin.ButterEquippedIsItemBetter;
-        DebugLog();
-    }
 
     private void SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment(SPInventoryVM spInventoryVm)
     {
@@ -156,7 +139,6 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
             InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState -= OnWidgetUpdateCivilianState;
             SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment -= SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
             SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment -= SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
-            SPItemVM_RefreshWithPatch.OnRefreshWith -= SPItemVM_RefreshWithPatch_OnRefreshWith;
         }
 
         _disposed = true;
