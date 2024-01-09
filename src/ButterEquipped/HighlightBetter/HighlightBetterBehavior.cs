@@ -73,6 +73,15 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         _currentVm.SetTarget(spInventoryVm);
         DebugLog();
 
+        //problem:
+        // Hero A and Hero B both have no / bad helms
+        // open trade full of helms (all green)
+        // equip Hero A with best helm
+        // trade side helms turn normal (ButterEquippedIsBetterItem: false)
+        // switch to Hero B
+        // trade side helms don't update, even though they are better
+
+        //solution:
         spInventoryVm.LeftItemListVM.ApplyActionOnAllItems(vm => vm.GetMixinForVM()?.Refresh());
         spInventoryVm.RightItemListVM.ApplyActionOnAllItems(vm => vm.GetMixinForVM()?.Refresh());
     }
@@ -85,6 +94,14 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         _currentVm.SetTarget(spInventoryVm);
         DebugLog();
 
+        //problem:
+        // same as OnUpdateCharacterEquipment, except that dragging in or equipping an item
+        // won't update items of the same type in the inventory, only the replaced item when it gets added
+        
+        //we could just refresh the entire item list,
+        //but since we know the index we can target only matching item types
+
+        //solution:
         UpdateItemsOfType(spInventoryVm.LeftItemListVM, equipmentIndex);
         UpdateItemsOfType(spInventoryVm.RightItemListVM, equipmentIndex);
 
