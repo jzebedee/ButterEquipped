@@ -1,12 +1,15 @@
 ﻿using ButterEquipped.Patches;
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade.GauntletUI.Widgets.Inventory;
 
 namespace ButterEquipped.HighlightBetter;
+using InventorySide = InventoryLogic.InventorySide;
 
 internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 {
@@ -26,6 +29,9 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
             false => null
         };
 
+    [Conditional("DEBUG")]
+    static void DebugLog([CallerMemberName] string methodName = "") => System.Diagnostics.Debug.WriteLine("[{0}] {1}", DateTimeOffset.Now, methodName);
+
     public HighlightBetterBehavior(HighlightBetterOptions options)
     {
         _options = options;
@@ -41,7 +47,34 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState += OnWidgetUpdateCivilianState;
         SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment += SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
         SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment += SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
+        SPItemVM_RefreshWithPatch.OnRefreshWith += SPItemVM_RefreshWithPatch_OnRefreshWith;
         _eventsRegistered = true;
+    }
+
+    private void SPItemVM_RefreshWithPatch_OnRefreshWith(SPItemVM instance, SPItemVM itemVM, InventorySide inventorySide)
+    {
+        Debug.Assert(!_disposed);
+
+        if(instance is null || itemVM is null)
+        {
+            return;
+        }
+
+        var instanceRef = TwoWayViewModelMixin<SPItemVM>.GetVmMixin(instance);
+        if(!instanceRef.TryGetTarget(out var instanceBase) || instanceBase is not SPItemVMMixin instanceMixin)
+        {
+            return;
+        }
+
+        var itemRef = TwoWayViewModelMixin<SPItemVM>.GetVmMixin(itemVM);
+        if (!itemRef.TryGetTarget(out var itemBase) || instanceBase is not SPItemVMMixin itemMixin)
+        {
+            return;
+        }
+
+        //instanceMixin.ButterEquippedIsItemBetter = itemMixin.ButterEquippedIsItemBetter;
+        itemMixin.ButterEquippedIsItemBetter = instanceMixin.ButterEquippedIsItemBetter;
+        DebugLog();
     }
 
     private void SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment(SPInventoryVM spInventoryVm)
@@ -50,6 +83,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 
         //switching war set / hero
         _currentVm.SetTarget(spInventoryVm);
+        DebugLog();
     }
 
     private void SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment(SPInventoryVM spInventoryVm, SPItemVM spItemVm, EquipmentIndex equipmentIndex)
@@ -58,7 +92,9 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 
         //moving items in or out of current character equipment
         _currentVm.SetTarget(spInventoryVm);
-        spInventoryVm.OnPropertyChangedWithValue(spItemVm, equipmentIndex.GetPropertyNameFromIndex());
+        DebugLog();
+
+        //spInventoryVm.OnPropertyChangedWithValue(spItemVm, equipmentIndex.GetPropertyNameFromIndex());
     }
 
     private void OnWidgetUpdateCivilianState(InventoryItemTupleWidget widget)
@@ -99,6 +135,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
             InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState -= OnWidgetUpdateCivilianState;
             SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment -= SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
             SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment -= SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
+            SPItemVM_RefreshWithPatch.OnRefreshWith -= SPItemVM_RefreshWithPatch_OnRefreshWith;
         }
 
         _disposed = true;

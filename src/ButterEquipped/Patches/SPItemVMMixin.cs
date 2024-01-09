@@ -1,5 +1,4 @@
 ﻿using Bannerlord.UIExtenderEx.Attributes;
-using Bannerlord.UIExtenderEx.ViewModels;
 using ButterEquipped.AutoEquip;
 using ButterEquipped.HighlightBetter;
 using HarmonyLib.BUTR.Extensions;
@@ -13,13 +12,54 @@ namespace ButterEquipped.Patches;
 using InventorySide = InventoryLogic.InventorySide;
 
 [ViewModelMixin]
-internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
+internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
 {
     private static readonly Func<SPInventoryVM, EquipmentIndex, SPItemVM>? GetItemFromIndex
         = AccessTools2.GetDelegate<Func<SPInventoryVM, EquipmentIndex, SPItemVM>>(typeof(SPInventoryVM), nameof(GetItemFromIndex));
 
+    public static Action<SPItemVM> OnEquipmentUpdated;
+
     public SPItemVMMixin(SPItemVM vm) : base(vm)
     {
+        if (vm is null)
+        {
+            return;
+        }
+
+        vm.PropertyChanged += (sender, e) =>
+        {
+            System.Diagnostics.Debug.WriteLine("[{0}] {1}", DateTimeOffset.Now, e.PropertyName);
+        };
+
+        vm.PropertyChangedWithBoolValue += HandleUnderlyingItemUpdate;
+    }
+
+    void HandleUnderlyingItemUpdate(object sender, PropertyChangedWithBoolValueEventArgs e)
+    {
+        if (e.PropertyName is not nameof(SPItemVM.IsFocused))
+        {
+            //spammy
+            System.Diagnostics.Debug.WriteLine("[{0}] {1} = {2}", DateTimeOffset.Now, e.PropertyName, e.Value);
+        }
+
+        if (e.PropertyName switch
+        {
+            nameof(SPItemVM.IsNew) => false,
+            nameof(SPItemVM.IsFiltered) => false,
+            nameof(SPItemVM.IsEquipableItem) => false,
+            nameof(SPItemVM.CanCharacterUseItem) => false,
+            _ => true,
+        })
+        {
+            return;
+        }
+
+        if(_isItemBetter != null)
+        {
+            ;
+        }
+
+        ButterEquippedIsItemBetter = CompareEquipment();
     }
 
     bool ShouldHighlightSide()
@@ -77,48 +117,6 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
             _ => true
         };
 
-    private void HandleOptionsUpdate(HighlightBetterOptions options)
-    {
-        if (ShouldHighlightSide())
-        {
-            ButterEquippedIsItemBetter = CompareEquipment();
-        }
-        else
-        {
-            ButterEquippedIsItemBetter = false;
-        }
-    }
-
-
-    private void HandleEquipmentUpdate(SPInventoryVM? oldVm, SPInventoryVM? newVm)
-    {
-        if (oldVm is not null)
-        {
-            oldVm.PropertyChangedWithValue -= HandleVmPropertyChanged;
-        }
-
-        if(newVm is not null)
-        {
-            newVm.PropertyChangedWithValue += HandleVmPropertyChanged;
-        }
-    }
-
-    private void HandleVmPropertyChanged(object? sender, PropertyChangedWithValueEventArgs e)
-    {
-        var watchedSlotName = ViewModel?.ItemType.GetPropertyNameFromIndex();
-        if (!e.PropertyName.Equals(watchedSlotName))
-        {
-            return;
-        }
-
-        if (!IsValid())
-        {
-            return;
-        }
-
-        ButterEquippedIsItemBetter = CompareEquipment(e.Value as SPItemVM);
-    }
-
     private SPItemVM? EquipmentReference
         => (GetItemFromIndex, ViewModel, HighlightBetterBehavior.CurrentVm) switch
         {
@@ -128,14 +126,6 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
 
     private bool CompareEquipment()
     {
-        //if (ViewModel is { InventorySide: InventorySide.Equipment }
-        //    or { IsEquipableItem: false }
-        //    or { CanCharacterUseItem: false })
-        if (!IsValid())
-        {
-            return false;
-        }
-
         if (EquipmentReference is not SPItemVM equippedItem)
         {
             return false;
@@ -146,6 +136,11 @@ internal class SPItemVMMixin : BaseViewModelMixin<SPItemVM>
 
     private bool CompareEquipment(SPItemVM? equippedItem)
     {
+        if (!IsValid())
+        {
+            return false;
+        }
+
         if (!ShouldHighlightSide())
         {
             return false;
