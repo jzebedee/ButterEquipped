@@ -56,19 +56,8 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         Debug.Assert(!_disposed);
         return;
 
-        if (instance is null || itemVM is null)
-        {
-            return;
-        }
-
-        var instanceRef = TwoWayViewModelMixin<SPItemVM>.GetVmMixin(instance);
-        if (!instanceRef.TryGetTarget(out var instanceBase) || instanceBase is not SPItemVMMixin instanceMixin)
-        {
-            return;
-        }
-
-        var itemRef = TwoWayViewModelMixin<SPItemVM>.GetVmMixin(itemVM);
-        if (!itemRef.TryGetTarget(out var itemBase) || itemBase is not SPItemVMMixin itemMixin)
+        if(instance.GetMixinForVM() is not SPItemVMMixin instanceMixin
+        || itemVM.GetMixinForVM() is not SPItemVMMixin itemMixin)
         {
             return;
         }
