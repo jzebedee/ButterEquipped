@@ -10,12 +10,9 @@ using TaleWorlds.MountAndBlade.GauntletUI.Widgets.Inventory;
 namespace ButterEquipped.HighlightBetter;
 internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 {
-    private static HighlightBetterOptions _options;
-
-    private bool _eventsRegistered;
-    private bool _disposed;
-
     private static readonly WeakReference<SPInventoryVM> _currentVm = new(null!);
+
+    private static HighlightBetterOptions _options;
 
     public static HighlightBetterOptions CurrentOptions => _options with { }; //shallow record clone
 
@@ -28,6 +25,9 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 
     [Conditional("DEBUG")]
     static void DebugLog([CallerMemberName] string methodName = "") => System.Diagnostics.Debug.WriteLine("[{0}] {1}", DateTimeOffset.Now, methodName);
+
+    private bool _eventsRegistered;
+    private bool _disposed;
 
     public HighlightBetterBehavior(HighlightBetterOptions options)
     {
