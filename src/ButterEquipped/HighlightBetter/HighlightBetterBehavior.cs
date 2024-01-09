@@ -85,8 +85,20 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         _currentVm.SetTarget(spInventoryVm);
         DebugLog();
 
-        spInventoryVm.LeftItemListVM.ApplyActionOnAllItems(vm => vm.GetMixinForVM()?.Refresh());
-        spInventoryVm.RightItemListVM.ApplyActionOnAllItems(vm => vm.GetMixinForVM()?.Refresh());
+        UpdateItemsOfType(spInventoryVm.LeftItemListVM, equipmentIndex);
+        UpdateItemsOfType(spInventoryVm.RightItemListVM, equipmentIndex);
+
+        static void UpdateItemsOfType(TaleWorlds.Library.MBBindingList<SPItemVM> items, EquipmentIndex index)
+        {
+            foreach (SPItemVM itemVM in items)
+            {
+                if (itemVM.ItemType == index)
+                {
+                    var mixin = itemVM.GetMixinForVM();
+                    mixin?.Refresh();
+                }
+            }
+        }
     }
 
     private void OnWidgetUpdateCivilianState(InventoryItemTupleWidget widget)
