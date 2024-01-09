@@ -54,7 +54,6 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
     private void SPItemVM_RefreshWithPatch_OnRefreshWith(SPItemVM instance, SPItemVM itemVM, InventorySide inventorySide)
     {
         Debug.Assert(!_disposed);
-        return;
 
         if(instance.GetMixinForVM() is not SPItemVMMixin instanceMixin
         || itemVM.GetMixinForVM() is not SPItemVMMixin itemMixin)
