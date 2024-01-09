@@ -19,9 +19,8 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
     private static readonly Func<SPInventoryVM, EquipmentIndex, SPItemVM>? GetItemFromIndex
         = AccessTools2.GetDelegate<Func<SPInventoryVM, EquipmentIndex, SPItemVM>>(typeof(SPInventoryVM), nameof(GetItemFromIndex));
 
-#if DEBUG
+    //only used for debugging
     internal static int _totalUpdates;
-#endif
 
     public SPItemVMMixin(SPItemVM vm) : base(vm)
     {
