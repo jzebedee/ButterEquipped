@@ -86,7 +86,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         spInventoryVm.RightItemListVM.ApplyActionOnAllItems(vm => vm.GetMixinForVM()?.Refresh());
     }
 
-    private void SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment(SPInventoryVM spInventoryVm, SPItemVM spItemVm, EquipmentIndex equipmentIndex)
+    private void SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment(SPInventoryVM spInventoryVm, /*SPItemVM spItemVm,*/ EquipmentIndex equipmentIndex)
     {
         Debug.Assert(!_disposed);
 
