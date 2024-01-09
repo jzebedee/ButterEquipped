@@ -11,7 +11,7 @@ using TaleWorlds.Library;
 namespace ButterEquipped.Patches;
 using InventorySide = InventoryLogic.InventorySide;
 
-[ViewModelMixin]
+[ViewModelMixin(nameof(SPItemVM.RefreshValues))]
 internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
 {
     private static readonly Func<SPInventoryVM, EquipmentIndex, SPItemVM>? GetItemFromIndex
@@ -19,12 +19,35 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
 
     public SPItemVMMixin(SPItemVM vm) : base(vm)
     {
-        if (vm is null)
+        //we are trying to avoid subscribing to property notifications from the underlying VM
+        //to avoid having to deal with weak events or leaking a reference to our mixin class
+        Subscribe();
+    }
+
+    private void Subscribe()
+    {
+        if (ViewModel is not SPItemVM itemVM)
         {
             return;
         }
 
-        vm.PropertyChangedWithBoolValue += HandleUnderlyingItemUpdate;
+        itemVM.PropertyChangedWithBoolValue += HandleUnderlyingItemUpdate;
+
+        _subscribed = true;
+    }
+    private void Unsubscribe()
+    {
+        if(!_subscribed)
+        {
+            return;
+        }
+
+        if(ViewModel is not SPItemVM itemVM)
+        {
+            return;
+        }
+
+        itemVM.PropertyChangedWithBoolValue -= HandleUnderlyingItemUpdate;
     }
 
     void HandleUnderlyingItemUpdate(object sender, PropertyChangedWithBoolValueEventArgs e)
@@ -34,6 +57,9 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
             nameof(SPItemVM.IsNew) => false,
             nameof(SPItemVM.IsFiltered) => false,
             nameof(SPItemVM.IsEquipableItem) => false,
+            //why? it's called in SPInventoryVM.AfterTransfer
+            //and is required to highlight/unhighlight after moving non-equipment between sides
+            nameof(SPItemVM.CanBeSlaughtered) => false,
             nameof(SPItemVM.CanCharacterUseItem) => false,
             _ => true,
         })
@@ -42,6 +68,16 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
         }
 
         Refresh();
+    }
+
+    public override void OnRefresh()
+    {
+        base.OnRefresh();
+    }
+    public override void OnFinalize()
+    {
+        base.OnFinalize();
+        Unsubscribe();
     }
 
     public void Refresh()
@@ -86,17 +122,9 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
         => ViewModel switch
         {
             null => false,
+            //{ IsNew: true } => false,
             { IsFiltered: true } => false,
             { IsEquipableItem: false } => false,
-            //Don't skip updating the property, otherwise we will have a dirty brush in this scenario:
-            //
-            // 1. Party has Hero A w/ Bad Horse equipped, inventory contains Good Horse with Riding > 10
-            //    IsItemBetter SHOULD be true because Good Horse > Bad Horse
-            // 2. Hero A has riding 1, so Good Horse has red brush because CanCharacterUseItem: false
-            // 3. Good Horse skips update because CanCharacterUseItem: false, so IsItemBetter stays false
-            // 4. Party switches to Hero B w/ Good Horse equipped
-            // 5. Good Horse gets updated, but IsItemBetter doesn't raise a change because it's already false
-            // 6. Good Horse has a green brush even though Hero B already has Good Horse equipped
             { CanCharacterUseItem: false } => false,
             { InventorySide: not InventorySide.PlayerInventory and not InventorySide.OtherInventory } => false,
             _ => true
@@ -159,7 +187,7 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
     [DataSourceProperty]
     public bool ButterEquippedIsItemBetter
     {
-        get => _isItemBetter ??= CompareEquipment();
+        get => _isItemBetter;
         set
         {
             if (_isItemBetter != value)
@@ -170,5 +198,6 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
         }
     }
 
-    private bool? _isItemBetter;
+    private bool _isItemBetter;
+    private bool _subscribed;
 }
