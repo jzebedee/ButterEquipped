@@ -3,6 +3,8 @@ using ButterEquipped.AutoEquip;
 using ButterEquipped.HighlightBetter;
 using HarmonyLib.BUTR.Extensions;
 using System;
+using System.Diagnostics;
+using System.Threading;
 using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
@@ -16,6 +18,10 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
 {
     private static readonly Func<SPInventoryVM, EquipmentIndex, SPItemVM>? GetItemFromIndex
         = AccessTools2.GetDelegate<Func<SPInventoryVM, EquipmentIndex, SPItemVM>>(typeof(SPInventoryVM), nameof(GetItemFromIndex));
+
+#if DEBUG
+    internal static int _totalUpdates;
+#endif
 
     public SPItemVMMixin(SPItemVM vm) : base(vm)
     {
@@ -143,10 +149,13 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
             {
                 _isItemBetter = value;
                 OnPropertyChangedWithValue(value);
+                DebugIncrementCount();
             }
+
+            [Conditional("DEBUG")]
+            static void DebugIncrementCount() => Interlocked.Increment(ref _totalUpdates);
         }
     }
 
     private bool _isItemBetter;
-
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
@@ -24,7 +25,14 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         };
 
     [Conditional("DEBUG")]
-    static void DebugLog([CallerMemberName] string methodName = "") => System.Diagnostics.Debug.WriteLine("[{0}] {1}", DateTimeOffset.Now, methodName);
+    static void DebugLog([CallerMemberName] string methodName = "") => System.Diagnostics.Debug.WriteLine("{0}", methodName);
+
+    [Conditional("DEBUG")]
+    static void DebugResetCount()
+    {
+        var totalCount = Interlocked.Exchange(ref SPItemVMMixin._totalUpdates, 0);
+        System.Diagnostics.Debug.WriteLine("--- TOTAL UPDATE COUNT --- {0}", totalCount);
+    }
 
     private bool _eventsRegistered;
     private bool _disposed;
@@ -44,7 +52,16 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState += OnWidgetUpdateCivilianState;
         SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment += SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
         SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment += SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
+        AddDebugListeners();
+
         _eventsRegistered = true;
+        return;
+
+        [Conditional("DEBUG")]
+        static void AddDebugListeners()
+        {
+            InventoryManager_CloseInventoryPresentationPatch.OnClosing += fromCancel => DebugResetCount();
+        }
     }
 
 
@@ -80,7 +97,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         //problem:
         // same as OnUpdateCharacterEquipment, except that dragging in or equipping an item
         // won't update items of the same type in the inventory, only the replaced item when it gets added
-        
+
         //we could just refresh the entire item list,
         //but since we know the index we can target only matching item types
 
@@ -139,8 +156,16 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
             InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState -= OnWidgetUpdateCivilianState;
             SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment -= SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
             SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment -= SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
+            RemoveDebugListeners();
         }
 
         _disposed = true;
+        return;
+
+        [Conditional("DEBUG")]
+        static void RemoveDebugListeners()
+        {
+            InventoryManager_CloseInventoryPresentationPatch.OnClosing -= fromCancel => DebugResetCount();
+        }
     }
 }
