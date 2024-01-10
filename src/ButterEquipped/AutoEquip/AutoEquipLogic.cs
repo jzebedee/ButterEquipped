@@ -43,6 +43,18 @@ public class AutoEquipLogic
                 });
     }
 
+    private static class PrivateMethods
+    {
+        public static Action<SPInventoryVM>? UpdateRightCharacter
+            = AccessTools2.GetDelegate<Action<SPInventoryVM>>(typeof(SPInventoryVM), "UpdateRightCharacter");
+
+        public static Action<SPInventoryVM>? ExecuteRemoveZeroCounts
+            = AccessTools2.GetDelegate<Action<SPInventoryVM>>(typeof(SPInventoryVM), "ExecuteRemoveZeroCounts");
+
+        public static Action<SPInventoryVM>? RefreshInformationValues
+            = AccessTools2.GetDelegate<Action<SPInventoryVM>>(typeof(SPInventoryVM), "RefreshInformationValues");
+    }
+
     private readonly Action _updateRightCharacter;
 
     private readonly Action _executeRemoveZeroCounts;
@@ -58,9 +70,9 @@ public class AutoEquipLogic
     public AutoEquipLogic(SPInventoryVM spInventoryVm, IEquipmentSlotLockSource equipmentSlotLocks)
     {
         _equipmentSlotLocks = equipmentSlotLocks;
-        _updateRightCharacter = AccessTools2.GetDelegate<Action>(spInventoryVm, typeof(SPInventoryVM), "UpdateRightCharacter");
-        _executeRemoveZeroCounts = AccessTools2.GetDelegate<Action>(spInventoryVm, typeof(SPInventoryVM), "ExecuteRemoveZeroCounts");
-        _refreshInformationValues = AccessTools2.GetDelegate<Action>(spInventoryVm, typeof(SPInventoryVM), "RefreshInformationValues");
+        _updateRightCharacter = () => PrivateMethods.UpdateRightCharacter?.Invoke(spInventoryVm);
+        _executeRemoveZeroCounts = () => PrivateMethods.ExecuteRemoveZeroCounts?.Invoke(spInventoryVm);
+        _refreshInformationValues = () => PrivateMethods.RefreshInformationValues?.Invoke(spInventoryVm);
         _eqComparer = new EquipmentElementComparer();
     }
 
