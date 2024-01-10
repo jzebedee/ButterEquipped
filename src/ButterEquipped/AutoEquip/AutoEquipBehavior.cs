@@ -16,6 +16,11 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
 {
     private bool eventsRegistered;
     private bool disposed;
+    private static class PrivateMethods
+    {
+        public static HarmonyLib.AccessTools.FieldRef<GauntletInventoryScreen, SPInventoryVM>? GauntletInventoryScreen_DataSource
+            = AccessTools2.FieldRefAccess<GauntletInventoryScreen, SPInventoryVM>("_dataSource");
+    }
 
     private Dictionary<HeroEquipmentSet, BitArray> slotLocks;
     public Dictionary<HeroEquipmentSet, BitArray> SlotLocks => slotLocks;
@@ -68,8 +73,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
             return;
         }
 
-        var dataSourceTraverse = Traverse2.Create(inventoryScreen).Field<SPInventoryVM>("_dataSource");
-        if (dataSourceTraverse.Value is not SPInventoryVM spInventoryVm)
+        if (PrivateMethods.GauntletInventoryScreen_DataSource?.Invoke(inventoryScreen) is not SPInventoryVM spInventoryVM)
         {
             return;
         }
