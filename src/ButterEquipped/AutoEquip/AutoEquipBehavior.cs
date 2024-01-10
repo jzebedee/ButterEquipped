@@ -39,8 +39,8 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
             manager.RegisterEvent<InventoryEquipmentTypeChangedEvent>(OnInventoryEquipmentTypeChanged);
         }
 
-        AutoEquipPatches_GauntletInventoryScreen_OnInitialize.OnInitialize += HandleInventoryScreenInitialized;
-        AutoEquipPatches_InventoryManager_CloseInventoryPresentation.OnClosing += HandleClose;
+        GauntletInventoryScreen_OnInitializePatch.OnInitialize += HandleInventoryScreenInitialized;
+        InventoryManager_CloseInventoryPresentationPatch.OnClosing += HandleClose;
         eventsRegistered = true;
     }
 
@@ -61,9 +61,9 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
     private void OnInventoryEquipmentTypeChanged(InventoryEquipmentTypeChangedEvent e)
         => UpdateViewModel();
 
-    private void HandleInventoryScreenInitialized(object sender, EventArgs e)
+    private void HandleInventoryScreenInitialized(GauntletInventoryScreen inventoryScreen)
     {
-        if (sender is not GauntletInventoryScreen inventoryScreen)
+        if (inventoryScreen is null)
         {
             return;
         }
@@ -151,8 +151,8 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
                 manager.UnregisterEvent<InventoryEquipmentTypeChangedEvent>(OnInventoryEquipmentTypeChanged);
             }
 
-            AutoEquipPatches_GauntletInventoryScreen_OnInitialize.OnInitialize -= HandleInventoryScreenInitialized;
-            AutoEquipPatches_InventoryManager_CloseInventoryPresentation.OnClosing -= HandleClose;
+            GauntletInventoryScreen_OnInitializePatch.OnInitialize -= HandleInventoryScreenInitialized;
+            InventoryManager_CloseInventoryPresentationPatch.OnClosing -= HandleClose;
         }
 
         disposed = true;
