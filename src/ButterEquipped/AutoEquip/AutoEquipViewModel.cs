@@ -218,7 +218,7 @@ public class AutoEquipViewModel : ViewModel
     }
 
     [DataSourceProperty]
-    public bool IsInWarSet => _SPInventoryVM.IsInWarSet;
+    public bool IsInWarSet => _spInventoryVM.IsInWarSet;
 
     [DataSourceProperty]
     public string EquipText { get; } = Messages.Equip.ToString();
@@ -227,7 +227,7 @@ public class AutoEquipViewModel : ViewModel
     public string PartyText { get; } = Messages.Party.ToString();
 
     public void ExecuteEquip()
-        => OnEquip?.Invoke(new EquipHeroEventArgs(_SPInventoryVM.CharacterList.SelectedItem.Hero, !_SPInventoryVM.IsInWarSet));
+        => OnEquip?.Invoke(new EquipHeroEventArgs(_spInventoryVM.CharacterList.SelectedItem.Hero, !_spInventoryVM.IsInWarSet));
 
     public void ExecuteEquipParty()
         => OnEquip?.Invoke(EquipPartyEventArgs.Empty);
@@ -236,7 +236,7 @@ public class AutoEquipViewModel : ViewModel
 
     private readonly IEquipmentSlotLockSource _slotLockSource;
 
-    private readonly SPInventoryVM _SPInventoryVM;
+    private readonly SPInventoryVM _spInventoryVM;
 
     private BitArray _slotLocks;
 
@@ -249,20 +249,20 @@ public class AutoEquipViewModel : ViewModel
 
     public record EquipHeroEventArgs(Hero Hero, bool Civilian) : AutoEquipEventArgs;
 
-    public AutoEquipViewModel(SPInventoryVM SPInventoryVM, IEquipmentSlotLockSource slotLockSource)
+    public AutoEquipViewModel(SPInventoryVM spInventoryVM, IEquipmentSlotLockSource slotLockSource)
     {
-        _SPInventoryVM = SPInventoryVM;
+        _spInventoryVM = spInventoryVM;
         _slotLockSource = slotLockSource;
     }
 
     public void UpdateSlotLocks()
     {
-        if(_SPInventoryVM is not { CharacterList.SelectedItem.CharacterID: string heroId })
+        if(_spInventoryVM is not { CharacterList.SelectedItem.CharacterID: string heroId })
         {
             return;
         }
 
-        var heroSet = new HeroEquipmentSet(heroId, _SPInventoryVM.IsInWarSet);
+        var heroSet = new HeroEquipmentSet(heroId, _spInventoryVM.IsInWarSet);
         _slotLocks = _slotLockSource.GetSlotLocks(heroSet);
 
         this.OnPropertyChanged(nameof(HelmetLocked));
