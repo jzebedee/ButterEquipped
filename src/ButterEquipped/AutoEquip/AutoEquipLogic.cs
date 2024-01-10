@@ -67,8 +67,9 @@ public class AutoEquipLogic
 
     private AutoEquipOptions options;
 
-    public AutoEquipLogic(SPInventoryVM spInventoryVm, IEquipmentSlotLockSource equipmentSlotLocks)
+    public AutoEquipLogic(AutoEquipOptions options, SPInventoryVM spInventoryVm, IEquipmentSlotLockSource equipmentSlotLocks)
     {
+        this.options = options;
         _equipmentSlotLocks = equipmentSlotLocks;
         _updateRightCharacter = () => PrivateMethods.UpdateRightCharacter?.Invoke(spInventoryVm);
         _executeRemoveZeroCounts = () => PrivateMethods.ExecuteRemoveZeroCounts?.Invoke(spInventoryVm);
@@ -76,14 +77,12 @@ public class AutoEquipLogic
         _eqComparer = new EquipmentElementComparer();
     }
 
-    public bool Equip(AutoEquipOptions options, Hero hero, bool civilian)
+    public bool Equip(Hero hero, bool civilian)
     {
         if (hero?.CharacterObject is not CharacterObject character)
         {
             return false;
         }
-
-        this.options = options;
 
         var result = false;
 
@@ -108,10 +107,8 @@ public class AutoEquipLogic
         return result;
     }
 
-    public bool EquipParty(AutoEquipOptions options)
+    public bool EquipParty()
     {
-        this.options = options;
-
         var result = false;
 
         if (options.EquipFromInventory)
