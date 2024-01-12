@@ -4,6 +4,8 @@
   <tag language="日本語"/>
  </tags>
  <strings>
+  <!-- Thank you to Satoshi Katagiri for providing this translation -->
+  <!-- https://github.com/Gedevan-Aleksizde -->
   <string id="ButterEquip001" text="装備対象"/>
   <string id="ButterEquip002" text="装備の取得元"/>
   <string id="ButterEquip003" text="維持する条件"/>
