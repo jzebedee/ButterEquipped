@@ -1,0 +1,20 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Beta_Debug" />
+    <BuildType Name="Beta_Release" />
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Stable_Debug" />
+    <BuildType Name="Stable_Release" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/build/">
+    <File Path=".github/workflows/ci.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="src/ButterEquipped/ButterEquipped.csproj">
+    <Platform Project="x64" />
+  </Project>
+</Solution>
