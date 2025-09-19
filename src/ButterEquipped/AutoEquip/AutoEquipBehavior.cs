@@ -115,10 +115,10 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
     private bool HandleEquip(AutoEquipViewModel.AutoEquipEventArgs? e)
         => e switch
         {
-            AutoEquipViewModel.EquipPartyEventArgs => eqUpLogic.EquipParty(),
-            AutoEquipViewModel.EquipHeroEventArgs eqHero => eqUpLogic.Equip(eqHero.Hero, eqHero.Civilian),
+            AutoEquipViewModel.EquipPartyEventArgs => eqUpLogic?.EquipParty(),
+            AutoEquipViewModel.EquipHeroEventArgs eqHero => eqUpLogic?.Equip(eqHero.Hero, eqHero.Mode),
             _ => false
-        };
+        } ?? false;
 
     private void HandleClose(bool fromCancel)
     {
