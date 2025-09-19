@@ -13,15 +13,17 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace ButterEquipped.AutoEquip;
+using EquipmentModes = SPInventoryVM.EquipmentModes;
+using InventoryMode = InventoryScreenHelper.InventoryMode;
 using InventorySide = InventoryLogic.InventorySide;
 using ItemTypeEnum = ItemObject.ItemTypeEnum;
 using ItemUsageSetFlags = ItemObject.ItemUsageSetFlags;
 
 public class AutoEquipLogic
 {
-    private static InventoryLogic InvLogic => InventoryManager.InventoryLogic;
+    private static InventoryLogic InvLogic => InventoryScreenHelper.GetActiveInventoryState().InventoryLogic;
 
-    private static InventoryMode Mode => InventoryManager.Instance.CurrentMode;
+    private static InventoryMode Mode => InventoryScreenHelper.GetActiveInventoryState().InventoryMode;
 
     private static class Messages
     {
@@ -53,6 +55,9 @@ public class AutoEquipLogic
 
         public static Action<SPInventoryVM>? RefreshInformationValues
             = AccessTools2.GetDelegate<Action<SPInventoryVM>>(typeof(SPInventoryVM), "RefreshInformationValues");
+
+        public static HarmonyLib.AccessTools.FieldRef<SPInventoryVM, EquipmentModes>? GetEquipmentMode
+            = AccessTools2.FieldRefAccess<SPInventoryVM, EquipmentModes>("_equipmentMode");
     }
 
     private readonly Action _updateRightCharacter;
@@ -60,6 +65,8 @@ public class AutoEquipLogic
     private readonly Action _executeRemoveZeroCounts;
 
     private readonly Action _refreshInformationValues;
+
+    private readonly Func<EquipmentModes?> _getEquipmentMode;
 
     private readonly IEquipmentSlotLockSource _equipmentSlotLocks;
 
@@ -74,6 +81,7 @@ public class AutoEquipLogic
         _updateRightCharacter = () => PrivateMethods.UpdateRightCharacter?.Invoke(spInventoryVm);
         _executeRemoveZeroCounts = () => PrivateMethods.ExecuteRemoveZeroCounts?.Invoke(spInventoryVm);
         _refreshInformationValues = () => PrivateMethods.RefreshInformationValues?.Invoke(spInventoryVm);
+        _getEquipmentMode = () => PrivateMethods.GetEquipmentMode?.Invoke(spInventoryVm);
         _eqComparer = new EquipmentElementComparer();
     }
 
@@ -226,11 +234,34 @@ public class AutoEquipLogic
         Equipment GetEquipment() => AutoEquipLogic.GetEquipment(hero, civilian);
 
         TransferCommand CreateUnequipCommand(EquipmentElement equipment, EquipmentIndex index)
-            => TransferCommand.Transfer(1, InventorySide.Equipment, InventorySide.PlayerInventory, new ItemRosterElement(equipment, 1), index, EquipmentIndex.None, hero, civilian);
+            => TransferCommand.Transfer(
+                amount: 1,
+                fromSide: EquipmentModeToInventorySide(_getEquipmentMode() ?? default),
+                toSide: InventorySide.PlayerInventory,
+                elementToTransfer: new ItemRosterElement(equipment, 1),
+                fromEquipmentIndex: index,
+                toEquipmentIndex: EquipmentIndex.None,
+                character: hero);
 
         TransferCommand CreateEquipCommand(ItemRosterElement itemRoster, EquipmentIndex index)
-            => TransferCommand.Transfer(1, side, InventorySide.Equipment, itemRoster, EquipmentIndex.None, index, hero, civilian);
+            => TransferCommand.Transfer(
+                amount: 1, 
+                fromSide: side,
+                toSide: EquipmentModeToInventorySide(_getEquipmentMode() ?? default), 
+                elementToTransfer: itemRoster, 
+                fromEquipmentIndex: EquipmentIndex.None, 
+                toEquipmentIndex: index,
+                character: hero);
     }
+
+    private static InventorySide EquipmentModeToInventorySide(EquipmentModes equipmentMode)
+        => equipmentMode switch
+        {
+            EquipmentModes.Civilian => InventorySide.CivilianEquipment,
+            EquipmentModes.Battle => InventorySide.BattleEquipment,
+            EquipmentModes.Stealth => InventorySide.StealthEquipment,
+            _ => InventorySide.None,
+        };
 
     private static void Message(string information)
         => InformationManager.DisplayMessage(new InformationMessage(information));
