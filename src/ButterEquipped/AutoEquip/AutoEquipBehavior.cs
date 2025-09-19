@@ -122,7 +122,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
 
     private void HandleClose(bool fromCancel)
     {
-        if(eqUpVm is not AutoEquipViewModel eqVM)
+        if (eqUpVm is not AutoEquipViewModel eqVM)
         {
             return;
         }
@@ -133,7 +133,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
         }
         eqVM.OnEquip -= HandleEquip;
 
-        if(spInventoryVM is not SPInventoryVM inventoryVM)
+        if (spInventoryVM is not SPInventoryVM inventoryVM)
         {
             return;
         }
@@ -142,10 +142,16 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
 
     public BitArray GetSlotLocks(HeroEquipmentSet set)
     {
-        var setLocks = slotLocks ??= new();
+        const int SlotLockLength = (int)EquipmentIndex.NumEquipmentSetSlots;
+
+        var setLocks = slotLocks ??= [];
         if (!setLocks.TryGetValue(set, out var locks))
         {
-            setLocks.Add(set, locks = new BitArray((int)EquipmentIndex.NumEquipmentSetSlots));
+            setLocks.Add(set, locks = new BitArray(SlotLockLength));
+        }
+        else if (locks is { Length: not SlotLockLength })
+        {
+            locks.Length = SlotLockLength;
         }
 
         return locks;
