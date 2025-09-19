@@ -2,6 +2,7 @@
 using ButterEquipped.AutoEquip;
 using ButterEquipped.HighlightBetter;
 using HarmonyLib.BUTR.Extensions;
+using Helpers;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -11,6 +12,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace ButterEquipped.Patches;
+using InventoryMode = InventoryScreenHelper.InventoryMode;
 using InventorySide = InventoryLogic.InventorySide;
 
 [ViewModelMixin(nameof(SPItemVM.RefreshValues))]
@@ -57,7 +59,7 @@ internal class SPItemVMMixin : TwoWayViewModelMixin<SPItemVM>
         return side switch
         {
             InventorySide.PlayerInventory => options is { HighlightFromInventory: true },
-            InventorySide.OtherInventory when InventoryManager.Instance is { CurrentMode: var mode } => ShouldHighlightOtherSide(options, mode),
+            InventorySide.OtherInventory when InventoryScreenHelper.GetActiveInventoryState() is { InventoryMode: var mode } => ShouldHighlightOtherSide(options, mode),
             _ => true//false
         };
 
