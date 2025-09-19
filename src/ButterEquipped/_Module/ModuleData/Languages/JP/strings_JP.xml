@@ -10,7 +10,7 @@
   <string id="ButterEquip004" text="自動装備"/>
   <string id="ButterEquip005" text="プレイヤーキャラクター"/>
   <string id="ButterEquip006" text="仲間の装備"/>
-  <string id="ButterEquip007" text="市民装備"/>
+  <string id="ButterEquip_EquipCivilianEquipment" text="市民装備"/>
   <string id="ButterEquip008" text="戦利品から"/>
   <string id="ButterEquip009" text="保管場所から"/>
   <string id="ButterEquip010" text="インベントリから"/>

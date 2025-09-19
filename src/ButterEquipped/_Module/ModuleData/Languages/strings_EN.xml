@@ -10,7 +10,9 @@
   <string id="ButterEquip004" text="Auto Equip"/>
   <string id="ButterEquip005" text="Equip Player Hero"/>
   <string id="ButterEquip006" text="Equip Companions"/>
-  <string id="ButterEquip007" text="Equip Civilian Equipment"/>
+  <string id="ButterEquip_EquipBattleEquipment" text="Equip Battle Equipment"/>
+  <string id="ButterEquip_EquipCivilianEquipment" text="Equip Civilian Equipment"/>
+  <string id="ButterEquip_EquipStealthEquipment" text="Equip Stealth Equipment"/>
   <string id="ButterEquip008" text="Equip from Loot"/>
   <string id="ButterEquip009" text="Equip from Stash"/>
   <string id="ButterEquip010" text="Equip from Inventory"/>

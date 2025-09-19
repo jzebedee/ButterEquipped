@@ -171,11 +171,18 @@ public class AutoEquipLogic
                 continue;
             }
 
-            var result = EquipHero(character, side, mode: EquipmentModes.Battle);
-            //TODO: add stealth equip
+            bool result = false;
+            if (options.EquipBattle)
+            {
+                result |= EquipHero(character, side, mode: EquipmentModes.Battle);
+            }
             if (options.EquipCivilian)
             {
                 result |= EquipHero(character, side, mode: EquipmentModes.Civilian);
+            }
+            if (options.EquipStealth)
+            {
+                result |= EquipHero(character, side, mode: EquipmentModes.Stealth);
             }
             yield return (hero, result);
         }
