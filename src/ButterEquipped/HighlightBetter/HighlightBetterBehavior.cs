@@ -49,7 +49,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
             return;
         }
 
-        InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState += OnWidgetUpdateCivilianState;
+        InventoryItemTupleWidget_UpdateEquipmentTypeStatePatch.OnUpdateEquipmentTypeState += OnWidgetUpdateEquipmentTypeState;
         SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment += SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
         SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment += SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
         AddDebugListeners();
@@ -60,7 +60,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         [Conditional("DEBUG")]
         static void AddDebugListeners()
         {
-            InventoryManager_CloseInventoryPresentationPatch.OnClosing += fromCancel => DebugResetCount();
+            InventoryScreenHelper_CloseInventoryPresentationPatch.OnClosing += fromCancel => DebugResetCount();
         }
     }
 
@@ -118,7 +118,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         }
     }
 
-    private void OnWidgetUpdateCivilianState(InventoryItemTupleWidget widget)
+    private void OnWidgetUpdateEquipmentTypeState(InventoryItemTupleWidget widget)
     {
         Debug.Assert(!_disposed);
 
@@ -153,7 +153,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 
         if (_eventsRegistered)
         {
-            InventoryItemTupleWidget_UpdateCivilianStatePatch.OnUpdateCivilianState -= OnWidgetUpdateCivilianState;
+            InventoryItemTupleWidget_UpdateEquipmentTypeStatePatch.OnUpdateEquipmentTypeState -= OnWidgetUpdateEquipmentTypeState;
             SPInventoryVM_UpdateEquipmentPatch.OnUpdateEquipment -= SPInventoryVM_UpdateEquipmentPatch_OnUpdateEquipment;
             SPInventoryVM_UpdateCharacterEquipmentPatch.OnUpdateCharacterEquipment -= SPInventoryVM_UpdateCharacterEquipmentPatch_OnUpdateCharacterEquipment;
             RemoveDebugListeners();
@@ -165,7 +165,7 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
         [Conditional("DEBUG")]
         static void RemoveDebugListeners()
         {
-            InventoryManager_CloseInventoryPresentationPatch.OnClosing -= fromCancel => DebugResetCount();
+            InventoryScreenHelper_CloseInventoryPresentationPatch.OnClosing -= fromCancel => DebugResetCount();
         }
     }
 }
