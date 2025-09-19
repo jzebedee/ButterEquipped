@@ -219,7 +219,10 @@ public class AutoEquipViewModel : ViewModel
     }
 
     [DataSourceProperty]
-    public bool IsInWarSet => _spInventoryVM.IsBattleMode;
+    public bool IsBattleMode => _spInventoryVM.IsBattleMode;
+
+    [DataSourceProperty]
+    public bool IsStealthMode => _spInventoryVM.IsStealthMode;
 
     [DataSourceProperty]
     public string EquipText { get; } = Messages.Equip.ToString();
@@ -283,6 +286,7 @@ public class AutoEquipViewModel : ViewModel
         this.OnPropertyChanged(nameof(Weapon3Locked));
         this.OnPropertyChanged(nameof(ExtraWeaponLocked));
 
-        this.OnPropertyChanged(nameof(IsInWarSet));
+        this.OnPropertyChanged(nameof(IsBattleMode));
+        this.OnPropertyChanged(nameof(IsStealthMode));
     }
 }

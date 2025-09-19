@@ -25,9 +25,9 @@
 
 						<ButtonWidget Id="LockBoot" Brush="Inventory.Lock" IsSelected="@BootLocked" ButtonType="Toggle" MarginTop="450" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockMount" Brush="Inventory.Lock" IsSelected="@MountLocked" ButtonType="Toggle" MarginTop="600" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockMount" Brush="Inventory.Lock" IsSelected="@MountLocked" IsHidden="@IsStealthMode" ButtonType="Toggle" MarginTop="600" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockMountArmor" Brush="Inventory.Lock" IsSelected="@MountArmorLocked" ButtonType="Toggle" MarginTop="700" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockMountArmor" Brush="Inventory.Lock" IsSelected="@MountArmorLocked" IsHidden="@IsStealthMode" ButtonType="Toggle" MarginTop="700" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Top" />
 					</Children>
 				</Widget>
 
@@ -41,7 +41,7 @@
 
 						<ButtonWidget Id="LockWeapon3" Brush="Inventory.Lock" IsSelected="@Weapon3Locked" ButtonType="Toggle" MarginTop="350" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
 
-						<ButtonWidget Id="LockExtraWeapon" Brush="Inventory.Lock" IsSelected="@ExtraWeaponLocked" IsVisible="@IsInWarSet" ButtonType="Toggle" MarginTop="600" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
+						<ButtonWidget Id="LockExtraWeapon" Brush="Inventory.Lock" IsSelected="@ExtraWeaponLocked" IsVisible="@IsBattleMode" ButtonType="Toggle" MarginTop="600" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
 					</Children>
 				</Widget>
 
