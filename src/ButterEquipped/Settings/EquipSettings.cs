@@ -35,7 +35,9 @@ internal static class EquipSettings
             => builder
                 .SetPropertyValue("equip_player", opt.EquipHero)
                 .SetPropertyValue("equip_companions", opt.EquipCompanions)
+                .SetPropertyValue("equip_battle", opt.EquipBattle)
                 .SetPropertyValue("equip_civilian", opt.EquipCivilian)
+                .SetPropertyValue("equip_stealth", opt.EquipStealth)
 
                 .SetPropertyValue("equip_from_loot", opt.EquipFromLoot)
                 .SetPropertyValue("equip_from_stash", opt.EquipFromStash)
@@ -55,15 +57,23 @@ internal static class EquipSettings
                 .AddBool("equip_player",
                          "{=ButterEquip005}Equip Player Hero",
                          new ProxyRef<bool>(() => eqOpt.EquipHero, value => eqOpt.EquipHero = value),
-                         propBuilder => propBuilder.SetRequireRestart(false))
+                         propBuilder => propBuilder.SetRequireRestart(false).SetOrder(1))
                 .AddBool("equip_companions",
                          "{=ButterEquip006}Equip Companions",
                          new ProxyRef<bool>(() => eqOpt.EquipCompanions, value => eqOpt.EquipCompanions = value),
-                         propBuilder => propBuilder.SetRequireRestart(false))
+                         propBuilder => propBuilder.SetRequireRestart(false).SetOrder(2))
+                .AddBool("equip_battle",
+                         "{=ButterEquip_EquipBattleEquipment}Equip Battle Equipment",
+                         new ProxyRef<bool>(() => eqOpt.EquipBattle, value => eqOpt.EquipBattle = value),
+                         propBuilder => propBuilder.SetRequireRestart(false).SetOrder(3))
                 .AddBool("equip_civilian",
-                         "{=ButterEquip007}Equip Civilian Equipment",
+                         "{=ButterEquip_EquipCivilianEquipment}Equip Civilian Equipment",
                          new ProxyRef<bool>(() => eqOpt.EquipCivilian, value => eqOpt.EquipCivilian = value),
-                         propBuilder => propBuilder.SetRequireRestart(false))
+                         propBuilder => propBuilder.SetRequireRestart(false).SetOrder(4))
+                .AddBool("equip_stealth",
+                         "{=ButterEquip_EquipStealthEquipment}Equip Stealth Equipment",
+                         new ProxyRef<bool>(() => eqOpt.EquipStealth, value => eqOpt.EquipStealth = value),
+                         propBuilder => propBuilder.SetRequireRestart(false).SetOrder(5))
                 .SetGroupOrder(1);
 
         void BuildEquipFromGroup(ISettingsPropertyGroupBuilder builder)
