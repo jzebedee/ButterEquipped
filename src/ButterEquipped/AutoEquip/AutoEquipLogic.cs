@@ -13,6 +13,8 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace ButterEquipped.AutoEquip;
+
+using EquipmentType = Equipment.EquipmentType;
 using EquipmentModes = SPInventoryVM.EquipmentModes;
 using InventoryMode = InventoryScreenHelper.InventoryMode;
 using InventorySide = InventoryLogic.InventorySide;
@@ -85,7 +87,7 @@ public class AutoEquipLogic
         _eqComparer = new EquipmentElementComparer();
     }
 
-    public bool Equip(Hero hero, bool civilian)
+    public bool Equip(Hero hero, EquipmentModes mode)
     {
         if (hero?.CharacterObject is not CharacterObject character)
         {
@@ -96,12 +98,12 @@ public class AutoEquipLogic
 
         if (options.EquipFromInventory)
         {
-            result |= EquipHero(character, InventorySide.PlayerInventory, civilian);
+            result |= EquipHero(character, InventorySide.PlayerInventory, mode);
         }
 
         if (ShouldEquipOtherSide())
         {
-            result |= EquipHero(character, InventorySide.OtherInventory, civilian);
+            result |= EquipHero(character, InventorySide.OtherInventory, mode);
         }
 
         if (!result)
@@ -169,20 +171,21 @@ public class AutoEquipLogic
                 continue;
             }
 
-            var result = EquipHero(character, side);
+            var result = EquipHero(character, side, mode: EquipmentModes.Battle);
+            //TODO: add stealth equip
             if (options.EquipCivilian)
             {
-                result |= EquipHero(character, side, civilian: true);
+                result |= EquipHero(character, side, mode: EquipmentModes.Civilian);
             }
             yield return (hero, result);
         }
     }
 
-    private bool EquipHero(CharacterObject hero, InventorySide side, bool civilian = false)
+    private bool EquipHero(CharacterObject hero, InventorySide side, EquipmentModes mode)
     {
         bool result = false;
 
-        var slotLocks = _equipmentSlotLocks.GetSlotLocks(new(hero.StringId, !civilian));
+        var slotLocks = _equipmentSlotLocks.GetSlotLocks(new(hero.StringId, (int)mode));
         for (EquipmentIndex index = EquipmentIndex.WeaponItemBeginSlot; index < EquipmentIndex.NumEquipmentSetSlots; index++)
         {
             if (slotLocks[(int)index])
@@ -199,7 +202,7 @@ public class AutoEquipLogic
         bool TryEquip(EquipmentIndex index)
         {
             EquipmentElement startingEq = GetEquipment()[index];
-            ItemRosterElement bestItem = FindBestItem(index, hero, side, civilian);
+            ItemRosterElement bestItem = FindBestItem(index, hero, side, mode);
 
             if (bestItem.IsEmpty || bestItem.EquipmentElement.IsEqualTo(startingEq))
             {
@@ -231,7 +234,7 @@ public class AutoEquipLogic
             return true;
         }
 
-        Equipment GetEquipment() => AutoEquipLogic.GetEquipment(hero, civilian);
+        Equipment GetEquipment() => AutoEquipLogic.GetEquipment(hero, mode);
 
         TransferCommand CreateUnequipCommand(EquipmentElement equipment, EquipmentIndex index)
             => TransferCommand.Transfer(
@@ -245,11 +248,11 @@ public class AutoEquipLogic
 
         TransferCommand CreateEquipCommand(ItemRosterElement itemRoster, EquipmentIndex index)
             => TransferCommand.Transfer(
-                amount: 1, 
+                amount: 1,
                 fromSide: side,
-                toSide: EquipmentModeToInventorySide(_getEquipmentMode() ?? default), 
-                elementToTransfer: itemRoster, 
-                fromEquipmentIndex: EquipmentIndex.None, 
+                toSide: EquipmentModeToInventorySide(_getEquipmentMode() ?? default),
+                elementToTransfer: itemRoster,
+                fromEquipmentIndex: EquipmentIndex.None,
                 toEquipmentIndex: index,
                 character: hero);
     }
@@ -331,9 +334,13 @@ public class AutoEquipLogic
             };
     }
 
-    private IEnumerable<ItemRosterElement> CompareItems(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, bool civilian)
+    private IEnumerable<ItemRosterElement> CompareItems(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, EquipmentModes eqMode)
     {
-        Equipment allEq = civilian ? hero.FirstCivilianEquipment : hero.FirstBattleEquipment;
+        if (GetEquipment(hero, eqMode) is not Equipment allEq)
+        {
+            return [];
+        }
+
         EquipmentElement slotEq = allEq[slotIndex];
 
         ItemTypeEnum itemType = slotEq.IsEmpty switch
@@ -354,13 +361,13 @@ public class AutoEquipLogic
 
         if (itemType is ItemTypeEnum.Invalid)
         {
-            return Enumerable.Empty<ItemRosterElement>();
+            return [];
         }
 
         EquipmentUsageInfo usageInfo = new(
             HasMount: !allEq.Horse.IsEmpty,
             HasShield: allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield),
-            UsableAmmoClasses: new(GetUsableAmmoClasses(allEq)),
+            UsableAmmoClasses: [.. GetUsableAmmoClasses(allEq)],
             CanUseAllBowsOnHorseback: hero.GetPerkValue(DefaultPerks.Bow.HorseMaster),
             TargetCulture: options.KeepCulture ? hero.Culture : null);
 
@@ -368,19 +375,20 @@ public class AutoEquipLogic
             .Where(item => item switch
             {
                 //disallow war items in civilian mode
-                { IsEmpty: false, EquipmentElement.Item.IsCivilian: false } when civilian => false,
+                { IsEmpty: false, EquipmentElement.Item.IsCivilian: false } when eqMode is EquipmentModes.Civilian => false,
+                { IsEmpty: false, EquipmentElement.Item.IsStealthItem: false } when eqMode is EquipmentModes.Stealth => false,
                 { IsEmpty: false } => true,
                 _ => false
             })
             .Where(item => Equipment.IsItemFitsToSlot(slotIndex, item.EquipmentElement.Item))
             .Where(item => CharacterHelper.CanUseItemBasedOnSkill(hero, item.EquipmentElement))
-            .Where(item => ShouldEquip(GetEquipment(hero, civilian), item.EquipmentElement, slotIndex, usageInfo))
+            .Where(item => ShouldEquip(GetEquipment(hero, eqMode), item.EquipmentElement, slotIndex, usageInfo))
             .Prepend(new ItemRosterElement(slotEq, 0))
             .OrderByDescending(item => item.EquipmentElement, _eqComparer);
     }
 
-    private ItemRosterElement FindBestItem(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, bool civilian)
-        => CompareItems(slotIndex, hero, side, civilian).DefaultIfEmpty(ItemRosterElement.Invalid).First();
+    private ItemRosterElement FindBestItem(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, EquipmentModes mode)
+        => CompareItems(slotIndex, hero, side, mode).DefaultIfEmpty(ItemRosterElement.Invalid).First();
 
     private static IEnumerable<WeaponClass> GetUsableAmmoClasses(Equipment allEq)
         => allEq.WeaponSlots()
@@ -390,6 +398,12 @@ public class AutoEquipLogic
                 .Select(wcd => wcd.AmmoClass)
                 .Where(ammoClass => ammoClass != WeaponClass.Undefined);
 
-    private static Equipment GetEquipment(CharacterObject character, bool civilian)
-        => civilian ? character.FirstCivilianEquipment : character.FirstBattleEquipment;
+    private static Equipment? GetEquipment(CharacterObject character, EquipmentModes mode)
+        => mode switch
+        {
+            EquipmentModes.Civilian => character.FirstCivilianEquipment,
+            EquipmentModes.Battle => character.FirstBattleEquipment,
+            EquipmentModes.Stealth => character.FirstStealthEquipment,
+            _ => null
+        };
 }
