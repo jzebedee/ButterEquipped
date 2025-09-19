@@ -7,8 +7,8 @@ namespace ButterEquipped.HighlightBetter;
 
 public class InventoryItemTupleInterceptWidget : InventoryItemTupleWidget
 {
-    private static readonly Action<InventoryItemTupleWidget>? UpdateCivilianState
-        = AccessTools2.GetDelegate<Action<InventoryItemTupleWidget>>(typeof(InventoryItemTupleWidget), nameof(UpdateCivilianState));
+    private static readonly Action<InventoryItemTupleWidget>? UpdateEquipmentTypeState
+        = AccessTools2.GetDelegate<Action<InventoryItemTupleWidget>>(typeof(InventoryItemTupleWidget), nameof(UpdateEquipmentTypeState));
 
     public InventoryItemTupleInterceptWidget(UIContext context) : base(context)
     {
@@ -39,7 +39,7 @@ public class InventoryItemTupleInterceptWidget : InventoryItemTupleWidget
             {
                 _isBetterItem = value;
                 OnPropertyChanged(value);
-                UpdateCivilianState?.Invoke(this);
+                UpdateEquipmentTypeState?.Invoke(this);
             }
         }
     }
