@@ -46,7 +46,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
         }
 
         GauntletInventoryScreen_OnInitializePatch.OnInitialize += HandleInventoryScreenInitialized;
-        InventoryManager_CloseInventoryPresentationPatch.OnClosing += HandleClose;
+        InventoryScreenHelper_CloseInventoryPresentationPatch.OnClosing += HandleClose;
         eventsRegistered = true;
     }
 
@@ -171,7 +171,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
             }
 
             GauntletInventoryScreen_OnInitializePatch.OnInitialize -= HandleInventoryScreenInitialized;
-            InventoryManager_CloseInventoryPresentationPatch.OnClosing -= HandleClose;
+            InventoryScreenHelper_CloseInventoryPresentationPatch.OnClosing -= HandleClose;
         }
 
         disposed = true;
