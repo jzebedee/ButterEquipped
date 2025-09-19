@@ -4,10 +4,10 @@ using TaleWorlds.MountAndBlade.GauntletUI.Widgets.Inventory;
 
 namespace ButterEquipped.Patches;
 
-[HarmonyPatch(typeof(InventoryItemTupleWidget), "UpdateCivilianState")]
-internal static class InventoryItemTupleWidget_UpdateCivilianStatePatch
+[HarmonyPatch(typeof(InventoryItemTupleWidget), "UpdateEquipmentTypeState")]
+internal static class InventoryItemTupleWidget_UpdateEquipmentTypeStatePatch
 {
-    internal static event Action<InventoryItemTupleWidget>? OnUpdateCivilianState;
+    internal static event Action<InventoryItemTupleWidget>? OnUpdateEquipmentTypeState;
 
     public static void Postfix(InventoryItemTupleWidget __instance)
     {
@@ -16,6 +16,6 @@ internal static class InventoryItemTupleWidget_UpdateCivilianStatePatch
             return;
         }
 
-        OnUpdateCivilianState?.Invoke(__instance);
+        OnUpdateEquipmentTypeState?.Invoke(__instance);
     }
 }
