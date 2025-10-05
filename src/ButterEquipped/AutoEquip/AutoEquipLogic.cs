@@ -27,6 +27,19 @@ public class AutoEquipLogic
 
     private static InventoryMode Mode => InventoryScreenHelper.GetActiveInventoryState().InventoryMode;
 
+    //private static readonly Dictionary<EquipmentModes, IComparer<EquipmentElement>> _comparerByMode = new()
+    //{
+    //    [EquipmentModes.Battle] = new EquipmentElementComparer(EquipmentType.Battle),
+    //    [EquipmentModes.Civilian] = new EquipmentElementComparer(EquipmentType.Civilian),
+    //    [EquipmentModes.Stealth] = new EquipmentElementComparer(EquipmentType.Stealth)
+    //};
+
+    private static readonly IComparer<EquipmentElement> _battleComparer = new EquipmentElementComparer(EquipmentType.Battle);
+
+    private static readonly IComparer<EquipmentElement> _civilianComparer = new EquipmentElementComparer(EquipmentType.Civilian);
+
+    private static readonly IComparer<EquipmentElement> _stealthComparer = new EquipmentElementComparer(EquipmentType.Stealth);
+
     private static class Messages
     {
         public static readonly TextObject NothingToEquip = new("{=ButterEquipMSG001}Nothing to equip");
@@ -72,8 +85,6 @@ public class AutoEquipLogic
 
     private readonly IEquipmentSlotLockSource _equipmentSlotLocks;
 
-    private readonly IComparer<EquipmentElement> _eqComparer;
-
     private AutoEquipOptions options;
 
     public AutoEquipLogic(AutoEquipOptions options, SPInventoryVM spInventoryVm, IEquipmentSlotLockSource equipmentSlotLocks)
@@ -84,7 +95,6 @@ public class AutoEquipLogic
         _executeRemoveZeroCounts = () => PrivateMethods.ExecuteRemoveZeroCounts?.Invoke(spInventoryVm);
         _refreshInformationValues = () => PrivateMethods.RefreshInformationValues?.Invoke(spInventoryVm);
         _getEquipmentMode = () => PrivateMethods.GetEquipmentMode?.Invoke(spInventoryVm);
-        _eqComparer = new EquipmentElementComparer();
     }
 
     public bool Equip(Hero hero, EquipmentModes mode)
@@ -241,12 +251,12 @@ public class AutoEquipLogic
             return true;
         }
 
-        Equipment GetEquipment() => AutoEquipLogic.GetEquipment(hero, mode);
+        Equipment? GetEquipment() => AutoEquipLogic.GetEquipment(hero, mode);
 
         TransferCommand CreateUnequipCommand(EquipmentElement equipment, EquipmentIndex index)
             => TransferCommand.Transfer(
                 amount: 1,
-                fromSide: EquipmentModeToInventorySide(_getEquipmentMode() ?? default),
+                fromSide: EquipmentModeToInventorySide(mode),
                 toSide: InventorySide.PlayerInventory,
                 elementToTransfer: new ItemRosterElement(equipment, 1),
                 fromEquipmentIndex: index,
@@ -257,7 +267,7 @@ public class AutoEquipLogic
             => TransferCommand.Transfer(
                 amount: 1,
                 fromSide: side,
-                toSide: EquipmentModeToInventorySide(_getEquipmentMode() ?? default),
+                toSide: EquipmentModeToInventorySide(mode),
                 elementToTransfer: itemRoster,
                 fromEquipmentIndex: EquipmentIndex.None,
                 toEquipmentIndex: index,
@@ -391,7 +401,13 @@ public class AutoEquipLogic
             .Where(item => CharacterHelper.CanUseItemBasedOnSkill(hero, item.EquipmentElement))
             .Where(item => ShouldEquip(GetEquipment(hero, eqMode), item.EquipmentElement, slotIndex, usageInfo))
             .Prepend(new ItemRosterElement(slotEq, 0))
-            .OrderByDescending(item => item.EquipmentElement, _eqComparer);
+            .OrderByDescending(item => item.EquipmentElement, eqMode switch
+            {
+                EquipmentModes.Battle => _battleComparer,
+                EquipmentModes.Civilian => _civilianComparer,
+                EquipmentModes.Stealth => _stealthComparer,
+                _ => _battleComparer
+            });
     }
 
     private ItemRosterElement FindBestItem(EquipmentIndex slotIndex, CharacterObject hero, InventorySide side, EquipmentModes mode)
