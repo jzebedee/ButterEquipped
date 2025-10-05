@@ -64,12 +64,13 @@ public sealed class EquipmentElementComparer(EquipmentType equipmentType) : ICom
                 var bodyArmor = eq.GetModifiedBodyArmor();
                 var legArmor = eq.GetModifiedLegArmor();
                 var armArmor = eq.GetModifiedArmArmor();
-                float armorScore = (headArmor * 34f + bodyArmor * 42f + legArmor * 12f + armArmor * 12f) * 0.03f;
-                return equipmentType switch
+                var stealthScore = eq.GetModifiedStealthFactor();
+                float armorScore = equipmentType switch
                 {
-                    EquipmentType.Stealth => armorScore + eq.GetModifiedStealthFactor(),
-                    _ => armorScore
+                    EquipmentType.Stealth => (headArmor * 34f + bodyArmor * 42f + legArmor * 12f + armArmor * 12f + stealthScore * 5f) * 0.03f,
+                    _ => (headArmor * 34f + bodyArmor * 42f + legArmor * 12f + armArmor * 12f) * 0.03f
                 };
+                return armorScore;
             }
         }
 
