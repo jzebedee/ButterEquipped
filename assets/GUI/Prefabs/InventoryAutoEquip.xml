@@ -3,8 +3,8 @@
 		<Constant Name="LeftPanel.Width" BrushLayer="Default" BrushName="Inventory.Tuple.Left" BrushValueType="Width" />
 		<Constant Name="RightPanel.Width" BrushLayer="Default" BrushName="Inventory.Tuple.Right" BrushValueType="Width" />
 
-		<Constant Name="ArmorEquipmentSlots.MarginTop" Value="190" />
-		<Constant Name="WeaponEquipmentSlots.MarginTop" Value="190" />
+		<Constant Name="ArmorEquipmentSlots.MarginTop" Value="165" />
+		<Constant Name="WeaponEquipmentSlots.MarginTop" Value="165" />
 		<Constant Name="EquipButtons.MarginTop" Value="75" />
 
 		<Constant Name="LeftSlots.MarginLeft" Value="!LeftPanel.Width" Additive="35" />
@@ -45,9 +45,9 @@
 					</Children>
 				</Widget>
 
-				<Widget Id="EquipButtonsContainer" DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="!EquipButtons.MarginTop">
+				<Widget Id="EquipButtonsContainer" DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginLeft="580" MarginTop="!EquipButtons.MarginTop">
 					<Children>
-						<ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ExecuteEquip" IsVisible="@IsEquipVisible" MarginLeft="480" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="60" Brush="ButtonGreenBrush">
+						<ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ExecuteEquip" IsVisible="@IsEquipVisible" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="60" Brush="ButtonGreenBrush">
 							<Children>
 								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center">
 									<Children>
@@ -57,7 +57,7 @@
 							</Children>
 						</ButtonWidget>
 
-						<ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ExecuteEquipParty" IsVisible="@IsEquipPartyVisible" MarginLeft="480" MarginTop="45" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="60" Brush="ButtonGoldBrush">
+						<ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ExecuteEquipParty" IsVisible="@IsEquipPartyVisible" MarginTop="45" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="60" Brush="ButtonGoldBrush">
 							<Children>
 								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center">
 									<Children>
