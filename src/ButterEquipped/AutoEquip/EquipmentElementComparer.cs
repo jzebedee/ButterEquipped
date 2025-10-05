@@ -4,8 +4,9 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace ButterEquipped.AutoEquip;
+using EquipmentType = Equipment.EquipmentType;
 
-public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
+public sealed class EquipmentElementComparer(EquipmentType equipmentType) : IComparer<EquipmentElement>
 {
     public int Compare(EquipmentElement x, EquipmentElement y)
         => (x.IsEmpty, y.IsEmpty) switch
@@ -13,17 +14,17 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
             (true, true) => 0,
             (true, false) => -1,
             (false, true) => 1,
-            (false, false) => CompareInternal(x, y),
+            (false, false) => CompareInternal(x, y, equipmentType),
         };
 
-    private static int CompareInternal(EquipmentElement x, EquipmentElement y)
+    private static int CompareInternal(EquipmentElement x, EquipmentElement y, EquipmentType equipmentType)
     {
-        var effX = CalculateEffectiveness(x);
-        var effY = CalculateEffectiveness(y);
+        var effX = CalculateEffectiveness(x, equipmentType);
+        var effY = CalculateEffectiveness(y, equipmentType);
         return effX.CompareTo(effY);
     }
 
-    internal static float CalculateEffectiveness(EquipmentElement eq)
+    internal static float CalculateEffectiveness(EquipmentElement eq, EquipmentType equipmentType = EquipmentType.Battle)
     {
         var item = eq.Item;
         var type = item.ItemType;
@@ -42,7 +43,7 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
         {
             //Banner pieces in story mode will crash because they have no banner effect
             //and GetBannerEffectBonus() doesn't check for null
-            if(banner is not { BannerEffect: not null })
+            if (banner is not { BannerEffect: not null })
             {
                 return default;
             }
@@ -63,7 +64,12 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
                 var bodyArmor = eq.GetModifiedBodyArmor();
                 var legArmor = eq.GetModifiedLegArmor();
                 var armArmor = eq.GetModifiedArmArmor();
-                return (headArmor * 34f + bodyArmor * 42f + legArmor * 12f + armArmor * 12f) * 0.03f;
+                float armorScore = (headArmor * 34f + bodyArmor * 42f + legArmor * 12f + armArmor * 12f) * 0.03f;
+                return equipmentType switch
+                {
+                    EquipmentType.Stealth => armorScore + eq.GetModifiedStealthFactor(),
+                    _ => armorScore
+                };
             }
         }
 
@@ -98,6 +104,14 @@ public sealed class EquipmentElementComparer : IComparer<EquipmentElement>
                 WeaponClass.LargeShield => 0.5f,
                 _ => 1f,
             };
+
+            float stealthBonus = equipmentType switch
+            {
+                EquipmentType.Stealth when weapon.WeaponClass is WeaponClass.Dagger => 2f,
+                EquipmentType.Stealth when weapon.WeaponClass is WeaponClass.ThrowingKnife => 1f,
+                _ => 0f
+            };
+            mod += (mod * stealthBonus);
 
             var missileDamage = weapon.GetModifiedMissileDamage(eq.ItemModifier);
             var missileSpeed = weapon.GetModifiedMissileSpeed(eq.ItemModifier);
