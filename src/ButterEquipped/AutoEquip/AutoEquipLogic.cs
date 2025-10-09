@@ -218,7 +218,12 @@ public class AutoEquipLogic
 
         bool TryEquip(EquipmentIndex index)
         {
-            EquipmentElement startingEq = GetEquipment()[index];
+            if (GetEquipment() is not Equipment heroEquipment)
+            {
+                return false;
+            }
+
+            EquipmentElement startingEq = heroEquipment[index];
             ItemRosterElement bestItem = FindBestItem(index, hero, side, mode);
 
             if (bestItem.IsEmpty || bestItem.EquipmentElement.IsEqualTo(startingEq))
@@ -238,7 +243,8 @@ public class AutoEquipLogic
                 Message(Messages.HeroEquipsItem(hero.Name, bestItem.EquipmentElement.GetModifiedItemName()).ToString());
             }
 
-            if (index == EquipmentIndex.Horse && GetEquipment()[EquipmentIndex.HorseHarness] is var harness && !harness.IsEmpty)
+            if (index is EquipmentIndex.Horse
+             && heroEquipment[EquipmentIndex.HorseHarness] is { IsEmpty: false } harness)
             {
                 //always unequip harness to avoid camels + horse harness
                 var unequipHarnessCmd = CreateUnequipCommand(harness, EquipmentIndex.HorseHarness);
@@ -399,7 +405,7 @@ public class AutoEquipLogic
             })
             .Where(item => Equipment.IsItemFitsToSlot(slotIndex, item.EquipmentElement.Item))
             .Where(item => CharacterHelper.CanUseItemBasedOnSkill(hero, item.EquipmentElement))
-            .Where(item => ShouldEquip(GetEquipment(hero, eqMode), item.EquipmentElement, slotIndex, usageInfo))
+            .Where(item => ShouldEquip(allEq, item.EquipmentElement, slotIndex, usageInfo))
             .Prepend(new ItemRosterElement(slotEq, 0))
             .OrderByDescending(item => item.EquipmentElement, eqMode switch
             {
