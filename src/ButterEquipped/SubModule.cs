@@ -22,7 +22,7 @@ public class SubModule : MBSubModuleBase
 
     private static readonly Lazy<UIExtender> _extender = new(() =>
     {
-        var extender = new UIExtender(nameof(ButterEquipped));
+        var extender = UIExtender.Create(nameof(ButterEquipped));
         extender.Register(typeof(SubModule).Assembly);
         return extender;
     });
