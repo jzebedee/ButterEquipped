@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
@@ -18,15 +19,26 @@ public class AutoEquipViewModel : ViewModel
         public static readonly TextObject Party = new("{=ButterEquipVM002}Party");
     }
 
+    private readonly struct EquipmentIndexAccessor(BitArray bitArray)
+    {
+        public readonly bool this[EquipmentIndex index]
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => bitArray[(int)index];
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set => bitArray[(int)index] = value;
+        }
+    }
+
     [DataSourceProperty]
     public bool Weapon0Locked
     {
-        get => _slotLocks[(int)EquipmentIndex.Weapon0];
+        get => _slotLocks[EquipmentIndex.Weapon0];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.Weapon0])
+            if (value != _slotLocks[EquipmentIndex.Weapon0])
             {
-                _slotLocks[(int)EquipmentIndex.Weapon0] = value;
+                _slotLocks[EquipmentIndex.Weapon0] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -35,12 +47,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool Weapon1Locked
     {
-        get => _slotLocks[(int)EquipmentIndex.Weapon1];
+        get => _slotLocks[EquipmentIndex.Weapon1];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.Weapon1])
+            if (value != _slotLocks[EquipmentIndex.Weapon1])
             {
-                _slotLocks[(int)EquipmentIndex.Weapon1] = value;
+                _slotLocks[EquipmentIndex.Weapon1] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -49,12 +61,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool Weapon2Locked
     {
-        get => _slotLocks[(int)EquipmentIndex.Weapon2];
+        get => _slotLocks[EquipmentIndex.Weapon2];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.Weapon2])
+            if (value != _slotLocks[EquipmentIndex.Weapon2])
             {
-                _slotLocks[(int)EquipmentIndex.Weapon2] = value;
+                _slotLocks[EquipmentIndex.Weapon2] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -63,12 +75,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool Weapon3Locked
     {
-        get => _slotLocks[(int)EquipmentIndex.Weapon3];
+        get => _slotLocks[EquipmentIndex.Weapon3];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.Weapon3])
+            if (value != _slotLocks[EquipmentIndex.Weapon3])
             {
-                _slotLocks[(int)EquipmentIndex.Weapon3] = value;
+                _slotLocks[EquipmentIndex.Weapon3] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -77,12 +89,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool ExtraWeaponLocked
     {
-        get => _slotLocks[(int)EquipmentIndex.ExtraWeaponSlot];
+        get => _slotLocks[EquipmentIndex.ExtraWeaponSlot];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.ExtraWeaponSlot])
+            if (value != _slotLocks[EquipmentIndex.ExtraWeaponSlot])
             {
-                _slotLocks[(int)EquipmentIndex.ExtraWeaponSlot] = value;
+                _slotLocks[EquipmentIndex.ExtraWeaponSlot] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -91,12 +103,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool HelmetLocked
     {
-        get => _slotLocks[(int)EquipmentIndex.Head];
+        get => _slotLocks[EquipmentIndex.Head];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.Head])
+            if (value != _slotLocks[EquipmentIndex.Head])
             {
-                _slotLocks[(int)EquipmentIndex.Head] = value;
+                _slotLocks[EquipmentIndex.Head] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -105,12 +117,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool CloakLocked
     {
-        get => _slotLocks[(int)EquipmentIndex.Cape];
+        get => _slotLocks[EquipmentIndex.Cape];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.Cape])
+            if (value != _slotLocks[EquipmentIndex.Cape])
             {
-                _slotLocks[(int)EquipmentIndex.Cape] = value;
+                _slotLocks[EquipmentIndex.Cape] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -119,12 +131,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool ArmorLocked
     {
-        get => _slotLocks[(int)EquipmentIndex.Body];
+        get => _slotLocks[EquipmentIndex.Body];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.Body])
+            if (value != _slotLocks[EquipmentIndex.Body])
             {
-                _slotLocks[(int)EquipmentIndex.Body] = value;
+                _slotLocks[EquipmentIndex.Body] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -133,12 +145,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool GloveLocked
     {
-        get => _slotLocks[(int)EquipmentIndex.Gloves];
+        get => _slotLocks[EquipmentIndex.Gloves];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.Gloves])
+            if (value != _slotLocks[EquipmentIndex.Gloves])
             {
-                _slotLocks[(int)EquipmentIndex.Gloves] = value;
+                _slotLocks[EquipmentIndex.Gloves] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -147,12 +159,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool BootLocked
     {
-        get => _slotLocks[(int)EquipmentIndex.Leg];
+        get => _slotLocks[EquipmentIndex.Leg];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.Leg])
+            if (value != _slotLocks[EquipmentIndex.Leg])
             {
-                _slotLocks[(int)EquipmentIndex.Leg] = value;
+                _slotLocks[EquipmentIndex.Leg] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -161,12 +173,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool MountLocked
     {
-        get => _slotLocks[(int)EquipmentIndex.Horse];
+        get => _slotLocks[EquipmentIndex.Horse];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.Horse])
+            if (value != _slotLocks[EquipmentIndex.Horse])
             {
-                _slotLocks[(int)EquipmentIndex.Horse] = value;
+                _slotLocks[EquipmentIndex.Horse] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -175,12 +187,12 @@ public class AutoEquipViewModel : ViewModel
     [DataSourceProperty]
     public bool MountArmorLocked
     {
-        get => _slotLocks[(int)EquipmentIndex.HorseHarness];
+        get => _slotLocks[EquipmentIndex.HorseHarness];
         set
         {
-            if (value != _slotLocks[(int)EquipmentIndex.HorseHarness])
+            if (value != _slotLocks[EquipmentIndex.HorseHarness])
             {
-                _slotLocks[(int)EquipmentIndex.HorseHarness] = value;
+                _slotLocks[EquipmentIndex.HorseHarness] = value;
                 OnPropertyChangedWithValue(value);
             }
         }
@@ -244,7 +256,7 @@ public class AutoEquipViewModel : ViewModel
 
     private readonly SPInventoryVM _spInventoryVM;
 
-    private BitArray _slotLocks;
+    private EquipmentIndexAccessor _slotLocks;
 
     public record AutoEquipEventArgs;
 
@@ -269,7 +281,7 @@ public class AutoEquipViewModel : ViewModel
         }
 
         var heroSet = new HeroEquipmentSet(heroId, mode);
-        _slotLocks = _slotLockSource.GetSlotLocks(heroSet);
+        _slotLocks = new(_slotLockSource.GetSlotLocks(heroSet));
 
         this.OnPropertyChanged(nameof(HelmetLocked));
         this.OnPropertyChanged(nameof(CloakLocked));
