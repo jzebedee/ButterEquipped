@@ -13,9 +13,9 @@ internal class HighlightBetterBehavior : CampaignBehaviorBase, IDisposable
 {
     private static readonly WeakReference<SPInventoryVM> _currentVm = new(null!);
 
-    private static HighlightBetterOptions _options;
+    private static HighlightBetterOptions? _options;
 
-    public static HighlightBetterOptions CurrentOptions => _options with { }; //shallow record clone
+    public static HighlightBetterOptions CurrentOptions => _options! with { }; //shallow record clone
 
     public static SPInventoryVM? CurrentVm
         => _currentVm.TryGetTarget(out var vm) switch
