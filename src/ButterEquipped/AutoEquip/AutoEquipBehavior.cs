@@ -24,7 +24,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
     private readonly AutoEquipOptions options;
 
     private Dictionary<HeroEquipmentSet, BitArray>? slotLocks;
-    public Dictionary<HeroEquipmentSet, BitArray> SlotLocks => slotLocks;
+    public Dictionary<HeroEquipmentSet, BitArray> SlotLocks => slotLocks!;
 
     private bool eventsRegistered;
     private bool disposed;
@@ -159,7 +159,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
 
     public override void SyncData(IDataStore dataStore)
     {
-        dataStore.SyncData<Dictionary<HeroEquipmentSet, BitArray>>("lockedSlots", ref slotLocks);
+        dataStore.SyncData<Dictionary<HeroEquipmentSet, BitArray>>("lockedSlots", ref slotLocks!);
     }
 
     public void Dispose()
