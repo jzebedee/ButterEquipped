@@ -238,7 +238,7 @@ public class AutoEquipViewModel : ViewModel
     public void ExecuteEquipParty()
         => OnEquip?.Invoke(EquipPartyEventArgs.Empty);
 
-    public event Func<AutoEquipEventArgs?, bool> OnEquip;
+    public event Func<AutoEquipEventArgs?, bool>? OnEquip;
 
     private readonly IEquipmentSlotLockSource _slotLockSource;
 
