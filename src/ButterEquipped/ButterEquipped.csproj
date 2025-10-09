@@ -11,8 +11,8 @@
     <BuildForWindowsStore>false</BuildForWindowsStore>
     
     <ModuleId>$(MSBuildProjectName)</ModuleId>
-    <ModuleName>$(MSBuildProjectName)</ModuleName>
-    <ModuleUrl></ModuleUrl>
+    <ModuleName>Butter Equipped</ModuleName>
+    <ModuleUrl>https://github.com/jzebedee/ButterEquipped</ModuleUrl>
     <GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
     <!-- Module manually override GameVersion -->
     <!-- <OverrideGameVersion>v1.0.0</OverrideGameVersion> -->
