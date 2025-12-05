@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base>
+	<tags>
+		<tag language="Español (LA)"/>
+	</tags>
+	<strings>
+		<string id="ButterEquip001" text="Objetivos de Equipo"/>
+		<string id="ButterEquip002" text="Equipar Desde"/>
+		<string id="ButterEquip003" text="Conservar Objetos"/>
+		<string id="ButterEquip004" text="Autoequipar"/>
+		<string id="ButterEquip005" text="Equipar Héroe Jugador"/>
+		<string id="ButterEquip006" text="Equipar Compañeros"/>
+		<string id="ButterEquip_EquipBattleEquipment" text="Equipar Equipo de Batalla"/>
+		<string id="ButterEquip_EquipCivilianEquipment" text="Equipar Equipo Civil"/>
+		<string id="ButterEquip_EquipStealthEquipment" text="Equipar Equipo de Sigilo"/>
+		<string id="ButterEquip008" text="Equipar del Botín"/>
+		<string id="ButterEquip009" text="Equipar del Alijo"/>
+		<string id="ButterEquip010" text="Equipar del Inventario"/>
+		<string id="ButterEquip011" text="Equipar de Descarte"/>
+		<string id="ButterEquip012" text="Equipar del Comercio"/>
+		<string id="ButterEquip013" text="Mantener Clase de Arma"/>
+		<string id="ButterEquip013Hint" text="Si está activado, solo se equiparán armas de la misma clase (ej.: mazas de una mano solo se reemplazan por mazas de una mano)"/>
+		<string id="ButterEquip014" text="Mantener Tipo de Montura"/>
+		<string id="ButterEquip014Hint" text="Si está activado, solo se equiparán monturas del mismo tipo (ej.: solo caballos para un caballo equipado, o camellos para un camello equipado)"/>
+		<string id="ButterEquip015" text="Mantener Armas Fabricadas"/>
+		<string id="ButterEquip016" text="Mantener Cultura"/>
+		<string id="ButterEquip016Hint" text="Si está activado, solo se equipará equipo de la misma cultura del héroe (ej.: armadura de Khuzait solo para héroes de cultura Khuzait)"/>
+		<string id="ButterEquip017" text="Resaltar Mejores Objetos"/>
+		<string id="ButterEquip018" text="Resaltar del Botín"/>
+		<string id="ButterEquip019" text="Resaltar del Alijo"/>
+		<string id="ButterEquip020" text="Resaltar del Inventario"/>
+		<string id="ButterEquip021" text="Resaltar de Descarte"/>
+		<string id="ButterEquip022" text="Resaltar del Comercio"/>
+		<string id="ButterEquipMSG001" text="Nada para equipar"/>
+		<string id="ButterEquipMSG002" text="{HERO} reemplazó {ITEM} por {BESTITEM}"/>
+		<string id="ButterEquipMSG003" text="{HERO} equipa {BESTITEM}"/>
+		<string id="ButterEquipVM001" text="Equipar"/>
+		<string id="ButterEquipVM002" text="Grupo"/>
+	</strings>
+</base>
