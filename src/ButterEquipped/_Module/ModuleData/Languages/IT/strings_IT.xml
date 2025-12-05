@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+    <tags>
+        <tag language="Italiano"/>
+    </tags>
+    <strings>
+        <string id="ButterEquip001" text="Obiettivi equipaggiamento"/>
+        <string id="ButterEquip002" text="Equipaggia da"/>
+        <string id="ButterEquip003" text="Mantieni oggetti"/>
+        <string id="ButterEquip004" text="Autoequipaggia"/>
+        <string id="ButterEquip005" text="Equipaggia eroe giocatore"/>
+        <string id="ButterEquip006" text="Equipaggia compagni"/>
+        <string id="ButterEquip_EquipBattleEquipment" text="Equipaggia equip. da battaglia"/>
+        <string id="ButterEquip_EquipCivilianEquipment" text="Equipaggia equip. civile"/>
+        <string id="ButterEquip_EquipStealthEquipment" text="Equipaggia equip. furtivo"/>
+        <string id="ButterEquip008" text="Equipaggia dal bottino"/>
+        <string id="ButterEquip009" text="Equipaggia dalla scorta"/>
+        <string id="ButterEquip010" text="Equipaggia dall'inventario"/>
+        <string id="ButterEquip011" text="Equipaggia dagli scarti"/>
+        <string id="ButterEquip012" text="Equipaggia dallo scambio"/>
+        <string id="ButterEquip013" text="Mantieni classe arma"/>
+        <string id="ButterEquip013Hint" text="Se attivo, si equipaggiano solo armi della stessa classe (es.: mazze a una mano solo con mazze a una mano)"/>
+        <string id="ButterEquip014" text="Mantieni tipo di cavalcatura"/>
+        <string id="ButterEquip014Hint" text="Se attivo, si equipaggiano solo cavalcature dello stesso tipo (es.: cavallo solo con cavallo, cammello con cammello)"/>
+        <string id="ButterEquip015" text="Mantieni armi forgiate"/>
+        <string id="ButterEquip016" text="Mantieni cultura"/>
+        <string id="ButterEquip016Hint" text="Se attivo, si equipaggia solo equipaggiamento della stessa cultura dell'eroe (es.: armatura khuzait solo per eroi di cultura khuzait)"/>
+        <string id="ButterEquip017" text="Evidenzia oggetti migliori"/>
+        <string id="ButterEquip018" text="Evidenzia dal bottino"/>
+        <string id="ButterEquip019" text="Evidenzia dalla scorta"/>
+        <string id="ButterEquip020" text="Evidenzia dall'inventario"/>
+        <string id="ButterEquip021" text="Evidenzia dagli scarti"/>
+        <string id="ButterEquip022" text="Evidenzia dallo scambio"/>
+        <string id="ButterEquipMSG001" text="Nulla da equipaggiare"/>
+        <string id="ButterEquipMSG002" text="{HERO} ha sostituito {ITEM} con {BESTITEM}"/>
+        <string id="ButterEquipMSG003" text="{HERO} equipaggia {BESTITEM}"/>
+        <string id="ButterEquipVM001" text="Equipaggia"/>
+        <string id="ButterEquipVM002" text="Gruppo"/>
+    </strings>
+</base>
