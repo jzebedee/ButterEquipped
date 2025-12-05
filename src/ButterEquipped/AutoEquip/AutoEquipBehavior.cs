@@ -106,7 +106,7 @@ public sealed class AutoEquipBehavior : CampaignBehaviorBase, IEquipmentSlotLock
     {
         const string inventoryAutoEquipPrefab = "InventoryAutoEquip";
 
-        var gauntletLayer = new GauntletLayer(localOrder: 109);
+        var gauntletLayer = new GauntletLayer("ButterEquipped", localOrder: 109);
         gauntletLayer.LoadMovie(inventoryAutoEquipPrefab, eqUpVm);
         gauntletLayer.InputRestrictions.SetInputRestrictions();
         return gauntletLayer;
