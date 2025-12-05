@@ -73,9 +73,6 @@ public class AutoEquipLogic(
 
         public static readonly Action<SPInventoryVM>? RefreshInformationValues
             = AccessTools2.GetDelegate<Action<SPInventoryVM>>(typeof(SPInventoryVM), "RefreshInformationValues");
-
-        public static readonly HarmonyLib.AccessTools.FieldRef<SPInventoryVM, EquipmentModes>? GetEquipmentMode
-            = AccessTools2.FieldRefAccess<SPInventoryVM, EquipmentModes>("_equipmentMode");
     }
 
     private readonly Action _updateRightCharacter = () => PrivateMethods.UpdateRightCharacter?.Invoke(spInventoryVm);
@@ -83,8 +80,6 @@ public class AutoEquipLogic(
     private readonly Action _executeRemoveZeroCounts = () => PrivateMethods.ExecuteRemoveZeroCounts?.Invoke(spInventoryVm);
 
     private readonly Action _refreshInformationValues = () => PrivateMethods.RefreshInformationValues?.Invoke(spInventoryVm);
-
-    private readonly Func<EquipmentModes?> _getEquipmentMode = () => PrivateMethods.GetEquipmentMode?.Invoke(spInventoryVm);
 
     public bool Equip(Hero hero, EquipmentModes mode)
     {
