@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <base>
-    <tags>
-        <tag language="日本語"/>
-    </tags>
-    <strings>
-        <string id="ButterEquip001" text="装備対象"/>
-        <string id="ButterEquip002" text="装備元"/>
-        <string id="ButterEquip003" text="アイテムを保持"/>
-        <string id="ButterEquip004" text="自動装備"/>
-        <string id="ButterEquip005" text="プレイヤー英雄を装備"/>
-        <string id="ButterEquip006" text="仲間を装備"/>
-        <string id="ButterEquip_EquipBattleEquipment" text="戦闘装備を装備"/>
-        <string id="ButterEquip_EquipCivilianEquipment" text="民間装備を装備"/>
-        <string id="ButterEquip_EquipStealthEquipment" text="潜入装備を装備"/>
-        <string id="ButterEquip008" text="戦利品から装備"/>
-        <string id="ButterEquip009" text="隠し倉庫から装備"/>
-        <string id="ButterEquip010" text="所持品から装備"/>
-        <string id="ButterEquip011" text="破棄品から装備"/>
-        <string id="ButterEquip012" text="取引品から装備"/>
-        <string id="ButterEquip013" text="武器クラスを維持"/>
-        <string id="ButterEquip013Hint" text="有効時は同じクラスの武器のみ装備（例: 片手メイスは片手メイスにのみ更新）"/>
-        <string id="ButterEquip014" text="騎乗タイプを維持"/>
-        <string id="ButterEquip014Hint" text="有効時は同タイプの騎乗のみ装備（例: 馬は馬のみ、ラクダはラクダのみ）"/>
-        <string id="ButterEquip015" text="自作武器を保持"/>
-        <string id="ButterEquip016" text="文化を維持"/>
-        <string id="ButterEquip016Hint" text="有効時は英雄と同文化の装備のみ装備（例: クーザイト文化の英雄にはクーザイト防具のみ）"/>
-        <string id="ButterEquip017" text="より良い装備をハイライト"/>
-        <string id="ButterEquip018" text="戦利品をハイライト"/>
-        <string id="ButterEquip019" text="隠し倉庫をハイライト"/>
-        <string id="ButterEquip020" text="所持品をハイライト"/>
-        <string id="ButterEquip021" text="破棄品をハイライト"/>
-        <string id="ButterEquip022" text="取引品をハイライト"/>
-        <string id="ButterEquipMSG001" text="装備するものがありません"/>
-        <string id="ButterEquipMSG002" text="{HERO} は {ITEM} を {BESTITEM} に替えた"/>
-        <string id="ButterEquipMSG003" text="{HERO} は {BESTITEM} を装備した"/>
-        <string id="ButterEquipVM001" text="装備"/>
-        <string id="ButterEquipVM002" text="一行"/>
-    </strings>
+ <tags>
+  <tag language="日本語"/>
+ </tags>
+ <strings>
+  <string id="ButterEquip001" text="装備対象"/>
+  <string id="ButterEquip002" text="装備元"/>
+  <string id="ButterEquip003" text="アイテムを保持"/>
+  <string id="ButterEquip004" text="自動装備"/>
+  <string id="ButterEquip005" text="プレイヤー英雄を装備"/>
+  <string id="ButterEquip006" text="仲間を装備"/>
+  <string id="ButterEquip_EquipBattleEquipment" text="戦闘装備を装備"/>
+  <string id="ButterEquip_EquipCivilianEquipment" text="民間装備を装備"/>
+  <string id="ButterEquip_EquipStealthEquipment" text="潜入装備を装備"/>
+  <string id="ButterEquip008" text="戦利品から装備"/>
+  <string id="ButterEquip009" text="隠し倉庫から装備"/>
+  <string id="ButterEquip010" text="所持品から装備"/>
+  <string id="ButterEquip011" text="破棄品から装備"/>
+  <string id="ButterEquip012" text="取引品から装備"/>
+  <string id="ButterEquip013" text="武器クラスを維持"/>
+  <string id="ButterEquip013Hint" text="有効時は同じクラスの武器のみ装備（例: 片手メイスは片手メイスにのみ更新）"/>
+  <string id="ButterEquip014" text="騎乗タイプを維持"/>
+  <string id="ButterEquip014Hint" text="有効時は同タイプの騎乗のみ装備（例: 馬は馬のみ、ラクダはラクダのみ）"/>
+  <string id="ButterEquip015" text="自作武器を保持"/>
+  <string id="ButterEquip016" text="文化を維持"/>
+  <string id="ButterEquip016Hint" text="有効時は英雄と同文化の装備のみ装備（例: クーザイト文化の英雄にはクーザイト防具のみ）"/>
+  <string id="ButterEquip017" text="より良い装備をハイライト"/>
+  <string id="ButterEquip018" text="戦利品をハイライト"/>
+  <string id="ButterEquip019" text="隠し倉庫をハイライト"/>
+  <string id="ButterEquip020" text="所持品をハイライト"/>
+  <string id="ButterEquip021" text="破棄品をハイライト"/>
+  <string id="ButterEquip022" text="取引品をハイライト"/>
+  <string id="ButterEquipMSG001" text="装備するものがありません"/>
+  <string id="ButterEquipMSG002" text="{HERO} は {ITEM} を {BESTITEM} に替えた"/>
+  <string id="ButterEquipMSG003" text="{HERO} は {BESTITEM} を装備した"/>
+  <string id="ButterEquipVM001" text="装備"/>
+  <string id="ButterEquipVM002" text="一行"/>
+ </strings>
 </base>

@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <base>
-    <tags>
-        <tag language="Polski"/>
-    </tags>
-    <strings>
-        <string id="ButterEquip001" text="Cele wyposażenia"/>
-        <string id="ButterEquip002" text="Wyposaż z"/>
-        <string id="ButterEquip003" text="Zachowaj przedmioty"/>
-        <string id="ButterEquip004" text="Auto-wyposaż"/>
-        <string id="ButterEquip005" text="Wyposaż bohatera gracza"/>
-        <string id="ButterEquip006" text="Wyposaż towarzyszy"/>
-        <string id="ButterEquip_EquipBattleEquipment" text="Wyposaż w ekwipunek bojowy"/>
-        <string id="ButterEquip_EquipCivilianEquipment" text="Wyposaż w ekwipunek cywilny"/>
-        <string id="ButterEquip_EquipStealthEquipment" text="Wyposaż w ekwipunek skryty"/>
-        <string id="ButterEquip008" text="Wyposaż z łupów"/>
-        <string id="ButterEquip009" text="Wyposaż ze skrytki"/>
-        <string id="ButterEquip010" text="Wyposaż z ekwipunku"/>
-        <string id="ButterEquip011" text="Wyposaż z odrzuconych"/>
-        <string id="ButterEquip012" text="Wyposaż z handlu"/>
-        <string id="ButterEquip013" text="Zachowaj klasę broni"/>
-        <string id="ButterEquip013Hint" text="Po włączeniu zakładane są tylko bronie tej samej klasy (np. buzdygany jednoręczne tylko na jednoręczne)"/>
-        <string id="ButterEquip014" text="Zachowaj typ wierzchowca"/>
-        <string id="ButterEquip014Hint" text="Po włączeniu zakładane są tylko wierzchowce tego samego typu (np. koń tylko na konia, wielbłąd na wielbłąda)"/>
-        <string id="ButterEquip015" text="Zachowaj wytworzone bronie"/>
-        <string id="ButterEquip016" text="Zachowaj kulturę"/>
-        <string id="ButterEquip016Hint" text="Po włączeniu zakładany jest tylko ekwipunek z kultury bohatera (np. pancerz Khuzait tylko dla bohaterów Khuzait)"/>
-        <string id="ButterEquip017" text="Wyróżnij lepsze przedmioty"/>
-        <string id="ButterEquip018" text="Wyróżnij z łupów"/>
-        <string id="ButterEquip019" text="Wyróżnij ze skrytki"/>
-        <string id="ButterEquip020" text="Wyróżnij z ekwipunku"/>
-        <string id="ButterEquip021" text="Wyróżnij z odrzuconych"/>
-        <string id="ButterEquip022" text="Wyróżnij z handlu"/>
-        <string id="ButterEquipMSG001" text="Brak przedmiotów do wyposażenia"/>
-        <string id="ButterEquipMSG002" text="{HERO} zamienił(a) {ITEM} na {BESTITEM}"/>
-        <string id="ButterEquipMSG003" text="{HERO} zakłada {BESTITEM}"/>
-        <string id="ButterEquipVM001" text="Wyposaż"/>
-        <string id="ButterEquipVM002" text="Drużyna"/>
-    </strings>
+ <tags>
+  <tag language="Polski"/>
+ </tags>
+ <strings>
+  <string id="ButterEquip001" text="Cele wyposażenia"/>
+  <string id="ButterEquip002" text="Wyposaż z"/>
+  <string id="ButterEquip003" text="Zachowaj przedmioty"/>
+  <string id="ButterEquip004" text="Auto-wyposaż"/>
+  <string id="ButterEquip005" text="Wyposaż bohatera gracza"/>
+  <string id="ButterEquip006" text="Wyposaż towarzyszy"/>
+  <string id="ButterEquip_EquipBattleEquipment" text="Wyposaż w ekwipunek bojowy"/>
+  <string id="ButterEquip_EquipCivilianEquipment" text="Wyposaż w ekwipunek cywilny"/>
+  <string id="ButterEquip_EquipStealthEquipment" text="Wyposaż w ekwipunek skryty"/>
+  <string id="ButterEquip008" text="Wyposaż z łupów"/>
+  <string id="ButterEquip009" text="Wyposaż ze skrytki"/>
+  <string id="ButterEquip010" text="Wyposaż z ekwipunku"/>
+  <string id="ButterEquip011" text="Wyposaż z odrzuconych"/>
+  <string id="ButterEquip012" text="Wyposaż z handlu"/>
+  <string id="ButterEquip013" text="Zachowaj klasę broni"/>
+  <string id="ButterEquip013Hint" text="Po włączeniu zakładane są tylko bronie tej samej klasy (np. buzdygany jednoręczne tylko na jednoręczne)"/>
+  <string id="ButterEquip014" text="Zachowaj typ wierzchowca"/>
+  <string id="ButterEquip014Hint" text="Po włączeniu zakładane są tylko wierzchowce tego samego typu (np. koń tylko na konia, wielbłąd na wielbłąda)"/>
+  <string id="ButterEquip015" text="Zachowaj wytworzone bronie"/>
+  <string id="ButterEquip016" text="Zachowaj kulturę"/>
+  <string id="ButterEquip016Hint" text="Po włączeniu zakładany jest tylko ekwipunek z kultury bohatera (np. pancerz Khuzait tylko dla bohaterów Khuzait)"/>
+  <string id="ButterEquip017" text="Wyróżnij lepsze przedmioty"/>
+  <string id="ButterEquip018" text="Wyróżnij z łupów"/>
+  <string id="ButterEquip019" text="Wyróżnij ze skrytki"/>
+  <string id="ButterEquip020" text="Wyróżnij z ekwipunku"/>
+  <string id="ButterEquip021" text="Wyróżnij z odrzuconych"/>
+  <string id="ButterEquip022" text="Wyróżnij z handlu"/>
+  <string id="ButterEquipMSG001" text="Brak przedmiotów do wyposażenia"/>
+  <string id="ButterEquipMSG002" text="{HERO} zamienił(a) {ITEM} na {BESTITEM}"/>
+  <string id="ButterEquipMSG003" text="{HERO} zakłada {BESTITEM}"/>
+  <string id="ButterEquipVM001" text="Wyposaż"/>
+  <string id="ButterEquipVM002" text="Drużyna"/>
+ </strings>
 </base>

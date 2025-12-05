@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <base>
-	<tags>
-		<tag language="Русский"/>
-	</tags>
-	<strings>
-		<string id="ButterEquip001" text="Цели экипировки"/>
-		<string id="ButterEquip002" text="Экипировать из"/>
-		<string id="ButterEquip003" text="Сохранять предметы"/>
-		<string id="ButterEquip004" text="Автоэкипировка"/>
-		<string id="ButterEquip005" text="Экипировать героя игрока"/>
-		<string id="ButterEquip006" text="Экипировать спутников"/>
-		<string id="ButterEquip_EquipBattleEquipment" text="Экипировать боевое снаряжение"/>
-		<string id="ButterEquip_EquipCivilianEquipment" text="Экипировать гражданское снаряжение"/>
-		<string id="ButterEquip_EquipStealthEquipment" text="Экипировать скрытное снаряжение"/>
-		<string id="ButterEquip008" text="Экипировать из трофеев"/>
-		<string id="ButterEquip009" text="Экипировать из тайника"/>
-		<string id="ButterEquip010" text="Экипировать из инвентаря"/>
-		<string id="ButterEquip011" text="Экипировать из сброшенного"/>
-		<string id="ButterEquip012" text="Экипировать из торговли"/>
-		<string id="ButterEquip013" text="Сохранять класс оружия"/>
-		<string id="ButterEquip013Hint" text="При включении экипируются только оружия того же класса (напр., одноручные булавы меняются только на одноручные булавы)"/>
-		<string id="ButterEquip014" text="Сохранять тип ездового"/>
-		<string id="ButterEquip014Hint" text="При включении экипируются ездовые только того же типа (напр., конь только на коня, верблюд только на верблюда)"/>
-		<string id="ButterEquip015" text="Сохранять созданное оружие"/>
-		<string id="ButterEquip016" text="Сохранять культуру"/>
-		<string id="ButterEquip016Hint" text="При включении экипируется только снаряжение той же культуры, что у героя (напр., хузайтская броня только героям культуры Хузайт)"/>
-		<string id="ButterEquip017" text="Подсветить лучшие предметы"/>
-		<string id="ButterEquip018" text="Подсветить из трофеев"/>
-		<string id="ButterEquip019" text="Подсветить из тайника"/>
-		<string id="ButterEquip020" text="Подсветить из инвентаря"/>
-		<string id="ButterEquip021" text="Подсветить из сброшенного"/>
-		<string id="ButterEquip022" text="Подсветить из торговли"/>
-		<string id="ButterEquipMSG001" text="Нечего экипировать"/>
-		<string id="ButterEquipMSG002" text="{HERO} заменил(а) {ITEM} на {BESTITEM}"/>
-		<string id="ButterEquipMSG003" text="{HERO} экипирует {BESTITEM}"/>
-		<string id="ButterEquipVM001" text="Экипировать"/>
-		<string id="ButterEquipVM002" text="Отряд"/>
-	</strings>
+ <tags>
+  <tag language="Русский"/>
+ </tags>
+ <strings>
+  <string id="ButterEquip001" text="Цели экипировки"/>
+  <string id="ButterEquip002" text="Экипировать из"/>
+  <string id="ButterEquip003" text="Сохранять предметы"/>
+  <string id="ButterEquip004" text="Автоэкипировка"/>
+  <string id="ButterEquip005" text="Экипировать героя игрока"/>
+  <string id="ButterEquip006" text="Экипировать спутников"/>
+  <string id="ButterEquip_EquipBattleEquipment" text="Экипировать боевое снаряжение"/>
+  <string id="ButterEquip_EquipCivilianEquipment" text="Экипировать гражданское снаряжение"/>
+  <string id="ButterEquip_EquipStealthEquipment" text="Экипировать скрытное снаряжение"/>
+  <string id="ButterEquip008" text="Экипировать из трофеев"/>
+  <string id="ButterEquip009" text="Экипировать из тайника"/>
+  <string id="ButterEquip010" text="Экипировать из инвентаря"/>
+  <string id="ButterEquip011" text="Экипировать из сброшенного"/>
+  <string id="ButterEquip012" text="Экипировать из торговли"/>
+  <string id="ButterEquip013" text="Сохранять класс оружия"/>
+  <string id="ButterEquip013Hint" text="При включении экипируются только оружия того же класса (напр., одноручные булавы меняются только на одноручные булавы)"/>
+  <string id="ButterEquip014" text="Сохранять тип ездового"/>
+  <string id="ButterEquip014Hint" text="При включении экипируются ездовые только того же типа (напр., конь только на коня, верблюд только на верблюда)"/>
+  <string id="ButterEquip015" text="Сохранять созданное оружие"/>
+  <string id="ButterEquip016" text="Сохранять культуру"/>
+  <string id="ButterEquip016Hint" text="При включении экипируется только снаряжение той же культуры, что у героя (напр., хузайтская броня только героям культуры Хузайт)"/>
+  <string id="ButterEquip017" text="Подсветить лучшие предметы"/>
+  <string id="ButterEquip018" text="Подсветить из трофеев"/>
+  <string id="ButterEquip019" text="Подсветить из тайника"/>
+  <string id="ButterEquip020" text="Подсветить из инвентаря"/>
+  <string id="ButterEquip021" text="Подсветить из сброшенного"/>
+  <string id="ButterEquip022" text="Подсветить из торговли"/>
+  <string id="ButterEquipMSG001" text="Нечего экипировать"/>
+  <string id="ButterEquipMSG002" text="{HERO} заменил(а) {ITEM} на {BESTITEM}"/>
+  <string id="ButterEquipMSG003" text="{HERO} экипирует {BESTITEM}"/>
+  <string id="ButterEquipVM001" text="Экипировать"/>
+  <string id="ButterEquipVM002" text="Отряд"/>
+ </strings>
 </base>

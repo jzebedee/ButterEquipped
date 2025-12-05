@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData id="繁體中文">
-    <LanguageFile xml_path="CNt/strings_CNt.xml" />
+  <LanguageFile xml_path="CNt/strings_CNt.xml" />
 </LanguageData>
