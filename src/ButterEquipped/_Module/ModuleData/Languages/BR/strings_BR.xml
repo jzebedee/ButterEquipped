@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <base>
  <tags>
-  <tag language="Português (Brasil)"/>
+  <tag language="Português (BR)"/>
  </tags>
  <strings>
   <string id="ButterEquip001" text="Alvos de Equipamento"/>
