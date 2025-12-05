@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+ <tags>
+  <tag language="Deutsch"/>
+ </tags>
+ <strings>
+  <string id="ButterEquip001" text="Ausrüstungsziele"/>
+  <string id="ButterEquip002" text="Ausrüsten aus"/>
+  <string id="ButterEquip003" text="Gegenstände behalten"/>
+  <string id="ButterEquip004" text="Auto-Ausrüstung"/>
+  <string id="ButterEquip005" text="Spielerheld ausrüsten"/>
+  <string id="ButterEquip006" text="Gefährten ausrüsten"/>
+  <string id="ButterEquip_EquipBattleEquipment" text="Kampfausrüstung ausrüsten"/>
+  <string id="ButterEquip_EquipCivilianEquipment" text="Zivilausrüstung ausrüsten"/>
+  <string id="ButterEquip_EquipStealthEquipment" text="Schleichausrüstung ausrüsten"/>
+  <string id="ButterEquip008" text="Aus Beute ausrüsten"/>
+  <string id="ButterEquip009" text="Aus Lager ausrüsten"/>
+  <string id="ButterEquip010" text="Aus Inventar ausrüsten"/>
+  <string id="ButterEquip011" text="Aus abgelegtem ausrüsten"/>
+  <string id="ButterEquip012" text="Aus Handel ausrüsten"/>
+  <string id="ButterEquip013" text="Waffenklasse behalten"/>
+  <string id="ButterEquip013Hint" text="Wenn aktiviert, werden nur Waffen derselben Klasse ausgerüstet (z.B. Streitkolben (Einhand) nur durch Streitkolben (Einhand))"/>
+  <string id="ButterEquip014" text="Reittiertyp behalten"/>
+  <string id="ButterEquip014Hint" text="Wenn aktiviert, werden nur Reittiere desselben Typs ausgerüstet (z.B. Pferd nur gegen Pferd, Kamel gegen Kamel)"/>
+  <string id="ButterEquip015" text="Geschmiedete Waffen behalten"/>
+  <string id="ButterEquip016" text="Kultur beibehalten"/>
+  <string id="ButterEquip016Hint" text="Wenn aktiviert, wird nur Ausrüstung derselben Kultur wie der Held ausgerüstet (z.B. nur Khuzait-Rüstung für Helden der Khuzait-Kultur)"/>
+  <string id="ButterEquip017" text="Bessere Gegenstände hervorheben"/>
+  <string id="ButterEquip018" text="Beute hervorheben"/>
+  <string id="ButterEquip019" text="Lager hervorheben"/>
+  <string id="ButterEquip020" text="Inventar hervorheben"/>
+  <string id="ButterEquip021" text="Abgelegtes hervorheben"/>
+  <string id="ButterEquip022" text="Handel hervorheben"/>
+  <string id="ButterEquipMSG001" text="Nichts auszurüsten"/>
+  <string id="ButterEquipMSG002" text="{HERO} ersetzt {ITEM} durch {BESTITEM}"/>
+  <string id="ButterEquipMSG003" text="{HERO} rüstet {BESTITEM} aus"/>
+  <string id="ButterEquipVM001" text="Ausrüsten"/>
+  <string id="ButterEquipVM002" text="Gruppe"/>
+ </strings>
+</base>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+ <tags>
+  <tag language="Français"/>
+ </tags>
+ <strings>
+  <string id="ButterEquip001" text="Cibles d'équipement"/>
+  <string id="ButterEquip002" text="Équiper depuis"/>
+  <string id="ButterEquip003" text="Garder les objets"/>
+  <string id="ButterEquip004" text="Équipement auto"/>
+  <string id="ButterEquip005" text="Équiper le héros joueur"/>
+  <string id="ButterEquip006" text="Équiper les compagnons"/>
+  <string id="ButterEquip_EquipBattleEquipment" text="Équiper l'équipement de bataille"/>
+  <string id="ButterEquip_EquipCivilianEquipment" text="Équiper l'équipement civil"/>
+  <string id="ButterEquip_EquipStealthEquipment" text="Équiper l'équipement furtif"/>
+  <string id="ButterEquip008" text="Équiper depuis le butin"/>
+  <string id="ButterEquip009" text="Équiper depuis la réserve"/>
+  <string id="ButterEquip010" text="Équiper depuis l'inventaire"/>
+  <string id="ButterEquip011" text="Équiper depuis le rebut"/>
+  <string id="ButterEquip012" text="Équiper depuis l'échange"/>
+  <string id="ButterEquip013" text="Garder la classe d'arme"/>
+  <string id="ButterEquip013Hint" text="Activé, seules les armes de même classe seront équipées (ex. : masses à une main remplacées par des masses à une main)"/>
+  <string id="ButterEquip014" text="Garder le type de monture"/>
+  <string id="ButterEquip014Hint" text="Activé, seules des montures du même type seront équipées (ex. : un cheval équipé reste un cheval, un chameau reste un chameau)"/>
+  <string id="ButterEquip015" text="Garder les armes forgées"/>
+  <string id="ButterEquip016" text="Garder la culture"/>
+  <string id="ButterEquip016Hint" text="Activé, seul l'équipement de la même culture que le héros sera équipé (ex. : armure khuzait seulement pour les héros khuzaits)"/>
+  <string id="ButterEquip017" text="Surligner les meilleurs objets"/>
+  <string id="ButterEquip018" text="Surligner dans le butin"/>
+  <string id="ButterEquip019" text="Surligner dans la réserve"/>
+  <string id="ButterEquip020" text="Surligner dans l'inventaire"/>
+  <string id="ButterEquip021" text="Surligner dans le rebut"/>
+  <string id="ButterEquip022" text="Surligner dans l'échange"/>
+  <string id="ButterEquipMSG001" text="Rien à équiper"/>
+  <string id="ButterEquipMSG002" text="{HERO} a remplacé {ITEM} par {BESTITEM}"/>
+  <string id="ButterEquipMSG003" text="{HERO} équipe {BESTITEM}"/>
+  <string id="ButterEquipVM001" text="Équiper"/>
+  <string id="ButterEquipVM002" text="Groupe"/>
+ </strings>
+</base>

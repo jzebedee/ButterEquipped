@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+ <tags>
+  <tag language="Türkçe"/>
+ </tags>
+ <strings>
+  <string id="ButterEquip001" text="Donatma hedefleri"/>
+  <string id="ButterEquip002" text="Donat kaynağı"/>
+  <string id="ButterEquip003" text="Eşyaları koru"/>
+  <string id="ButterEquip004" text="Otomatik donat"/>
+  <string id="ButterEquip005" text="Oyuncu kahramanını donat"/>
+  <string id="ButterEquip006" text="Yoldaşları donat"/>
+  <string id="ButterEquip_EquipBattleEquipment" text="Savaş ekipmanını donat"/>
+  <string id="ButterEquip_EquipCivilianEquipment" text="Sivil ekipmanını donat"/>
+  <string id="ButterEquip_EquipStealthEquipment" text="Gizlilik ekipmanını donat"/>
+  <string id="ButterEquip008" text="Yağmadan donat"/>
+  <string id="ButterEquip009" text="Depodan donat"/>
+  <string id="ButterEquip010" text="Envanterden donat"/>
+  <string id="ButterEquip011" text="Atılandan donat"/>
+  <string id="ButterEquip012" text="Ticaret ürününden donat"/>
+  <string id="ButterEquip013" text="Silah sınıfını koru"/>
+  <string id="ButterEquip013Hint" text="Açıkken sadece aynı sınıftaki silahlar donatılır (ör.: tek elli gürz sadece tek elli gürzle değiştirilir)"/>
+  <string id="ButterEquip014" text="Binek türünü koru"/>
+  <string id="ButterEquip014Hint" text="Açıkken sadece aynı tür binek donatılır (ör.: at sadece atla, deve sadece deveyle değiştirilir)"/>
+  <string id="ButterEquip015" text="Üretilen silahları koru"/>
+  <string id="ButterEquip016" text="Kültürü koru"/>
+  <string id="ButterEquip016Hint" text="Açıkken yalnızca kahramanla aynı kültüre ait ekipman donatılır (ör.: Huzayt kültürlü kahramanlara sadece Huzayt zırhı)"/>
+  <string id="ButterEquip017" text="Daha iyi eşyaları vurgula"/>
+  <string id="ButterEquip018" text="Yağmadan vurgula"/>
+  <string id="ButterEquip019" text="Depodan vurgula"/>
+  <string id="ButterEquip020" text="Envanterden vurgula"/>
+  <string id="ButterEquip021" text="Atılandan vurgula"/>
+  <string id="ButterEquip022" text="Ticaret ürününden vurgula"/>
+  <string id="ButterEquipMSG001" text="Donatılacak bir şey yok"/>
+  <string id="ButterEquipMSG002" text="{HERO}, {ITEM} yerine {BESTITEM} taktı"/>
+  <string id="ButterEquipMSG003" text="{HERO}, {BESTITEM} takıyor"/>
+  <string id="ButterEquipVM001" text="Donat"/>
+  <string id="ButterEquipVM002" text="Grup"/>
+ </strings>
+</base>

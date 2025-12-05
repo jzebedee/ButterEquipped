@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+ <tags>
+  <tag language="简体中文"/>
+ </tags>
+ <strings>
+  <string id="ButterEquip001" text="装备目标"/>
+  <string id="ButterEquip002" text="装备来源"/>
+  <string id="ButterEquip003" text="保留物品"/>
+  <string id="ButterEquip004" text="自动装备"/>
+  <string id="ButterEquip005" text="装备玩家主角"/>
+  <string id="ButterEquip006" text="装备同伴"/>
+  <string id="ButterEquip_EquipBattleEquipment" text="装备战斗装备"/>
+  <string id="ButterEquip_EquipCivilianEquipment" text="装备民用装备"/>
+  <string id="ButterEquip_EquipStealthEquipment" text="装备潜行装备"/>
+  <string id="ButterEquip008" text="从战利品装备"/>
+  <string id="ButterEquip009" text="从储藏装备"/>
+  <string id="ButterEquip010" text="从物品栏装备"/>
+  <string id="ButterEquip011" text="从丢弃物装备"/>
+  <string id="ButterEquip012" text="从交易装备"/>
+  <string id="ButterEquip013" text="保持武器类别"/>
+  <string id="ButterEquip013Hint" text="启用后，只会装备同类别的武器（例如单手锤只会用单手锤替换）"/>
+  <string id="ButterEquip014" text="保持坐骑类型"/>
+  <string id="ButterEquip014Hint" text="启用后，只会装备同类型坐骑（例如已装备马只会换马，骆驼只会换骆驼）"/>
+  <string id="ButterEquip015" text="保留自制武器"/>
+  <string id="ButterEquip016" text="保持文化"/>
+  <string id="ButterEquip016Hint" text="启用后，只会装备与英雄同文化的装备（例如库赛特文化英雄只装备库赛特护甲）"/>
+  <string id="ButterEquip017" text="高亮更好物品"/>
+  <string id="ButterEquip018" text="高亮战利品"/>
+  <string id="ButterEquip019" text="高亮储藏"/>
+  <string id="ButterEquip020" text="高亮物品栏"/>
+  <string id="ButterEquip021" text="高亮丢弃物"/>
+  <string id="ButterEquip022" text="高亮交易物"/>
+  <string id="ButterEquipMSG001" text="无可装备物品"/>
+  <string id="ButterEquipMSG002" text="{HERO}用{BESTITEM}替换了{ITEM}"/>
+  <string id="ButterEquipMSG003" text="{HERO}装备了{BESTITEM}"/>
+  <string id="ButterEquipVM001" text="装备"/>
+  <string id="ButterEquipVM002" text="队伍"/>
+ </strings>
+</base>

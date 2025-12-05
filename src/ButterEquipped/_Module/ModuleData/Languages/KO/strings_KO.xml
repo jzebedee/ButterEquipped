@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+ <tags>
+  <tag language="한국어"/>
+ </tags>
+ <strings>
+  <string id="ButterEquip001" text="장비 대상"/>
+  <string id="ButterEquip002" text="장착 원본"/>
+  <string id="ButterEquip003" text="아이템 유지"/>
+  <string id="ButterEquip004" text="자동 장착"/>
+  <string id="ButterEquip005" text="플레이어 영웅 장착"/>
+  <string id="ButterEquip006" text="동료 장착"/>
+  <string id="ButterEquip_EquipBattleEquipment" text="전투 장비 장착"/>
+  <string id="ButterEquip_EquipCivilianEquipment" text="민간 장비 장착"/>
+  <string id="ButterEquip_EquipStealthEquipment" text="잠입 장비 장착"/>
+  <string id="ButterEquip008" text="전리품에서 장착"/>
+  <string id="ButterEquip009" text="보관품에서 장착"/>
+  <string id="ButterEquip010" text="인벤토리에서 장착"/>
+  <string id="ButterEquip011" text="버린 물건에서 장착"/>
+  <string id="ButterEquip012" text="거래품에서 장착"/>
+  <string id="ButterEquip013" text="무기 종류 유지"/>
+  <string id="ButterEquip013Hint" text="켜면 같은 종류의 무기만 장착됨(예: 한손 철퇴는 한손 철퇴로만 교체)"/>
+  <string id="ButterEquip014" text="탈것 유형 유지"/>
+  <string id="ButterEquip014Hint" text="켜면 같은 유형의 탈것만 장착됨(예: 말은 말로만, 낙타는 낙타로만 교체)"/>
+  <string id="ButterEquip015" text="제작 무기 유지"/>
+  <string id="ButterEquip016" text="문화 유지"/>
+  <string id="ButterEquip016Hint" text="켜면 영웅과 같은 문화의 장비만 장착됨(예: 쿠자이트 문화 영웅은 쿠자이트 방어구만)"/>
+  <string id="ButterEquip017" text="더 나은 아이템 강조"/>
+  <string id="ButterEquip018" text="전리품 강조"/>
+  <string id="ButterEquip019" text="보관품 강조"/>
+  <string id="ButterEquip020" text="인벤토리 강조"/>
+  <string id="ButterEquip021" text="버린 물건 강조"/>
+  <string id="ButterEquip022" text="거래품 강조"/>
+  <string id="ButterEquipMSG001" text="장착할 것이 없습니다"/>
+  <string id="ButterEquipMSG002" text="{HERO}가 {ITEM}을 {BESTITEM}(으)로 교체함"/>
+  <string id="ButterEquipMSG003" text="{HERO}가 {BESTITEM}을(를) 장착함"/>
+  <string id="ButterEquipVM001" text="장착"/>
+  <string id="ButterEquipVM002" text="일행"/>
+ </strings>
+</base>
