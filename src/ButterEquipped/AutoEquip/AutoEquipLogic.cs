@@ -62,16 +62,16 @@ public class AutoEquipLogic
 
     private static class PrivateMethods
     {
-        public static Action<SPInventoryVM>? UpdateRightCharacter
+        public static readonly Action<SPInventoryVM>? UpdateRightCharacter
             = AccessTools2.GetDelegate<Action<SPInventoryVM>>(typeof(SPInventoryVM), "UpdateRightCharacter");
 
-        public static Action<SPInventoryVM>? ExecuteRemoveZeroCounts
+        public static readonly Action<SPInventoryVM>? ExecuteRemoveZeroCounts
             = AccessTools2.GetDelegate<Action<SPInventoryVM>>(typeof(SPInventoryVM), "ExecuteRemoveZeroCounts");
 
-        public static Action<SPInventoryVM>? RefreshInformationValues
+        public static readonly Action<SPInventoryVM>? RefreshInformationValues
             = AccessTools2.GetDelegate<Action<SPInventoryVM>>(typeof(SPInventoryVM), "RefreshInformationValues");
 
-        public static HarmonyLib.AccessTools.FieldRef<SPInventoryVM, EquipmentModes>? GetEquipmentMode
+        public static readonly HarmonyLib.AccessTools.FieldRef<SPInventoryVM, EquipmentModes>? GetEquipmentMode
             = AccessTools2.FieldRefAccess<SPInventoryVM, EquipmentModes>("_equipmentMode");
     }
 
