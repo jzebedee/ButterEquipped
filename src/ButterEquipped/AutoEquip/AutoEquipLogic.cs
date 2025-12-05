@@ -85,11 +85,11 @@ public class AutoEquipLogic
 
     private readonly IEquipmentSlotLockSource _equipmentSlotLocks;
 
-    private AutoEquipOptions options;
+    private readonly AutoEquipOptions _options;
 
     public AutoEquipLogic(AutoEquipOptions options, SPInventoryVM spInventoryVm, IEquipmentSlotLockSource equipmentSlotLocks)
     {
-        this.options = options;
+        _options = options;
         _equipmentSlotLocks = equipmentSlotLocks;
         _updateRightCharacter = () => PrivateMethods.UpdateRightCharacter?.Invoke(spInventoryVm);
         _executeRemoveZeroCounts = () => PrivateMethods.ExecuteRemoveZeroCounts?.Invoke(spInventoryVm);
@@ -106,7 +106,7 @@ public class AutoEquipLogic
 
         var result = false;
 
-        if (options.EquipFromInventory)
+        if (_options.EquipFromInventory)
         {
             result |= EquipHero(character, InventorySide.PlayerInventory, mode);
         }
@@ -131,7 +131,7 @@ public class AutoEquipLogic
     {
         var result = false;
 
-        if (options.EquipFromInventory)
+        if (_options.EquipFromInventory)
         {
             result |= EquipAllHeroes(InventorySide.PlayerInventory).Select(t => t.result).LastOrDefault(t => t);
         }
@@ -154,10 +154,10 @@ public class AutoEquipLogic
 
     private bool ShouldEquipOtherSide() => Mode switch
     {
-        InventoryMode.Default when options.EquipFromDiscard => true,
-        InventoryMode.Loot when options.EquipFromLoot => true,
-        InventoryMode.Stash when options.EquipFromStash => true,
-        InventoryMode.Trade when options.EquipFromTrade => true,
+        InventoryMode.Default when _options.EquipFromDiscard => true,
+        InventoryMode.Loot when _options.EquipFromLoot => true,
+        InventoryMode.Stash when _options.EquipFromStash => true,
+        InventoryMode.Trade when _options.EquipFromTrade => true,
         _ => false
     };
 
@@ -171,26 +171,26 @@ public class AutoEquipLogic
         foreach ((CharacterObject character, Hero hero) in heroes)
         {
             //IsPlayerCompanion is false for tutorial family
-            if (!hero.IsHumanPlayerCharacter && !options.EquipCompanions)
+            if (!hero.IsHumanPlayerCharacter && !_options.EquipCompanions)
             {
                 continue;
             }
 
-            if (hero.IsHumanPlayerCharacter && !options.EquipHero)
+            if (hero.IsHumanPlayerCharacter && !_options.EquipHero)
             {
                 continue;
             }
 
             bool result = false;
-            if (options.EquipBattle)
+            if (_options.EquipBattle)
             {
                 result |= EquipHero(character, side, mode: EquipmentModes.Battle);
             }
-            if (options.EquipCivilian)
+            if (_options.EquipCivilian)
             {
                 result |= EquipHero(character, side, mode: EquipmentModes.Civilian);
             }
-            if (options.EquipStealth)
+            if (_options.EquipStealth)
             {
                 result |= EquipHero(character, side, mode: EquipmentModes.Stealth);
             }
@@ -310,7 +310,7 @@ public class AutoEquipLogic
         {
             EquipmentIndex.HorseHarness when allEq.Horse.IsEmpty => false,
             EquipmentIndex.HorseHarness => allEq.Horse.Item.HorseComponent.Monster.FamilyType == item.ArmorComponent.FamilyType, //camelizer
-            EquipmentIndex.Horse when options.KeepMountType && allEq is { Horse.IsEmpty: false } => allEq.Horse.Item.HorseComponent.Monster.FamilyType == item.HorseComponent.Monster.FamilyType, //camelizer
+            EquipmentIndex.Horse when _options.KeepMountType && allEq is { Horse.IsEmpty: false } => allEq.Horse.Item.HorseComponent.Monster.FamilyType == item.HorseComponent.Monster.FamilyType, //camelizer
             EquipmentIndex.ExtraWeaponSlot when allEq[EquipmentIndex.ExtraWeaponSlot].IsEmpty => false,
             EquipmentIndex.ExtraWeaponSlot => allEq[EquipmentIndex.ExtraWeaponSlot].Item.BannerComponent.BannerEffect.StringId == item.BannerComponent.BannerEffect?.StringId, //banners
             _ => true
@@ -327,7 +327,7 @@ public class AutoEquipLogic
             var initialDetails = GetWeaponDetails(initialEq.Item.WeaponComponent);
             var weaponDetails = GetWeaponDetails(weapon);
 
-            if (options.KeepWeaponClass)
+            if (_options.KeepWeaponClass)
             {
                 //Keep weapon class will force an exact match of the current:
                 // weapon class (ex: , weapon description
@@ -378,7 +378,7 @@ public class AutoEquipLogic
                 EquipmentIndex.HorseHarness when !allEq[EquipmentIndex.Horse].IsEmpty => ItemTypeEnum.HorseHarness,
                 _ => ItemTypeEnum.Invalid
             },
-            false when options.KeepCrafted && slotEq.Item.IsCraftedByPlayer => ItemTypeEnum.Invalid,
+            false when _options.KeepCrafted && slotEq.Item.IsCraftedByPlayer => ItemTypeEnum.Invalid,
             false => slotEq.Item.ItemType
         };
 
@@ -392,7 +392,7 @@ public class AutoEquipLogic
             HasShield: allEq.HasWeaponOfClass(WeaponClass.LargeShield, WeaponClass.SmallShield),
             UsableAmmoClasses: [.. GetUsableAmmoClasses(allEq)],
             CanUseAllBowsOnHorseback: hero.GetPerkValue(DefaultPerks.Bow.HorseMaster),
-            TargetCulture: options.KeepCulture ? hero.Culture : null);
+            TargetCulture: _options.KeepCulture ? hero.Culture : null);
 
         return InvLogic.GetElementsInRoster(side)
             .Where(item => item switch
