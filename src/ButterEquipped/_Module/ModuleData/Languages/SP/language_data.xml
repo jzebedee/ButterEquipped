@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData id="Español (LA)">
-	<LanguageFile xml_path="SP/strings_SP.xml" />
+  <LanguageFile xml_path="SP/strings_SP.xml" />
 </LanguageData>
