@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base>
+	<tags>
+		<tag language="Русский"/>
+	</tags>
+	<strings>
+		<string id="ButterEquip001" text="Цели экипировки"/>
+		<string id="ButterEquip002" text="Экипировать из"/>
+		<string id="ButterEquip003" text="Сохранить предметы"/>
+		<string id="ButterEquip004" text="Автоэкипировка"/>
+		<string id="ButterEquip005" text="Экипировать героя"/>
+		<string id="ButterEquip006" text="Экипировать спутников"/>
+		<string id="ButterEquip_EquipBattleEquipment" text="Экипировать боевое снаряжение"/>
+		<string id="ButterEquip_EquipCivilianEquipment" text="Экипировать гражданское снаряжение"/>
+		<string id="ButterEquip_EquipStealthEquipment" text="Экипировать скрытное снаряжение"/>
+		<string id="ButterEquip008" text="Экипировать из добычи"/>
+		<string id="ButterEquip009" text="Экипировать из тайника"/>
+		<string id="ButterEquip010" text="Экипировать из инвентаря"/>
+		<string id="ButterEquip011" text="Экипировать из отброшенного"/>
+		<string id="ButterEquip012" text="Экипировать из торговли"/>
+		<string id="ButterEquip013" text="Сохранить класс оружия"/>
+		<string id="ButterEquip013Hint" text="Если включено, экипируются только оружия того же класса (например, одноручные булавы заменяются только одноручными булавами)"/>
+		<string id="ButterEquip014" text="Сохранить тип верхового животного"/>
+		<string id="ButterEquip014Hint" text="Если включено, экипируются только животные того же типа (например, только лошади для лошади или верблюды для верблюда)"/>
+		<string id="ButterEquip015" text="Сохранить кованое оружие"/>
+		<string id="ButterEquip016" text="Сохранить культуру"/>
+		<string id="ButterEquip016Hint" text="Если включено, экипируется только снаряжение той же культуры, что и у героя (например, только хузайтская броня для хузайтских героев)"/>
+		<string id="ButterEquip017" text="Выделять лучшие предметы"/>
+		<string id="ButterEquip018" text="Выделять из добычи"/>
+		<string id="ButterEquip019" text="Выделять из тайника"/>
+		<string id="ButterEquip020" text="Выделять из инвентаря"/>
+		<string id="ButterEquip021" text="Выделять из отброшенного"/>
+		<string id="ButterEquip022" text="Выделять из торговли"/>
+		<string id="ButterEquipMSG001" text="Нечего экипировать"/>
+		<string id="ButterEquipMSG002" text="{HERO} заменил {ITEM} на {BESTITEM}"/>
+		<string id="ButterEquipMSG003" text="{HERO} экипирует {BESTITEM}"/>
+		<string id="ButterEquipVM001" text="Экипировать"/>
+		<string id="ButterEquipVM002" text="Отряд"/>
+	</strings>
+</base>
