@@ -5,14 +5,10 @@ using TaleWorlds.MountAndBlade.GauntletUI.Widgets.Inventory;
 
 namespace ButterEquipped.HighlightBetter;
 
-public class InventoryItemTupleInterceptWidget : InventoryItemTupleWidget
+public class InventoryItemTupleInterceptWidget(UIContext context) : InventoryItemTupleWidget(context)
 {
     private static readonly Action<InventoryItemTupleWidget>? UpdateEquipmentTypeState
         = AccessTools2.GetDelegate<Action<InventoryItemTupleWidget>>(typeof(InventoryItemTupleWidget), nameof(UpdateEquipmentTypeState));
-
-    public InventoryItemTupleInterceptWidget(UIContext context) : base(context)
-    {
-    }
 
     [Editor(false)]
     public float BetterItemScore
