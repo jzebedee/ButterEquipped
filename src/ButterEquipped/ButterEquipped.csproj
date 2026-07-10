@@ -35,7 +35,7 @@
     <HarmonyExtensionsVersion>3.2.0.77</HarmonyExtensionsVersion>
     <UIExtenderExVersion>2.13.2</UIExtenderExVersion>
     <ButterLibVersion>2.10.2</ButterLibVersion>
-    <MCMVersion>5.11.3</MCMVersion>
+    <MCMVersion>5.12.1</MCMVersion>
   </PropertyGroup>
 
   <!-- Required for GUI assets -->
