@@ -388,7 +388,7 @@ public class AutoEquipLogic(
                 _ => false
             })
             .Where(item => Equipment.IsItemFitsToSlot(slotIndex, item.EquipmentElement.Item))
-            .Where(item => CharacterHelper.CanUseItemBasedOnSkill(hero, item.EquipmentElement))
+            .Where(item => CharacterHelper.CanUseItem(hero, item.EquipmentElement))
             .Where(item => ShouldEquip(allEq, item.EquipmentElement, slotIndex, usageInfo))
             .Prepend(new ItemRosterElement(slotEq, 0))
             .OrderByDescending(item => item.EquipmentElement, eqMode switch
